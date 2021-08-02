@@ -2,6 +2,7 @@ import pages_01_Overview as page1
 import pages_02_Cases_Deaths as page2
 import pages_04_Testing as page4
 import pages_05_Lockdown as page5
+import pages_06_Vaccinations as page6
 
 import functions_get_Data as getData
 
@@ -32,5 +33,6 @@ page4.draw_Scatter_pRate_Cases_deaths()
 page4.draw_Scatter_Tests_Conducted()
 
 page5.draw_Daily_Growth_Rate()
+
 
 print("------------------ COVID REPORTS JOB COMPLETE ----------- -------")

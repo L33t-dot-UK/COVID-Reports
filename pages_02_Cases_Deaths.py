@@ -454,7 +454,6 @@ def draw_Bar_Aged_Deaths():
 
     for ii in range(19):
         totalDeaths[ii] = dataAge.getTotals(ii, 'deaths', 'true')
-        ageRange[ii] = dataAge.getUnPackedData('true', 0)[0][ii]['age']
             
     plt.bar(ageRange, totalDeaths,  color = 'teal', alpha = 1)
 

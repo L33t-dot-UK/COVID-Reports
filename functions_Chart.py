@@ -426,11 +426,11 @@ def addScatterplot(xData, yData, colour, label):
 
     #Now we will chop the last 4 days worth of data as this data is probably incomplete and 
     #will make our LOBF look a little funny if we include it.
-    values = [0]*(len(xData) - 4)
+    values = [0]*(len(xData) - 7)
     for ii in range (0 , len(values)):
         values[ii] = xData[ii]
 
-    nData = [0]* (len(LOBF_Data) - 4)
+    nData = [0]* (len(LOBF_Data) - 7)
     for ii in range (0 , len(nData)):
         nData[ii] = LOBF_Data[ii]
     
@@ -445,11 +445,11 @@ def addBarplot(xData, yData, colour, label):
 
     #Now we will chop the last 4 days worth of data as this data is probably incomplete and 
     #will make our LOBF look a little funny of we include it. However we will draw the scatter plots for this data.
-    values = [0]*(len(xData) - 4)
+    values = [0]*(len(xData) - 7)
     for ii in range (0 , len(values)):
         values[ii] = xData[ii]
 
-    nData = [0]* (len(LOBF_Data) - 4)
+    nData = [0]* (len(LOBF_Data) - 7)
     for ii in range (0 , len(nData)):
         nData[ii] = LOBF_Data[ii]
 
