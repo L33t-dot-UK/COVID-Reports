@@ -75,9 +75,10 @@ def draw_Scatter_Year_Comp(data, toShow, label):
 
     ax1.legend(loc='upper left')
 
-    chart.drawChart("Date","Number of People","COVID 19 Data - Yearly Comp (" + label + ")", "yearlyComp" + label ,"false", "false", ax1, "flase", "true") #Draws the chart with lockdowns etc drawn on
+    chart.drawChart("Date","Number of People","COVID 19 Data - Yearly Comp (" + label + ")", "yearlyComp" + label ,toShow , "false", ax1, "flase", "true") #Draws the chart with lockdowns etc drawn on
 
-draw_Scatter_Year_Comp(newAdmssions, "false", "Hospital_Admissions")
-draw_Scatter_Year_Comp(hospitalCases, "false", "Hospital_Cases")
-draw_Scatter_Year_Comp(newCases, "false", "Cases")
-draw_Scatter_Year_Comp(newDeaths, "false", "Deaths")
+def draw_Comp_Graphs():
+    draw_Scatter_Year_Comp(newAdmssions, "false", "Hospital_Admissions")
+    draw_Scatter_Year_Comp(hospitalCases, "false", "People_in_Hospital_With_C19")
+    draw_Scatter_Year_Comp(newCases, "false", "Cases")
+    draw_Scatter_Year_Comp(newDeaths, "false", "Deaths")

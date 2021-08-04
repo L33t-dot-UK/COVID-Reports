@@ -40,7 +40,7 @@ def draw_Scatter_Cases_LFFT_PCR():
         addedData[ii] = newLFDCases[ii] + newLFDCasesConfPCR[ii]
 
     chart.addScatterplot(GOVdateSeries, addedData, 'violet', 'All Cases Found by LFTs')
-    chart.addScatterplot(GOVdateSeries, newLFDCases,  'lightseagreen', 'Cases Found by LFT Only')
+    chart.addScatterplot(GOVdateSeries, newLFDCases,  'black', 'Cases Found by LFT Only')
     chart.addScatterplot(GOVdateSeries, newLFDCasesConfPCR, 'orangered', 'Cases found by LFT With Conf PCR')
     chart.addScatterplot(GOVdateSeries, allPCR, 'seagreen', 'Cases found by PCR Only')
     chart.drawChart("Date","Number of Cases","COVID 19 Data - Cases Found Using PCR and LFT's", "casesPCRLFT", "false", "true", ax1, "true", "true") #Draws the chart with lockdowns etc drawn on

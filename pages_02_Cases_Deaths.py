@@ -479,5 +479,10 @@ def draw_Bar_Aged_Deaths():
     plt.close()
 
 
+'''
+import pages_06_Vaccinations as vac
+for ii in range(0, 19):
+    vac.draw_Scatter_Year_Comp(dataAge.getData(ii, 'deaths', 'true'), "false", "Death for Group " + str(ii))
+'''
 
 

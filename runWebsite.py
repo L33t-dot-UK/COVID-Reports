@@ -34,5 +34,6 @@ page4.draw_Scatter_Tests_Conducted()
 
 page5.draw_Daily_Growth_Rate()
 
+page6.draw_Comp_Graphs()
 
 print("------------------ COVID REPORTS JOB COMPLETE ----------- -------")
