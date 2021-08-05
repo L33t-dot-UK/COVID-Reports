@@ -73,7 +73,7 @@ def draw_Scatter_Year_Comp(data, toShow, label):
         totals = "{:,}".format(totals)
         chart.addScatterplot(yDates, plotData, colours[ii], "Year " + str(yNum) + " " + label + " (Total: " + str(totals) + " / Daily Avg: " + str(dailyAvg) + ")")
 
-    ax1.legend(loc='upper left')
+    ax1.legend(loc='upper left' , fontsize = chart.globalLegendFontSize)
 
     chart.drawChart("Date","Number of People","COVID 19 Data - Yearly Comp (" + label + ")", "yearlyComp" + label ,toShow , "false", ax1, "flase", "true") #Draws the chart with lockdowns etc drawn on
 

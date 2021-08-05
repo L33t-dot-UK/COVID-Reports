@@ -46,8 +46,6 @@ def draw_DeathsVdeaths(toShow, toSave):
     Draws a graph showing Death by Death Date and Death by Reported Date
     '''
     fig, ax1 = plt.subplots()
-    #plt.cla()
-    #plt.clf()
 
     #Normal Resolution Chart
     chart.addBarplot(GOVdateSeries, deathsByReportDate, 'blue', 'Deaths by Report Date')
@@ -60,6 +58,3 @@ def draw_DeathsVdeaths(toShow, toSave):
     chart.addBarplot(GOVdateSeries, newDeaths, 'red', 'Deaths by Death Date')
     chart.drawChartHR("Date","Number of People","COVID 19 Data - Death Reported Date vs Death Date", "deathsAndDeathsHR",toShow, toSave, ax1, "true", "true") #Draws the chart with lockdowns etc drawn on
     plt.close()
-
-
-

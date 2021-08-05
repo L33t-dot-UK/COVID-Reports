@@ -46,7 +46,7 @@ def draw_Daily_Growth_Rate():
     chart.addScatterplot(GOVdateSeries, caseGR, 'darkcyan', 'Cases Daily Growth Rate, 50,000 = Baseline')
     chart.addDashedLine(GOVdateSeries, sfA, 'grey', 'Baseline') # This is the Baseline at 50,000
 
-    ax1.legend(loc='upper right')
+    ax1.legend(loc='upper right', fontsize = chart.globalLegendFontSize)
 
     chart.drawChart("Date","Number of People","COVID 19 Data - Cases Daily Growth Rate", "gRateCases" ,"false", "false", ax1, "true", "true") #Draws the chart with lockdowns etc drawn on
 

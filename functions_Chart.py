@@ -16,6 +16,8 @@ from matplotlib.dates import DateFormatter
 
 #DRAWING LINES, LEGENDS ETC ON THE CHART ------------------------------------------------------------------------------------------
 
+globalLegendFontSize = 18
+
 def drawChart(xAxisTitle, yAxisTitle, title, fileName, toShow, showLeg, ax1, toAdd, toStamp):
 
     if (toAdd == 'true'):
@@ -90,12 +92,12 @@ def drawChart(xAxisTitle, yAxisTitle, title, fileName, toShow, showLeg, ax1, toA
     ax1.xaxis.set_major_locator(ticker.MaxNLocator(75))
 
     plt.title(title, fontsize=20)
-    plt.xlabel(xAxisTitle, fontsize=15)
-    plt.ylabel(yAxisTitle, fontsize=15)
+    plt.xlabel(xAxisTitle, fontsize=18)
+    plt.ylabel(yAxisTitle, fontsize=18)
     if(showLeg == "true"):
-        plt.legend(loc='best', fontsize = 15)
-    plt.xticks(rotation = 90, fontsize = 15)
-    plt.yticks(fontsize = 15)
+        plt.legend(loc='upper left', fontsize = 18)
+    plt.xticks(rotation = 90, fontsize = 16)
+    plt.yticks(fontsize = 16)
 
     figure = plt.gcf()
     figure.set_size_inches(28, 20)
@@ -110,7 +112,7 @@ def drawChart(xAxisTitle, yAxisTitle, title, fileName, toShow, showLeg, ax1, toA
     plt.xlabel(xAxisTitle, fontsize=10)
     plt.ylabel(yAxisTitle, fontsize=10)
     if(showLeg == "true"):
-        plt.legend(loc='best', fontsize = 8)
+        plt.legend(loc='upper left', fontsize = 8)
     plt.xticks(rotation = 90, fontsize = 8)
     plt.yticks(fontsize = 8)
 
@@ -455,3 +457,18 @@ def addBarplot(xData, yData, colour, label):
 
     plt.plot(values, nData,  color = colour, alpha = 1, label = label)
     plt.bar(xData, yData,  color = colour, alpha = 0.5)
+
+def put_Side_By_Side(filename1, filename2, saveName):
+    img = Image.new('RGB', (5600, 2000), color = 'white')
+    d = ImageDraw.Draw(img)
+
+    im1 = Image.open(filename1)
+    im2 = Image.open(filename2)
+
+    img.paste(im1, (0, 0))
+    img.paste(im2, (2800, 0))
+
+    img.save(saveName)
+
+
+

@@ -5,6 +5,7 @@ import pages_05_Lockdown as page5
 import pages_06_Vaccinations as page6
 
 import functions_get_Data as getData
+import functions_Chart as chart
 
 print("------------------ COVID REPORTS JOB STARTED ------------------")
 
@@ -35,5 +36,10 @@ page4.draw_Scatter_Tests_Conducted()
 page5.draw_Daily_Growth_Rate()
 
 page6.draw_Comp_Graphs()
+chart.put_Side_By_Side("images/yearlyCompCases.png", "images/yearlyCompDeaths.png", "images/yearCompCasesDeaths.png")
+chart.put_Side_By_Side("images/yearlyCompHospital_Admissions.png", "images/yearlyCompPeople_in_Hospital_With_C19.png", "images/YearCompHospital.png")
+page2.draw_Scatter_Aged_Cases_Grouped()
+page2.draw_Scatter_Aged_Death_Grouped()
+chart.put_Side_By_Side("images/ageGroupCases.png", "images/ageGroupDeaths.png", "images/agedGroupedData.png")
 
 print("------------------ COVID REPORTS JOB COMPLETE ----------- -------")

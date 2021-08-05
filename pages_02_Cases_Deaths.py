@@ -44,7 +44,7 @@ def draw_Scatter_Aged_Cases_per_Million(lLimit, hLimit):
         chart.addScatterplot(dataAge.GOVdateSeries, agedCasesPerMillion[iii], lineColour[iii], lbl)
 
     fileName = "ageCasesPerCapita" + str(lLimit) + "_" + str(hLimit)
-    leg = ax1.legend(loc='upper left')
+    leg = ax1.legend(loc='upper left', fontsize = chart.globalLegendFontSize)
     chart.drawChart("Date", "Cases Per Million",  "COVID 19 Data - Daily Cases Per Million by Age in England", fileName, "false", "false", ax1, "true", "true")
     plt.close
 
@@ -122,7 +122,7 @@ def draw_Scatter_Aged_Cases(lLimit, hLimit):
         chart.addScatterplot(dataAge.GOVdateSeries, dataAge.getData(iii, 'cases', 'true'), lineColour[iii], lbl)
 
     fileName = "ageCases_" + str(lLimit) + "_" + str(hLimit)
-    leg = ax1.legend(loc='upper left')
+    leg = ax1.legend(loc='upper left', fontsize = chart.globalLegendFontSize)
     chart.drawChart("Date", "Number of People", "COVID 19 Data - Daily cases by Age in England", fileName, "false", "false", ax1, "true", "true")
 
 def draw_Age_Cases_Treemap():
@@ -201,7 +201,7 @@ def draw_Scatter_Aged_Deaths_per_Million(lLimit, hLimit):
         chart.addScatterplot(dataAge.GOVdateSeries, agedDeathsPerMillion[iii], lineColour[iii], lbl)
 
     fileName = "ageDeathsPerCapita" + str(lLimit) + "_" + str(hLimit)
-    leg = ax1.legend(loc='upper left')
+    leg = ax1.legend(loc='upper left', fontsize = chart.globalLegendFontSize)
     chart.drawChart("Date", "Deaths per Million", "COVID 19 Data - Daily Deaths Per Million by Age in England", fileName, "false", "false", ax1, "true", "true")
     plt.close
 
@@ -438,7 +438,7 @@ def draw_Scatter_Aged_Deaths(lLimit, hLimit):
         chart.addScatterplot(dataAge.GOVdateSeries, dataAge.getData(iii, 'deaths', 'true'), lineColour[iii], lbl)
 
     fileName = "ageDeaths_" + str(lLimit) + "_" + str(hLimit)
-    leg = ax1.legend(loc='upper left')
+    leg = ax1.legend(loc='upper left', fontsize = chart.globalLegendFontSize)
     chart.drawChart("Date", "Number of People", "COVID 19 Data - Daily Deaths by Age in England", fileName, "false", "false", ax1, "true", "true")
     plt.close()
 
@@ -478,11 +478,35 @@ def draw_Bar_Aged_Deaths():
     chart.createTimeStamp("images/" + fileName + '.png', 980, 970, 12)
     plt.close()
 
+def add_Aged_Data(cat, lLimit, hLimit, colour, label):
+    dataSet = [0] * len(dataAge.getData(0, cat, 'true'))
+    for ii in range(lLimit, hLimit):
+        tmpDataCases = [0] * len(dataSet)
+        tmpDataCases = dataAge.getData(ii, cat, 'true')
 
-'''
-import pages_06_Vaccinations as vac
-for ii in range(0, 19):
-    vac.draw_Scatter_Year_Comp(dataAge.getData(ii, 'deaths', 'true'), "false", "Death for Group " + str(ii))
-'''
+        for iii in range(len(dataSet)):
+            dataSet[iii] = dataSet[iii] + tmpDataCases[iii]
+
+    chart.addScatterplot(dataAge.GOVdateSeries, dataSet, colour, "Age Group (" + label + ")")
+
+def draw_Scatter_Aged_Death_Grouped():
+    setupChart()
+
+    add_Aged_Data("deaths",0,6, dataAge.lineColour[3], "0 - 29")
+    add_Aged_Data("deaths",6,10, dataAge.lineColour[7], "30 - 49")
+    add_Aged_Data("deaths",10,14, dataAge.lineColour[12],"50 - 69")
+    add_Aged_Data("deaths",14,19, dataAge.lineColour[16], "70+")
+
+    chart.drawChart("Date", "Number of People", "COVID 19 Data - Daily Deaths by Age in England by Age Group", "ageGroupDeaths", "false", "true", ax1, "true", "true")
+
+def draw_Scatter_Aged_Cases_Grouped():
+    setupChart()
+
+    add_Aged_Data("cases",0,6, dataAge.lineColour[3], "0 - 29")
+    add_Aged_Data("cases",6,10, dataAge.lineColour[7], "30 - 49")
+    add_Aged_Data("cases",10,14, dataAge.lineColour[12],"50 - 69")
+    add_Aged_Data("cases",14,19, dataAge.lineColour[16], "70+")
+
+    chart.drawChart("Date", "Number of People", "COVID 19 Data - Daily Cases by Age in England by Age Group", "ageGroupCases", "false", "true", ax1, "true", "true")
 
 
