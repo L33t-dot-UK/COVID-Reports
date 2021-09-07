@@ -27,6 +27,9 @@ def drawTable_AgeProfiledData():
 
     #We will now add the cases data
  
+    for ii in range(19):
+        totalcases[ii] = dataAge.getTotals(ii, 'cases', 'true')
+
     chart.drawRow(300, 140, 220, 100, ageCategoriesString.copy(), "gainsboro", "pink", "", "false", 'images/totals.png', 40)
     chart.drawRow(300, 240, 220, 100, totalcases.copy(), "whitesmoke", "pink", "Cases", "true", 'images/totals.png', 40)
 
@@ -218,5 +221,4 @@ def createDashboard():
     drawChart_Deaths_Cases()
     drawBar_Deaths_Cases()
     mergeImages()
-
 

@@ -29,8 +29,6 @@ page2.draw_Bar_Aged_Cases()
 page2.draw_Scatter_Aged_Deaths(0,19)
 page2.draw_Bar_Aged_Deaths()
 
-page3.createDashboard()
-
 page4.draw_Scatter_Cases_LFFT_PCR()
 page4.draw_Scatter_PositivityRate()
 page4.draw_Scatter_pRate_Cases_deaths()
@@ -44,5 +42,7 @@ chart.put_Side_By_Side("images/yearlyCompHospital_Admissions.png", "images/yearl
 page2.draw_Scatter_Aged_Cases_Grouped()
 page2.draw_Scatter_Aged_Death_Grouped()
 chart.put_Side_By_Side("images/ageGroupCases.png", "images/ageGroupDeaths.png", "images/agedGroupedData.png")
+
+page3.createDashboard() #Do this last so we don't need to reload data
 
 print("------------------ COVID REPORTS JOB COMPLETE ----------- -------")
