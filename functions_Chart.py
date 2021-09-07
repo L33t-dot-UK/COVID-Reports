@@ -401,7 +401,7 @@ def drawRow(xStart, yStart, width, height, data, fillColour, lineColour, label, 
     font = ImageFont.truetype("arial.ttf", fontsize)
     draw = ImageDraw.Draw(img)
 
-    d.text((xStart - 120,  yStart + 15), label, fill=(100,8,58), font=font)
+    d.text((xStart - 130,  yStart + 25), label, fill=(100,8,58), font=font)
     
     for ii in range(19):
         
@@ -413,13 +413,13 @@ def drawRow(xStart, yStart, width, height, data, fillColour, lineColour, label, 
             print("Number format error")
         
         draw.rectangle((xStart, yStart, xStart + width, yStart + height), fill=(fillColour), outline=(lineColour))
-        d.text((20 + xStart,  yStart + 15), data[ii] , fill=(100,8,58), font=font)
+        d.text((20 + xStart,  yStart + 25), data[ii] , fill=(100,8,58), font=font)
         xStart = xStart + width
 
     if(toTotal == "true"):
         total = f'{total:,}'
         draw.rectangle((xStart, yStart, xStart + width + int((width/2)), yStart + height), fill=(fillColour), outline=(lineColour))
-        d.text((20 + xStart,  yStart + 15), str(total), fill=(100,8,58), font=font)
+        d.text((20 + xStart,  yStart + 25), str(total), fill=(100,8,58), font=font)
 
     img.save(imagePath)
 
@@ -435,7 +435,7 @@ def addScatterplot(xData, yData, colour, label):
     nData = [0]* (len(LOBF_Data) - 7)
     for ii in range (0 , len(nData)):
         nData[ii] = LOBF_Data[ii]
-    
+
     plt.plot(values, nData,  color = colour, alpha = 1, label = label)
     plt.scatter(xData, yData,  color = colour, alpha = 0.2, s =5)
 

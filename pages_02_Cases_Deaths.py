@@ -7,6 +7,8 @@ from datetime import date
 from datetime import datetime
 import squarify
 
+import math
+
 def setupChart():
     global ax1
     fig, ax1 = plt.subplots()
@@ -37,7 +39,8 @@ def draw_Scatter_Aged_Cases_per_Million(lLimit, hLimit):
     for ii in range(lLimit, hLimit):
         for iii in range(len(agedCasesData[ii])):
             agedCasesPerMillion[ii][iii] = float(agedCasesData[ii][iii]) / float(population[ii])
-       
+            agedCasesPerMillion[ii][iii] =  agedCasesPerMillion[ii][iii] * 1000000
+
     for iii in range(lLimit, hLimit):
         lbl = ageCategoriesString[iii]
         
@@ -73,7 +76,8 @@ def draw_Bar_Aged_Cases_per_Million():
     for ii in range(0, 19):
         for iii in range(len(agedCasesData[ii])):
             agedCasesPerMillion[ii][iii] = float(agedCasesData[ii][iii]) / float(population[ii])
-       
+            agedCasesPerMillion[ii][iii] =  agedCasesPerMillion[ii][iii] * 1000000
+
     for ii in range(0, 19):
         totalAgedCases[ii] = sum(agedCasesPerMillion[ii])
 
@@ -82,7 +86,8 @@ def draw_Bar_Aged_Cases_per_Million():
     value = 0
     
     for x in range(len(totalAgedCases)):
-        value = "{:.4f}".format(totalAgedCases[x])
+        value = math.trunc(totalAgedCases[x])
+        value = f'{value:,}'
         label3 = value
         plt.annotate(label3, # this is the text
                      (ageCategoriesString[x],totalAgedCases[x]), # this is the point to label
@@ -195,7 +200,8 @@ def draw_Scatter_Aged_Deaths_per_Million(lLimit, hLimit):
     for ii in range(lLimit, hLimit):
         for iii in range(len(agedDeathsData[ii])):
             agedDeathsPerMillion[ii][iii] = float(agedDeathsData[ii][iii]) / float(population[ii])
-           
+            agedDeathsPerMillion[ii][iii] = agedDeathsPerMillion[ii][iii] * 1000000
+            
     for iii in range(lLimit, hLimit):
         lbl = ageCategoriesString[iii]
         chart.addScatterplot(dataAge.GOVdateSeries, agedDeathsPerMillion[iii], lineColour[iii], lbl)
@@ -226,6 +232,7 @@ def draw_Bar_Aged_Deaths_per_Million():
     for ii in range(0, 19):
         for iii in range(len(agedDeathsData[ii])):
             agedDeathsPerMillion[ii][iii] = float(agedDeathsData[ii][iii]) / float(population[ii])
+            agedDeathsPerMillion[ii][iii] = agedDeathsPerMillion[ii][iii] * 1000000
 
     for ii in range(0, 19):
         totalAgedDeaths[ii] = sum(agedDeathsPerMillion[ii])
@@ -239,7 +246,8 @@ def draw_Bar_Aged_Deaths_per_Million():
     value = 0
     
     for x in range(len(totalAgedDeaths)):
-        value = "{:.4f}".format(totalAgedDeaths[x])
+        value = math.trunc(totalAgedDeaths[x])
+        value = f'{value:,}'
         label3 = value
         plt.annotate(label3, # this is the text
                      (ageCategoriesString[x],totalAgedDeaths[x]), # this is the point to label
@@ -367,7 +375,7 @@ def draw_Age_Deaths_Bar_Under_vs_Over(limit, firstAgeRange, secondAgeRange, titl
     plt.bar(ageRange, totalRangedDeaths,  color = 'teal', alpha = 1)
 
     for x in range(len(totalRangedDeaths)):
-        label3 = totalRangedDeaths[x]
+        label3 = f'{totalRangedDeaths[x]:,}'
         plt.annotate(label3, # this is the text
                     (ageRange[x],totalRangedDeaths[x]), # this is the point to label
                     textcoords="offset points", # how to position the text
@@ -402,7 +410,7 @@ def draw_Bar_Aged_Cases():
     plt.bar(ageRange, totalcases,  color = 'teal', alpha = 1)
 
     for x in range(len(totalcases)):
-        label3 = totalcases[x]
+        label3 = f'{totalcases[x]:,}'
         plt.annotate(label3, # this is the text
                     (ageRange[x],totalcases[x]), # this is the point to label
                     textcoords="offset points", # how to position the text
@@ -458,7 +466,7 @@ def draw_Bar_Aged_Deaths():
     plt.bar(ageRange, totalDeaths,  color = 'teal', alpha = 1)
 
     for x in range(len(totalDeaths)):
-        label3 = totalDeaths[x]
+        label3 = f'{totalDeaths[x]:,}'
         plt.annotate(label3, # this is the text
                     (ageRange[x],totalDeaths[x]), # this is the point to label
                     textcoords="offset points", # how to position the text

@@ -215,9 +215,11 @@ def getTotals(dataIndex, category, toReOrder):
     try:
         for ii in range(len(unPackedData)): #Calculate the total number of cases in each age group
             returnedData = returnedData + int(unPackedData[ii][dataIndex][category])
+
     except Exception as e:
         print("Data Error (getTotals) - This error can be ignored")
         print(e)
 
     loadData(category, toReOrder, 32) #This will stop certain errors if you wanted to plot data after totalling it
+
     return returnedData

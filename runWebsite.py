@@ -1,5 +1,6 @@
 import pages_01_Overview as page1
 import pages_02_Cases_Deaths as page2
+import pages_03_Dashboard as page3
 import pages_04_Testing as page4
 import pages_05_Lockdown as page5
 import pages_06_Vaccinations as page6
@@ -27,6 +28,8 @@ page2.draw_Age_Deaths_Bar_Under_vs_Over(10, "Under 50's", "Over 50's", "COVID 19
 page2.draw_Bar_Aged_Cases()
 page2.draw_Scatter_Aged_Deaths(0,19)
 page2.draw_Bar_Aged_Deaths()
+
+page3.createDashboard()
 
 page4.draw_Scatter_Cases_LFFT_PCR()
 page4.draw_Scatter_PositivityRate()
