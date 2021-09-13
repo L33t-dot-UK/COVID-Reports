@@ -251,4 +251,3 @@ def createDashboard():
     drawBar_Deaths_Cases()
     mergeImages()
 
-createDashboard()
