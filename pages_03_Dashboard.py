@@ -12,16 +12,19 @@ totalcases = [0]*19
 ageRange = [0]*19
 casesWeek = [0]*19
 
+dataAge.getData(0, 'deaths', 'true')
+lastDate = dataAge.GOVdateSeries[len(dataAge.GOVdateSeries) - 1]
+
 #Draw the table that shows cases broken down by age
 def drawTable_AgeProfiledData():
     #We must first create the image that the tables will be added to
-    img = Image.new('RGB', (5000, 1300), color = 'white')
+    img = Image.new('RGB', (5000, 1500), color = 'white')
     img = ImageOps.expand(img, border=2,fill='pink')
     d = ImageDraw.Draw(img)
     font = ImageFont.truetype("arial.ttf", 56)
     d.text((2000,  30), "Total Cases and Deaths (All Time)", fill=(100,8,58), font=font)
-    d.text((2000,  870), "Last 45 Days (RHS of the below graphs)", fill=(100,8,58), font=font)
-    d.text((2000,  500), "First 45 Days (LHS of the below graphs)", fill=(100,8,58), font=font)
+    d.text((2000,  1070), "Last 45 Days (RHS of the below graphs)", fill=(100,8,58), font=font)
+    d.text((2000,  600), "First 45 Days (LHS of the below graphs)", fill=(100,8,58), font=font)
 
     img.save('images/totals.png') #We have now created an image with the titles and a border
 
@@ -30,17 +33,12 @@ def drawTable_AgeProfiledData():
     for ii in range(19):
         totalcases[ii] = dataAge.getTotals(ii, 'cases', 'true')
 
-    chart.drawRow(300, 140, 220, 100, ageCategoriesString.copy(), "gainsboro", "pink", "", "false", 'images/totals.png', 40)
-    chart.drawRow(300, 240, 220, 100, totalcases.copy(), "whitesmoke", "pink", "Cases", "true", 'images/totals.png', 40)
-
     casesTotalWeek = [0]*19
     daysToGoBack = 45
 
     for ii in range(0, 19):
         casesWeek[ii] = dataAge.getSubData(ii, 'cases', 'true', dataAge.getDataLength() - daysToGoBack)
         casesTotalWeek[ii] = casesTotalWeek[ii] + sum(casesWeek[ii])
-
-    chart.drawRow(300, 980, 220, 100, casesTotalWeek.copy(), "whitesmoke", "pink", "Cases", "true", 'images/totals.png', 40)
 
     casesWeek90 = [0]*19
     casesTotalWeek90 = [0]*19
@@ -51,8 +49,6 @@ def drawTable_AgeProfiledData():
         casesTotalWeek90[ii] = casesTotalWeek90[ii] + sum(casesWeek90[ii])
         casesTotalWeek90[ii] = casesTotalWeek90[ii] - casesTotalWeek[ii]
     
-    chart.drawRow(300, 640, 220, 100, casesTotalWeek90.copy(), "whitesmoke", "pink", "Cases", "true", 'images/totals.png', 40)
-
     #Now add the death data to the tables
     totaldeaths = [0]*19
     deathsWeek = [0]*19
@@ -68,8 +64,6 @@ def drawTable_AgeProfiledData():
 
     img.save('images/totals.png')
 
-    chart.drawRow(300, 340, 220, 100, totaldeaths.copy(), "whitesmoke", "pink", "Deaths", "true", 'images/totals.png', 40)
-
     deathsWeek = [0]*19
     deathsTotalWeek = [0]*19
     daysToGoBack = 45
@@ -77,8 +71,6 @@ def drawTable_AgeProfiledData():
     for ii in range(0, 19):
         deathsWeek[ii] = dataAge.getSubData(ii, 'deaths', 'true', dataAge.getDataLength() - daysToGoBack)
         deathsTotalWeek[ii] = deathsTotalWeek[ii] + sum(deathsWeek[ii])
-
-    chart.drawRow(300, 1080, 220, 100, deathsTotalWeek.copy(), "whitesmoke", "pink", "Deaths", "true", 'images/totals.png', 40)
 
     deathsWeek60 = [0]*19
     deathsTotalWeek60 = [0]*19
@@ -88,8 +80,40 @@ def drawTable_AgeProfiledData():
         deathsWeek60[ii] = dataAge.getSubData(ii, 'deaths', 'true', dataAge.getDataLength() - daysToGoBack)
         deathsTotalWeek60[ii] = deathsTotalWeek60[ii] + sum(deathsWeek60[ii])
         deathsTotalWeek60[ii] = deathsTotalWeek60[ii] - deathsTotalWeek[ii]
-        
-    chart.drawRow(300, 740, 220, 100, deathsTotalWeek60.copy(), "whitesmoke", "pink", "Deaths", "true", 'images/totals.png', 40)
+
+    #Now calculate the CFR for each age group
+    CFR = [0] * 19
+    CFRF45 = [0] * 19
+    CFRS45 = [0] * 19
+    for ii in range(0,19):
+        CFR[ii] = totaldeaths[ii] / totalcases[ii]
+        CFR[ii] = CFR[ii] * 100
+        CFR[ii] = "{:.3f}".format(CFR[ii])
+        CFR[ii] = str(CFR[ii]) + "%"
+
+        CFRF45[ii] = deathsTotalWeek60[ii] / casesTotalWeek90[ii]
+        CFRF45[ii] = CFRF45[ii] * 100
+        CFRF45[ii] = "{:.3f}".format(CFRF45[ii])
+        CFRF45[ii] = str(CFRF45[ii]) + "%"
+
+        CFRS45[ii] = deathsTotalWeek[ii] / casesTotalWeek[ii]
+        CFRS45[ii] = CFRS45[ii] * 100
+        CFRS45[ii] = "{:.3f}".format(CFRS45[ii])
+        CFRS45[ii] = str(CFRS45[ii]) + "%"
+
+
+    chart.drawRow(300, 140, 220, 100, ageCategoriesString.copy(), "gainsboro", "pink", "", "false", 'images/totals.png', 40)
+    chart.drawRow(300, 240, 220, 100, totalcases.copy(), "whitesmoke", "pink", "Cases", "true", 'images/totals.png', 40)
+    chart.drawRow(300, 340, 220, 100, totaldeaths.copy(), "whitesmoke", "pink", "Deaths", "true", 'images/totals.png', 40)
+    chart.drawRow(300, 440, 220, 100, CFR.copy(), "whitesmoke", "pink", "CFR", "false", 'images/totals.png', 40)
+
+    chart.drawRow(300, 720, 220, 100, casesTotalWeek90.copy(), "whitesmoke", "pink", "Cases", "true", 'images/totals.png', 40)       
+    chart.drawRow(300, 820, 220, 100, deathsTotalWeek60.copy(), "whitesmoke", "pink", "Deaths", "true", 'images/totals.png', 40)
+    chart.drawRow(300, 920, 220, 100, CFRF45.copy(), "whitesmoke", "pink", "CFR", "false", 'images/totals.png', 40)
+
+    chart.drawRow(300, 1160, 220, 100, casesTotalWeek.copy(), "whitesmoke", "pink", "Cases", "true", 'images/totals.png', 40)
+    chart.drawRow(300, 1260, 220, 100, deathsTotalWeek.copy(), "whitesmoke", "pink", "Deaths", "true", 'images/totals.png', 40)
+    chart.drawRow(300, 1360, 220, 100, CFRS45.copy(), "whitesmoke", "pink", "CFR", "false", 'images/totals.png', 40)
 
 def setupCharts():
     global ax1
@@ -193,12 +217,12 @@ def mergeImages():
     im0 = Image.open('images/totals.png')
 
     #Must be in this order due to image overlap
-    img.paste(im5, (40, 5400))
-    img.paste(im6, (2848, 5400))
-    img.paste(im3, (40, 3500))
-    img.paste(im4, (2848, 3500))
-    img.paste(im1, (40, 1600))
-    img.paste(im2, (2848, 1600))
+    img.paste(im5, (40, 5600))
+    img.paste(im6, (2848, 5600))
+    img.paste(im3, (40, 3700))
+    img.paste(im4, (2848, 3700))
+    img.paste(im1, (40, 1800))
+    img.paste(im2, (2848, 1800))
 
     img.paste(im0, (360, 300))
 
@@ -210,9 +234,14 @@ def mergeImages():
 
     fontsize = 30
     font = ImageFont.truetype("arial.ttf", fontsize)  
-    d.text((4600,7500), "https://www.COVIDreports.uk   Last Updated " + dt_string, fill=(100,8,58), font=font)
+    d.text((4600,7540), "https://www.COVIDreports.uk   Last Updated " + dt_string, fill=(100,8,58), font=font)
+    d.text((250,7540), "Last Data Entry " + lastDate , fill=(100,8,58), font=font)
 
     img.save('images/Dashboard_1.png')
+
+def drawTable_CFR():
+    print("Placeholder")
+
 
 def createDashboard():
     drawTable_AgeProfiledData()
@@ -222,3 +251,4 @@ def createDashboard():
     drawBar_Deaths_Cases()
     mergeImages()
 
+createDashboard()
