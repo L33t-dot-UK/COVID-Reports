@@ -29,6 +29,8 @@ def assignValues():
 
     global newPCRTests
     global newLFDTests
+
+    global cumSecondDose
     
     global GOVdateSeries
 
@@ -49,6 +51,8 @@ def assignValues():
     newLFDTests = GOVdataset.iloc[0:,13].values
     newLFDCases = GOVdataset.iloc[0:,14].values
 
+    cumSecondDose = GOVdataset.iloc[0:,15].values
+
     GOVdateSeries = GOVdataset.iloc[0:,0].values
     
     #Now lets flip the array so index 0 will be the oldest value
@@ -64,6 +68,7 @@ def assignValues():
     newPCRTests = newPCRTests[::-1]
     newLFDTests = newLFDTests[::-1]
     newLFDCases = newLFDCases[::-1]
+    cumSecondDose = cumSecondDose[::-1]
     
     GOVdateSeries = GOVdateSeries[::-1]
 

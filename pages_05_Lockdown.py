@@ -48,5 +48,5 @@ def draw_Daily_Growth_Rate():
 
     ax1.legend(loc='upper right', fontsize = chart.globalLegendFontSize)
 
-    chart.drawChart("Date","Number of People","COVID 19 Data - Cases Daily Growth Rate", "gRateCases" ,"false", "false", ax1, "true", "true") #Draws the chart with lockdowns etc drawn on
+    chart.drawWideChart("Date","Number of People","COVID 19 Data - Cases Daily Growth Rate", "gRateCases" ,"false", "false", ax1, "true", "true") #Draws the chart with lockdowns etc drawn on
 

@@ -38,7 +38,7 @@ def draw_Overview(toShow, toSave):
     chart.addScatterplot(GOVdateSeries, newAdmssions,'darkslategrey', 'Hospital Admissions')
     chart.addBarplot(GOVdateSeries, newDeaths, 'red', 'Deaths by Death Date')
 
-    chart.drawChart("Date","Number of People","COVID 19 Data - Hospital Cases, Hosptial Admissions, General Cases and Deaths", "overview", toShow, toSave, ax1, "true", "true") #Draws the chart with lockdowns etc drawn on
+    chart.drawWideChart("Date","Number of People","COVID 19 Data - Hospital Cases, Hosptial Admissions, General Cases and Deaths", "overview", toShow, toSave, ax1, "true", "true") #Draws the chart with lockdowns etc drawn on
     plt.close()
 
 def draw_DeathsVdeaths(toShow, toSave):
@@ -50,7 +50,7 @@ def draw_DeathsVdeaths(toShow, toSave):
     #Normal Resolution Chart
     chart.addBarplot(GOVdateSeries, deathsByReportDate, 'blue', 'Deaths by Report Date')
     chart.addBarplot(GOVdateSeries, newDeaths, 'red', 'Deaths by Death Date')
-    chart.drawChart("Date","Number of People","COVID 19 Data - Death Reported Date vs Death Date", "deathsAndDeaths",toShow, toSave, ax1, "true", "true") #Draws the chart with lockdowns etc drawn on
+    chart.drawWideChart("Date","Number of People","COVID 19 Data - Death Reported Date vs Death Date", "deathsAndDeaths",toShow, toSave, ax1, "true", "true") #Draws the chart with lockdowns etc drawn on
 
     #High Resolution Chart if this chart is shown the labels will be too big and look silly; only use high resolution to save HR images due to the amount of data being displayed
     fig, ax1 = plt.subplots()

@@ -21,6 +21,8 @@ totalLFD = govDataset.newLFDTests #Total LFTs conducted
 
 newLFDCases = govDataset.newLFDCases #Total LFD positive cases not confirmed by PCR
 
+secondDoses = govDataset.cumSecondDose
+
 #DRAWING THE CHART ------------------------------------------------------------------------------------------------------------------
 
 #Draw the chart

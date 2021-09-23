@@ -121,6 +121,108 @@ def drawChart(xAxisTitle, yAxisTitle, title, fileName, toShow, showLeg, ax1, toA
     else:
         plt.close() #If we don't show the plot we close it
 
+def drawWideChart(xAxisTitle, yAxisTitle, title, fileName, toShow, showLeg, ax1, toAdd, toStamp):
+
+    if (toAdd == 'true'):
+        #Draw verticle lines on the chart
+        startDatasetDate = date(2020, 3,2)
+        LD1 = date(2020,3,23)
+        LD1_2Weeks = date(2020,4,6)
+        LD1_S = date(2020,6,23)
+        LD1_SchoolsBack = date(2020,6,1)
+        FM = date(2020,7,24)
+        FFM_2Weeks = date(2020,8,7)
+        LD2 = date(2020,11,5)
+        LD2_2Weeks = date(2020,11,19)
+        LD2_S = date(2020,12,2)
+        LD3 = date(2021,1,6)
+        LD3_2Weeks = date(2021,1,20)
+        LD3_S = date(2021,7,19)
+        
+        VAC = date(2020,12,8)
+        P2T = date(2020,7,13)
+        SLFT = date(2021,3,8)
+
+        plt.axvline(x=(LD1 - startDatasetDate).days, alpha = 0.2, label = '(VLINE) Lockdown 1.0 & Schools Closed', color = 'steelblue')
+        plt.axvline(x=(LD1_2Weeks - startDatasetDate).days, alpha = 0.2,  color = 'steelblue', linestyle='-.')
+        plt.axvline(x=(LD1_SchoolsBack - startDatasetDate).days, alpha = 0.2, color = 'red', label = '(VLINE) LD1 Schools Back')
+        plt.axvline(x=(LD1_S - startDatasetDate).days, alpha = 0.2, color = 'steelblue')
+
+        #Shade in lockdown 1 region
+        for i in range((LD1 - startDatasetDate).days, (LD1_S - startDatasetDate).days):
+            plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
+
+        plt.axvline(x=(P2T - startDatasetDate).days, alpha = 0.2, label = '(VLINE) Large Scale P2 Tests Introduced', color = 'red')
+        
+        plt.axvline(x=(FM - startDatasetDate).days, alpha = 0.2, label = '(VLINE) Mandatory Face Masks', color = 'deepskyblue')
+        plt.axvline(x=(FFM_2Weeks - startDatasetDate).days, alpha = 0.2,  color = 'deepskyblue' , linestyle='-.')
+
+        plt.axvline(x=(LD2 - startDatasetDate).days, alpha = 0.2, label = '(VLINE) Lockdown 2.0', color = 'cadetblue')
+        plt.axvline(x=(LD2_2Weeks - startDatasetDate).days, alpha = 0.2,  color = 'cadetblue', linestyle='-.')
+        plt.axvline(x=(LD2_S - startDatasetDate).days, alpha = 0.2, color = 'cadetblue')
+
+        #Shade in lockdown 2 region
+        for i in range((LD2 - startDatasetDate).days, (LD2_S - startDatasetDate).days):
+            plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
+
+        plt.axvline(x=(VAC - startDatasetDate).days, alpha = 0.2, color = 'red', label = '(VLINE) Vaccine Rollout Starts')
+
+        plt.axvline(x=(LD3 - startDatasetDate).days, alpha = 0.2, label = '(VLINE) Lockdown 3.0 & Schools Closed', color = 'steelblue')
+        plt.axvline(x=(LD3_2Weeks - startDatasetDate).days, alpha = 0.2,  color = 'steelblue', linestyle='-.')
+        plt.axvline(x=(LD3_S - startDatasetDate).days, alpha = 0.2, color = 'steelblue')
+
+        plt.axvline(x=(SLFT - startDatasetDate).days, alpha = 0.2, label = '(VLINE) LD3 Schools Back with LFTs', color = 'red')
+        
+        #Shade in lockdown 3 region
+        for i in range((LD3 - startDatasetDate).days, (LD3_S - startDatasetDate).days):
+            plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
+
+    plt.ylim(ymin=0)
+
+    plt.title(title)
+    plt.xlabel(xAxisTitle)
+    plt.ylabel(yAxisTitle)
+
+    #Add the legend
+
+    if(showLeg == "true"):
+        plt.legend(loc='best')
+
+    #Rotate the x plts labels and change bg colour
+    plt.xticks(rotation = 90)
+
+    ax1.set_facecolor("white")
+    ax1.xaxis.set_major_locator(ticker.MaxNLocator(75))
+
+    plt.title(title, fontsize=20)
+    plt.xlabel(xAxisTitle, fontsize=18)
+    plt.ylabel(yAxisTitle, fontsize=18)
+    if(showLeg == "true"):
+        plt.legend(loc='upper left', fontsize = 18)
+    plt.xticks(rotation = 90, fontsize = 16)
+    plt.yticks(fontsize = 16)
+
+    figure = plt.gcf()
+    figure.set_size_inches(56, 20)
+    plt.savefig("images/" + fileName + '.png')
+
+    if(toStamp == 'true'):
+        createTimeStamp("images/" + fileName + '.png', 4200, 1930, 24)
+
+    print ("Graph saved as " + "images/" + fileName + ".png")
+
+    plt.title(title, fontsize=12)
+    plt.xlabel(xAxisTitle, fontsize=10)
+    plt.ylabel(yAxisTitle, fontsize=10)
+    if(showLeg == "true"):
+        plt.legend(loc='upper left', fontsize = 8)
+    plt.xticks(rotation = 90, fontsize = 8)
+    plt.yticks(fontsize = 8)
+
+    if (toShow == "true"):
+        plt.show() #Show the plot
+    else:
+        plt.close() #If we don't show the plot we close it
 
 def drawChartHR(xAxisTitle, yAxisTitle, title, fileName, toShow, showLeg, ax1, toAdd, toStamp):
 
@@ -433,6 +535,22 @@ def addScatterplot(xData, yData, colour, label):
         values[ii] = xData[ii]
 
     nData = [0]* (len(LOBF_Data) - 7)
+    for ii in range (0 , len(nData)):
+        nData[ii] = LOBF_Data[ii]
+
+    plt.plot(values, nData,  color = colour, alpha = 1, label = label)
+    plt.scatter(xData, yData,  color = colour, alpha = 0.2, s =5)
+
+def addScatterplotSubbed(xData, yData, colour, label, LOBFsub):
+    LOBF_Data = averagedValues(yData.copy(),7)
+
+    #Now we will chop the last 4 days worth of data as this data is probably incomplete and 
+    #will make our LOBF look a little funny if we include it.
+    values = [0]*(len(xData) - LOBFsub)
+    for ii in range (0 , len(values)):
+        values[ii] = xData[ii]
+
+    nData = [0]* (len(LOBF_Data) - LOBFsub)
     for ii in range (0 , len(nData)):
         nData[ii] = LOBF_Data[ii]
 

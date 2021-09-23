@@ -24,7 +24,8 @@ def get_Data():
         "newCasesPCROnlyBySpecimenDate":"newCasesPCROnlyBySpecimenDate",
         "newPCRTestsByPublishDate":"newPCRTestsByPublishDate",
         "newLFDTests":"newLFDTests",
-        "newCasesLFDOnlyBySpecimenDate":"newCasesLFDOnlyBySpecimenDate"
+        "newCasesLFDOnlyBySpecimenDate":"newCasesLFDOnlyBySpecimenDate",
+        "cumPeopleVaccinatedSecondDoseByPublishDate":"cumPeopleVaccinatedSecondDoseByPublishDate"
     }
 
     england_only = [

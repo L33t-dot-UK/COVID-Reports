@@ -9,28 +9,67 @@ ageCategoriesString = dataAge.ageCategoriesString
 agedCasesData = [0]*19
 agedDeathsData = [0]*19
 
-global ax1
-fig, ax1 = plt.subplots()
+def return_Aged_Data(cat, lLimit, hLimit):
+    dataSet = [0] * len(dataAge.getData(0, cat, 'true'))
+    for ii in range(lLimit, hLimit):
+        tmpDataCases = [0] * len(dataSet)
+        tmpDataCases = dataAge.getData(ii, cat, 'true')
 
-for iii in range(0, 19):
-    agedCasesData[iii] = dataAge.getData(iii, 'cases', 'true')
-    agedDeathsData[iii] = dataAge.getData(iii, 'deaths', 'true')
+        for iii in range(len(dataSet)):
+            dataSet[iii] = dataSet[iii] + tmpDataCases[iii]
 
+    return dataSet
 
 filename = ""
 
-for ii in range (10, 24):
+global ax1
+fig, ax1 = plt.subplots()
 
-    plt.cla()
-    plt.clf()
-    plt.ylim(ymax = 100)
+def resizeArray(data, size):
 
-    for iii in range(0, 19):
-        LOBF_dataDeath =  chart.averagedValues(agedDeathsData[iii].copy(),7)
-        LOBF_dataCases =  chart.averagedValues(agedCasesData[iii].copy(),7)
-        #chart.addScatterplot(dataAge.GOVdateSeries , chart.calcRatios(agedDeathsData[iii], agedCasesData[iii], ii),lineColour[iii], ageCategoriesString[iii])
-        chart.addScatterplot(dataAge.GOVdateSeries , chart.calcRatios(LOBF_dataDeath, LOBF_dataCases, ii),lineColour[iii], ageCategoriesString[iii])
-        
-    filename = ("test" + str(ii))
-    chart.drawChart("Date", "Test",  "COVID 19 Data - Test", filename, "false", "true", ax1, "true", "true")
+    newdata = [0] * (len(data) - size)
+    for ii in range(0, len(newdata)):
+        newdata[ii] = data[ii]
 
+    return data
+
+for ii in range (18, 19):
+
+    plt.ylim(ymax = 40)
+
+    lowLimit = 0
+    highLimit = 6
+
+    LOBF_dataDeath =  chart.averagedValues(return_Aged_Data("deaths",lowLimit,highLimit),7)
+    LOBF_dataCases =  chart.averagedValues(return_Aged_Data("cases",lowLimit,highLimit),7)
+
+    chart.addScatterplotSubbed(dataAge.GOVdateSeries , chart.calcRatios(LOBF_dataDeath, LOBF_dataCases, ii), lineColour[3], "Age 0 - 29" , ii + 4)
+    
+    lowLimit = 6
+    highLimit = 10
+
+    LOBF_dataDeath =  chart.averagedValues(return_Aged_Data("deaths",lowLimit,highLimit),7)
+    LOBF_dataCases =  chart.averagedValues(return_Aged_Data("cases",lowLimit,highLimit),7)
+
+
+    chart.addScatterplotSubbed(dataAge.GOVdateSeries , chart.calcRatios(LOBF_dataDeath, LOBF_dataCases, ii), lineColour[7], "Age 30 - 49",ii + 4)
+    
+    lowLimit = 10
+    highLimit = 14
+
+    LOBF_dataDeath =  chart.averagedValues(return_Aged_Data("deaths",lowLimit,highLimit),7)
+    LOBF_dataCases =  chart.averagedValues(return_Aged_Data("cases",lowLimit,highLimit),7)
+
+    chart.addScatterplotSubbed(dataAge.GOVdateSeries , chart.calcRatios(LOBF_dataDeath, LOBF_dataCases, ii), lineColour[12], "Age 50 - 69",ii + 4)
+    
+    lowLimit = 14
+    highLimit = 19
+
+    LOBF_dataDeath =  chart.averagedValues(return_Aged_Data("deaths",lowLimit,highLimit),7)
+    LOBF_dataCases =  chart.averagedValues(return_Aged_Data("cases",lowLimit,highLimit),7)
+
+    chart.addScatterplotSubbed(dataAge.GOVdateSeries , chart.calcRatios(LOBF_dataDeath, LOBF_dataCases, ii), lineColour[16], "Age 70+", ii + 4)
+
+
+    filename = ("CFR" + str(ii))
+    chart.drawWideChart("Date", "CFR %",  "COVID 19 Data - Case Fatality Ratio (" + str(ii) + " Day Lag Between Cases and Deaths)", filename, "false", "true", ax1, "true", "true")

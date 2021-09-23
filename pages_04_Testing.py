@@ -43,7 +43,7 @@ def draw_Scatter_Cases_LFFT_PCR():
     chart.addScatterplot(GOVdateSeries, newLFDCases,  'black', 'Cases Found by LFT Only')
     chart.addScatterplot(GOVdateSeries, newLFDCasesConfPCR, 'orangered', 'Cases found by LFT With Conf PCR')
     chart.addScatterplot(GOVdateSeries, allPCR, 'seagreen', 'Cases found by PCR Only')
-    chart.drawChart("Date","Number of Cases","COVID 19 Data - Cases Found Using PCR and LFT's", "casesPCRLFT", "false", "true", ax1, "true", "true") #Draws the chart with lockdowns etc drawn on
+    chart.drawWideChart("Date","Number of Cases","COVID 19 Data - Cases Found Using PCR and LFT's", "casesPCRLFT", "false", "true", ax1, "true", "true") #Draws the chart with lockdowns etc drawn on
 
 def addDatasets(set1, set2):
     newSet = set1.copy()
@@ -75,7 +75,7 @@ def draw_Scatter_PositivityRate():
     chart.addScatterplot(GOVdateSeries,calcRatio(addDatasets(govDataset.newLFDCases, govDataset.positiveLFDconfirmedByPCR), totalLFD), 'darkolivegreen', 'Positivity Rate LFT''s')
     chart.addScatterplot(GOVdateSeries,calcRatio(newCases, addDatasets(p2Tests, p1Tests)), 'brown', 'Positivity Rate LFT & PCR')
 
-    chart.drawChart("Date","Percentage of positive tests","COVID 19 Data - Positivity  Rate", "positivityRate", "false", "true", ax1, "true", "true") #Draws the chart with lockdowns etc drawn on
+    chart.drawWideChart("Date","Percentage of positive tests","COVID 19 Data - Positivity  Rate", "positivityRate", "false", "true", ax1, "true", "true") #Draws the chart with lockdowns etc drawn on
 
 def draw_Scatter_pRate_Cases_deaths():
     setupChart()
@@ -86,7 +86,7 @@ def draw_Scatter_pRate_Cases_deaths():
 
     chart.addScatterplot(GOVdateSeries,calcRatio(newCases, addDatasets(p2Tests, p1Tests)), 'brown', 'Positivity Rate LFT & PCR')
 
-    chart.drawChart("Date","Percentage of Positive Tests, Number of Cases and Deaths (Scaled)","COVID 19 Data - Positivity  Rate, Cases and Deaths", "pRateCasesDeaths", "false", "true", ax1, "true", "true") #Draws the chart with lockdowns etc drawn on
+    chart.drawWideChart("Date","Percentage of Positive Tests, Number of Cases and Deaths (Scaled)","COVID 19 Data - Positivity  Rate, Cases and Deaths", "pRateCasesDeaths", "false", "true", ax1, "true", "true") #Draws the chart with lockdowns etc drawn on
 
 def draw_Scatter_Tests_Conducted():
     setupChart()
@@ -94,4 +94,4 @@ def draw_Scatter_Tests_Conducted():
     chart.addScatterplot(GOVdateSeries,totalLFD, 'violet', 'Pillar 1 & 2 Tests LFT Only')
     chart.addScatterplot(GOVdateSeries,totalPCR, 'darkslategray', 'Pillar 1 & 2 Tests PCR Only')
     chart.addScatterplot(GOVdateSeries,p1Tests, 'chocolate', 'Pillar 1 Tests PCR')
-    chart.drawChart("Date","Number of Tests","COVID 19 Data - Tests Conducted Pillar 1 and 2", "testsConducted", "false", "true", ax1, "true", "true") #Draws the chart with lockdowns etc drawn on
+    chart.drawWideChart("Date","Number of Tests","COVID 19 Data - Tests Conducted Pillar 1 and 2", "testsConducted", "false", "true", ax1, "true", "true") #Draws the chart with lockdowns etc drawn on

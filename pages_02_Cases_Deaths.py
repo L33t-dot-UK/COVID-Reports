@@ -48,7 +48,7 @@ def draw_Scatter_Aged_Cases_per_Million(lLimit, hLimit):
 
     fileName = "ageCasesPerCapita" + str(lLimit) + "_" + str(hLimit)
     leg = ax1.legend(loc='upper left', fontsize = chart.globalLegendFontSize)
-    chart.drawChart("Date", "Cases Per Million",  "COVID 19 Data - Daily Cases Per Million by Age in England", fileName, "false", "false", ax1, "true", "true")
+    chart.drawWideChart("Date", "Cases Per Million",  "COVID 19 Data - Daily Cases Per Million by Age in England", fileName, "false", "false", ax1, "true", "true")
     plt.close
 
 def draw_Bar_Aged_Cases_per_Million():
@@ -128,7 +128,7 @@ def draw_Scatter_Aged_Cases(lLimit, hLimit):
 
     fileName = "ageCases_" + str(lLimit) + "_" + str(hLimit)
     leg = ax1.legend(loc='upper left', fontsize = chart.globalLegendFontSize)
-    chart.drawChart("Date", "Number of People", "COVID 19 Data - Daily cases by Age in England", fileName, "false", "false", ax1, "true", "true")
+    chart.drawWideChart("Date", "Number of People", "COVID 19 Data - Daily cases by Age in England", fileName, "false", "false", ax1, "true", "true")
 
 def draw_Age_Cases_Treemap():
     '''
@@ -208,7 +208,7 @@ def draw_Scatter_Aged_Deaths_per_Million(lLimit, hLimit):
 
     fileName = "ageDeathsPerCapita" + str(lLimit) + "_" + str(hLimit)
     leg = ax1.legend(loc='upper left', fontsize = chart.globalLegendFontSize)
-    chart.drawChart("Date", "Deaths per Million", "COVID 19 Data - Daily Deaths Per Million by Age in England", fileName, "false", "false", ax1, "true", "true")
+    chart.drawWideChart("Date", "Deaths per Million", "COVID 19 Data - Daily Deaths Per Million by Age in England", fileName, "false", "false", ax1, "true", "true")
     plt.close
 
 def draw_Bar_Aged_Deaths_per_Million():
@@ -447,7 +447,7 @@ def draw_Scatter_Aged_Deaths(lLimit, hLimit):
 
     fileName = "ageDeaths_" + str(lLimit) + "_" + str(hLimit)
     leg = ax1.legend(loc='upper left', fontsize = chart.globalLegendFontSize)
-    chart.drawChart("Date", "Number of People", "COVID 19 Data - Daily Deaths by Age in England", fileName, "false", "false", ax1, "true", "true")
+    chart.drawWideChart("Date", "Number of People", "COVID 19 Data - Daily Deaths by Age in England", fileName, "false", "false", ax1, "true", "true")
     plt.close()
 
 def draw_Bar_Aged_Deaths():

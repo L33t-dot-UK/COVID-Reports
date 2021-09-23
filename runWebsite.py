@@ -4,6 +4,7 @@ import pages_03_Dashboard as page3
 import pages_04_Testing as page4
 import pages_05_Lockdown as page5
 import pages_06_Vaccinations as page6
+import test as CFR
 
 import functions_get_Data as getData
 import functions_Chart as chart
