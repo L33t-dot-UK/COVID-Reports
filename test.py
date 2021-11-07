@@ -1,3 +1,11 @@
+
+'''
+THIS IS WHERE I TEST SOME OF THE CODE IN THE COVIDTOOLSET CLASS
+
+THIS CODE CAN BE IGNORED!!!!!
+'''
+
+
 from COVIDTOOLSET import LoadDataSets as govDataClass
 from COVIDTOOLSET import CovidChart as COVIDchart
 from COVIDTOOLSET import GetCOVIDData as getData
