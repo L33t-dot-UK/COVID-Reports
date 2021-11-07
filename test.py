@@ -1,75 +1,78 @@
-import functions_load_Data as dataAge #Loads age graduated data
-import functions_Chart as chart #Draws the chart with certain data points such as lockdowns added
-import matplotlib.pyplot as plt
+from COVIDTOOLSET import LoadDataSets as govDataClass
+from COVIDTOOLSET import CovidChart as COVIDchart
+from COVIDTOOLSET import GetCOVIDData as getData
+from COVIDTOOLSET import Functions as COVIDFUNCS
+from COVIDTOOLSET import Dashboard as DASH
 
-dataAge.get_Data()
-lineColour = dataAge.lineColour
-ageCategoriesString = dataAge.ageCategoriesString
+#pullData = getData("England")
+govData = govDataClass('true')
+dates = govData.getGOVdateSeries()
+ageDates = govData.getAgedGOVdateSeries()
+data = govData.getCumSecondDose()
 
-agedCasesData = [0]*19
-agedDeathsData = [0]*19
+chart = COVIDchart()
+funcs = COVIDFUNCS()
 
-def return_Aged_Data(cat, lLimit, hLimit):
-    dataSet = [0] * len(dataAge.getData(0, cat, 'true'))
-    for ii in range(lLimit, hLimit):
-        tmpDataCases = [0] * len(dataSet)
-        tmpDataCases = dataAge.getData(ii, cat, 'true')
+chart.clearChart()
 
-        for iii in range(len(dataSet)):
-            dataSet[iii] = dataSet[iii] + tmpDataCases[iii]
+chart.setChartParams("false","false","false","true")
+chart.clearChart()
 
-    return dataSet
+for ii in range(0,50):
+    print (govData.getAgedDeathData(15))
 
-filename = ""
-
-global ax1
-fig, ax1 = plt.subplots()
-
-def resizeArray(data, size):
-
-    newdata = [0] * (len(data) - size)
-    for ii in range(0, len(newdata)):
-        newdata[ii] = data[ii]
-
-    return data
-
-for ii in range (18, 19):
-
-    plt.ylim(ymax = 40)
-
-    lowLimit = 0
-    highLimit = 6
-
-    LOBF_dataDeath =  chart.averagedValues(return_Aged_Data("deaths",lowLimit,highLimit),7)
-    LOBF_dataCases =  chart.averagedValues(return_Aged_Data("cases",lowLimit,highLimit),7)
-
-    chart.addScatterplotSubbed(dataAge.GOVdateSeries , chart.calcRatios(LOBF_dataDeath, LOBF_dataCases, ii), lineColour[3], "Age 0 - 29" , ii + 4)
-    
-    lowLimit = 6
-    highLimit = 10
-
-    LOBF_dataDeath =  chart.averagedValues(return_Aged_Data("deaths",lowLimit,highLimit),7)
-    LOBF_dataCases =  chart.averagedValues(return_Aged_Data("cases",lowLimit,highLimit),7)
+dash = DASH()
+imageString = ["images/totals.png", "images/test1.png","images/test2.png","images/test3.png","images/test4.png","images/test5.png"]
+#imageString = ["images/test1.png","images/test2.png","images/test3.png","images/test4.png","images/test5.png"]
 
 
-    chart.addScatterplotSubbed(dataAge.GOVdateSeries , chart.calcRatios(LOBF_dataDeath, LOBF_dataCases, ii), lineColour[7], "Age 30 - 49",ii + 4)
-    
-    lowLimit = 10
-    highLimit = 14
+#Does not work with images of different height
+dash.createDashboard("COVID-19 Dashboard 90 Day History (England)", imageString, "TESTDASH")
 
-    LOBF_dataDeath =  chart.averagedValues(return_Aged_Data("deaths",lowLimit,highLimit),7)
-    LOBF_dataCases =  chart.averagedValues(return_Aged_Data("cases",lowLimit,highLimit),7)
+####
+#
+#
+# CREATE TABLE TESTING
+# WORKS WITH AN ARRAY OF LIST VALUES
+# NEED TO ADD A TABLE TITLE IN THE MAIN METHOD
+#
+'''
+totals = [0] * 19
+totalDeaths = [0] * 19
 
-    chart.addScatterplotSubbed(dataAge.GOVdateSeries , chart.calcRatios(LOBF_dataDeath, LOBF_dataCases, ii), lineColour[12], "Age 50 - 69",ii + 4)
-    
-    lowLimit = 14
-    highLimit = 19
+for ii in range(19):
+    totals[ii] = sum(govData.getAgedCaseData(ii))
+    totalDeaths[ii] = sum(govData.getAgedDeathData(ii))
 
-    LOBF_dataDeath =  chart.averagedValues(return_Aged_Data("deaths",lowLimit,highLimit),7)
-    LOBF_dataCases =  chart.averagedValues(return_Aged_Data("cases",lowLimit,highLimit),7)
+mdLIST = [govData.getAgeCatStringArray(), totals, totalDeaths]
 
-    chart.addScatterplotSubbed(dataAge.GOVdateSeries , chart.calcRatios(LOBF_dataDeath, LOBF_dataCases, ii), lineColour[16], "Age 70+", ii + 4)
+rowlbl = ['EMPTY', 'Cases', 'Deaths', 'test'] #row labels
+
+dash.createTable(300, 400, 20, 20, mdLIST,'white', 'black', rowlbl, 'true', 'images/TESTDASH.png', 40 ,'true', "Test")
+
+dd = [0] * 90
+dates = [0] *90
+dd = funcs.getLastRecords(90, govData.getNewCases())
+dates = funcs.getLastRecords(90, govData.getGOVdateSeries())
+print(dates)
+print(len(dates))
+'''
+'''
+
+import squarify
 
 
-    filename = ("CFR" + str(ii))
-    chart.drawWideChart("Date", "CFR %",  "COVID 19 Data - Case Fatality Ratio (" + str(ii) + " Day Lag Between Cases and Deaths)", filename, "false", "true", ax1, "true", "true")
+chart.clearChart()
+ageCategoriesLabel = govData.getAgeCatStringArray()
+totalCasesAllAges = 0
+for ii in range (19):
+    totalCasesAllAges = totalCasesAllAges + totData[ii]
+
+percent = [0]*19
+for ii in range(19):
+    percent[ii] = (totData[ii] / totalCasesAllAges) * 100
+    percent[ii] = str(round(percent[ii],2))
+    ageCategoriesLabel[ii] = ageCategoriesLabel[ii] + " (" + str(percent[ii]) + "%)" 
+
+squarify.plot(sizes=totData, label=ageCategoriesLabel, color=govData.getLineColourArray(), alpha=.8, bar_kwargs=dict(linewidth=0.5, edgecolor="black"))
+'''
