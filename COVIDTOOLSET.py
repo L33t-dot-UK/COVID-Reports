@@ -17,7 +17,7 @@ class CovidChart:
         from COVIDTOOLSET import CovidChart as CovidChart
         from COVIDTOOLSET import GetCOVIDData as getData
 
-        pullData = getData() #get the latest data and save toLoad data.csv and ageData.csv
+        pullData = getData("England") #get the latest data and save toLoad data.csv and ageData.csv
 
         govData = govDataClass() #Create a govDataClass
         dates = govData.getGOVdateSeries() #get dates from the class
