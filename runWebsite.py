@@ -47,7 +47,7 @@ def page_01_Overview():
     ------------------------ DRAW THE OVERVIEW CHART ------------------------
     '''
     data = govData.getNewCases() #Gets new cases
-    chart.addScatterplot(nonAgeDates, data, "orange", "New COVID-19 Cases", "false")
+    chart.addScatterplot(nonAgeDates, data, "orange", "New COVID-19 Cases ", "false")
 
     data = govData.getHospitalCases() #Gets new deaths
     chart.addScatterplot(nonAgeDates, data, "indigo", "People in Hospital with COVID-19", "false")
@@ -58,7 +58,7 @@ def page_01_Overview():
     data = govData.getNewDeaths() #Gets new deaths
     chart.addBarplot(nonAgeDates, data, "red", "New COVID-19 Deaths")
 
-    chart.drawChart("Date", "Number of People", "COVID-19 Data - Hospital Cases, Hosptial Admissions, General Cases and Deaths  (" + nation + ")" , "overview", "true")
+    chart.drawChart("Date", "Number of People", "COVID-19 Data - Hospital Cases, Hosptial Admissions, Cases and Deaths  (" + nation + ")" , "overview", "true")
 
     '''
     ------------------------ DRAW THE DEATHS CHART ------------------------
@@ -407,16 +407,20 @@ def page_03_Dashboard():
     peopleinHos = funcs.scaleData(peopleinHos, 5)
     hosAdmins = funcs.scaleData(hosAdmins, 10)
 
+    CasesByReportDate = funcs.getLastRecords(90, govData.getnewCasesByReportDate())
+
     chart.setChartParams('false', 'false', 'false', 'false')
-    chart.addBarplot(dates, newCases, 'orange', 'Daily Cases')
+    chart.addBarplot(dates, CasesByReportDate, 'orange', 'Daily Cases (By Reported Date)')
     chart.addScatterplot(dates, peopleinHos, 'indigo', 'Number of People in Hospital (Scaled by 5)', 'false')
     chart.addScatterplot(dates, hosAdmins, 'darkslategrey', 'Number of Daily Admissions (Scaled by 10)', 'false')
-    chart.drawChart('Date', 'Number of Cases, Hospital Cases, Hospital Admission', 'Cases and Hospitalisations (Last 90 Days)', 'Dashboard_60_C_HC_HA', 'false')
+    chart.drawChart('Date', 'Number of Cases (By Reported Date), Hospital Cases, Hospital Admission', 'Cases and Hospitalisations (Last 90 Days)', 'Dashboard_60_C_HC_HA', 'false')
 
     #Total Daily Deaths (Last 90 Days)
     chart.clearChart() #Clear the chart
     totalDeathsLast90 = funcs.getLastRecords(90, govData.getNewDeaths())
+    totalDeathsRepLast90 = funcs.getLastRecords(90, govData.getDeathsByReportDate())
     chart.addBarplot(dates, totalDeathsLast90, 'red', 'Deaths by Death Date')
+    #chart.addScatterplot(dates, totalDeathsRepLast90, 'pink', 'Deaths by Reported Date', 'false')
     chart.setChartParams('false', 'false', 'false', 'false')
     chart.drawChart('Date', 'Number of Deaths by Death Date', 'Total Daily Deaths (Last 90 Days)', 'Dashboard_60_Deaths', 'false')
 
@@ -604,18 +608,12 @@ def calcAgedCFR(lag):
     deaths, deathsStr = add_Aged_Data('deaths', 0, 6)
     cases, casesStr = add_Aged_Data('cases', 0, 6)
 
-    #deaths =  CFRChart.averagedValues(deaths, 7)
-    #cases =  CFRChart.averagedValues(cases, 7)
-
     data = funcs.CalcCFR(lag, deaths, cases)
     dates = funcs.getFirstRecords((len(data)) , govData.getAgedGOVdateSeries())
     CFRChart.addScatterplot(dates, data, govData.getLineColourArray()[3], 'Age Range: 0 - 29', 'false')
 
     deaths, deathsStr = add_Aged_Data('deaths', 6, 10)
     cases, casesStr = add_Aged_Data('cases', 6, 10)
-
-    #deaths =  CFRChart.averagedValues(deaths, 7)
-    #cases =  CFRChart.averagedValues(cases, 7)
 
     data = funcs.CalcCFR(lag, deaths, cases)
     dates = funcs.getFirstRecords((len(data)) , govData.getAgedGOVdateSeries())
@@ -624,18 +622,12 @@ def calcAgedCFR(lag):
     deaths, deathsStr = add_Aged_Data('deaths', 10, 14)
     cases, casesStr = add_Aged_Data('cases', 10, 14)
 
-    #deaths =  CFRChart.averagedValues(deaths, 7)
-    #cases =  CFRChart.averagedValues(cases, 7)
-
     data = funcs.CalcCFR(lag, deaths, cases)
     dates = funcs.getFirstRecords((len(data)) , govData.getAgedGOVdateSeries())
     chart.addScatterplot(dates, data, govData.getLineColourArray()[12], 'Age Range: 50 - 69', 'false')
 
     deaths, deathsStr = add_Aged_Data('deaths', 14, 19)
     cases, casesStr = add_Aged_Data('cases', 14, 19)
-
-    #deaths =  CFRChart.averagedValues(deaths, 7)
-    #cases =  CFRChart.averagedValues(cases, 7)
 
     data = funcs.CalcCFR(lag, deaths, cases)
     dates = funcs.getFirstRecords((len(data)) , govData.getAgedGOVdateSeries())
@@ -644,6 +636,70 @@ def calcAgedCFR(lag):
     CFRChart.setMaxYvalue(50)
     CFRChart.setChartParams('false', 'false', 'true', 'true')
     CFRChart.drawChart('Date', 'Case Fatality Ratio %', 'Case Fatality Ratio Between the Age Groups (18 Day Lag)', 'CFR18', 'true')
+
+def Dashboard_2():
+    chart.setChartParams('false', 'false', 'false', 'true')
+    chart.clearChart()
+    days = 14
+    chart.addBarChart(funcs.getLastRecords(days, govData.getGOVdateSeries()), funcs.getLastRecords(days, govData.getnewCasesByReportDate()), 'orange')
+    chart.drawChart('Date', 'Cases', 'COVID 19 Data - Cases by Reported Date, Previous ' + str(days) + ' Days', 'test', 'false')
+
+    chart.clearChart()
+    chart.addBarChart(funcs.getLastRecords(days, govData.getGOVdateSeries()), funcs.getLastRecords(days, govData.getHospitalCases()), 'indigo')
+    chart.addBarChart(funcs.getLastRecords(days, govData.getGOVdateSeries()), funcs.getLastRecords(days, govData.getnewAdmssions()), 'darkslategrey')
+
+    chart.drawChart('Date', 'Cases', 'COVID 19 Data - Hospital Cases & Admissions, Previous ' + str(days) + ' Days', 'testp', 'false')
+
+    chart.clearChart()
+    days = 45
+    agedCases, casesStr = add_Aged_Data('cases', 14, 19)
+    agedCases = funcs.getLastRecords(days, agedCases)
+
+    agedDeaths, deathsStr = add_Aged_Data('deaths', 14, 19)
+    agedDeaths = funcs.getLastRecords(days, agedDeaths)
+    chart.addBarChart(funcs.getLastRecords(days, govData.getAgedGOVdateSeries()), agedCases, 'orange')
+    chart.addBarChart(funcs.getLastRecords(days, govData.getAgedGOVdateSeries()), agedDeaths, 'red')
+    chart.drawChart('Date', 'Cases', 'COVID 19 Data - Cases & Deaths in the Extremely Vulnerable 70+ Age Groups, Previous ' + str(days) + ' Days', 'testd', 'true')
+
+    chart.clearChart()
+    agedCases, casesStr = add_Aged_Data('cases', 10, 14)
+    agedCases = funcs.getLastRecords(days, agedCases)
+
+    agedDeaths, deathsStr = add_Aged_Data('deaths', 10, 14)
+    agedDeaths = funcs.getLastRecords(days, agedDeaths)
+    chart.addBarChart(funcs.getLastRecords(days, govData.getAgedGOVdateSeries()), agedCases, 'orange')
+    chart.addBarChart(funcs.getLastRecords(days, govData.getAgedGOVdateSeries()), agedDeaths, 'red')
+    chart.drawChart('Date', 'Cases', 'COVID 19 Data - Cases & Deaths in the 50 - 69 Age Groups, Previous ' + str(days) + ' Days', 'teste', 'true')
+
+    chart.clearChart()
+    agedCases, casesStr = add_Aged_Data('cases', 0, 10)
+    agedCases = funcs.getLastRecords(days, agedCases)
+
+    agedDeaths, deathsStr = add_Aged_Data('deaths', 0, 10)
+    agedDeaths = funcs.getLastRecords(days, agedDeaths)
+    chart.addBarChart(funcs.getLastRecords(days, govData.getAgedGOVdateSeries()), agedCases, 'orange')
+    chart.addBarChart(funcs.getLastRecords(days, govData.getAgedGOVdateSeries()), agedDeaths, 'red')
+    chart.drawChart('Date', 'Cases', 'COVID 19 Data - Cases & Deaths in the under 50s Age Groups, Previous ' + str(days) + ' Days', 'testf', 'true')
+
+    days = 14
+    chart.clearChart()
+    chart.addBarChart(funcs.getLastRecords(days, govData.getGOVdateSeries()), funcs.getLastRecords(days, govData.getDeathsByReportDate()), 'pink')
+    chart.drawChart('Date', 'Deaths', 'COVID 19 Data - Deaths by Report Date, Previous ' + str(days) + ' Days', 'testb', 'false')
+
+    chart.clearChart()
+    chart.addBarChart(funcs.getLastRecords(days, govData.getGOVdateSeries()), funcs.getLastRecords(days, govData.getNewDeaths()), 'red')
+    chart.drawChart('Date', 'Deaths', 'COVID 19 Data - Deaths by Death Date, Previous ' + str(days) + ' Days', 'testc', 'false')
+
+    img = ['images/test.png', 'images/testp.png', 'images/testb.png', 'images/testc.png', 'images/testf.png', 'images/teste.png', 'images/testd.png']
+
+    dash = DASH()
+    dash.createDashboard("Cases, Deaths and Hospitalisation (14 to 45 Day Review)", img, 'dashboard_2')
+
+from BENCHMARK import Benchmark
+BENCH = Benchmark() #Used for benchmarking
+BENCH.setBench(True) #Bechmark output will be printed if this is set to true
+
+BENCH.benchStart()
 
 page_01_Overview()
 page_02_Cases_Deaths(0, 19)
@@ -654,4 +710,11 @@ page_06_Vaccinations()
 
 CFRChart = CovidChart() #Use a different object because we change the max Y value
 calcAgedCFR(18)
+
+Dashboard_2()
+BENCH.benchEnd("TOTAL EXECUTION")
+
+
+
+
 

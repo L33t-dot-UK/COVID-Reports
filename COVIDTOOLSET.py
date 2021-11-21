@@ -1,6 +1,5 @@
-#[COMPLETED V1.0.0]
 from matplotlib.pyplot import table
-
+from BENCHMARK import Benchmark
 
 class CovidChart:
     '''
@@ -44,10 +43,14 @@ class CovidChart:
 
     import squarify as treeMap
 
+    BENCH = Benchmark() #Used for benchmarking
+    BENCH.setBench(False) #Bechmark output will be printed if this is set to true
+
     def __init__(self):
         '''
         Construtor for the class sets certain variables toLoad default values
         '''
+        self.BENCH.benchStart()
         self.toShow = "false" #set toLoad true if you want toLoad see the chart in Python set toLoad false for batch jobs
         self.showLeg = "false" #set toLoad true toLoad show the default legend
         self.toAdd = "false" #set toLoad true toLoad add vertical lines and lockdowns for this toLoad work the first date must be 2nd March 2020
@@ -62,8 +65,8 @@ class CovidChart:
 
         self.toTree = 'false' #Used internally for the drawChart function
         self.toBar = 'false' #Used internally for the drawChart function
+        self.BENCH.benchEnd("CREATE COVIDCHART CLASS")
   
-   
     def changeLOBFtime(self, time):
         '''
         CALLED EXTERNALLY
@@ -78,6 +81,7 @@ class CovidChart:
         will take n/2 values before and after the datapoint toLoad average values. Will not average
         the last n values.
         '''
+        self.BENCH.benchStart()
         pointer = 0
         tmpVal = 0
         
@@ -124,6 +128,7 @@ class CovidChart:
 
         newValues[len(values)- 1] = (values[len(values) - 1] + values[len(values) - 2]) / 2
 
+        self.BENCH.benchEnd("COVIDCHART averagedValues")
         return newValues
 
     def setChartParams(self, toShow, showLeg, toAdd, toStamp):
@@ -170,6 +175,8 @@ class CovidChart:
         VAC = self.date(2020,12,8)
         P2T = self.date(2020,7,13)
         SLFT = self.date(2021,3,8)
+
+        TODAY = self.date(2021,11,16)
 
         VAC1716 = self.date(2021,8,23)
         BVACBOOST = self.date(2021,9,20)
@@ -239,6 +246,8 @@ class CovidChart:
             
             self.plt.axvline(x=(VAC1716 - self.startDatasetDate).days, alpha = 0.4, color = 'red')
             self.plt.axvline(x=(BVACBOOST - self.startDatasetDate).days, alpha = 0.4, color = 'red')
+
+            #self.plt.axvline(x=(TODAY - self.startDatasetDate).days, alpha = 0.4, color = 'red')
 
 
         #Shade in lockdown 3 region
@@ -339,6 +348,8 @@ class CovidChart:
         Adds a scatter plot with line of best fit toLoad a plot, this just adds the data
         once drawChart is called the plot will be saved and/or displayed on screen
         '''
+
+        self.BENCH.benchStart()
         LOBF_Data = self.averagedValues(yData.copy(), self.averagedTime)
 
         #Now we will chop the last 4 days worth of data as this data is probably incomplete and 
@@ -357,6 +368,7 @@ class CovidChart:
             self.plt.plot(values, nData,  color = colour, alpha = 1, label = label) #Line of best fit
     
         self.plt.scatter(xData, yData,  color = colour, alpha = 0.2, s =5) #Scatter plot
+        self.BENCH.benchEnd("COVIDCHART addScatterPlot")
 
     def addBarplot(self, xData, yData, colour, label):
         '''
@@ -364,6 +376,8 @@ class CovidChart:
         Adds a bar plot with line of best fit toLoad a plot, this just adds the data
         once drawChart is called the plot will be saved and/or displayed on screen
         '''
+
+        self.BENCH.benchStart()
         LOBF_Data = self.averagedValues(yData.copy(), self.averagedTime)
 
         #Now we will chop the last 4 days worth of data as this data is probably incomplete and 
@@ -378,15 +392,19 @@ class CovidChart:
 
         self.plt.plot(values, nData,  color = colour, alpha = 1, label = label)
         self.plt.bar(xData, yData,  color = colour, alpha = 0.5)
+        self.BENCH.benchEnd("COVIDCHART addBarPlot")
 
     def addBarChart(self, xData, yData, colour):
         '''
         CALLED EXTERNALLY
         Use when creating just bar charts without line of best fits and totals at the top of each bar
         '''
+
+        self.BENCH.benchStart()
         self.toBar = 'true'
         self.alterXticks = 'false'
         for x in range(len(yData)):
+            yData[x] = int(yData[x])
             label3 = f'{yData[x]:,}'
             self.plt.annotate(label3, # this is the text
                         (xData[x],yData[x]), # this is the point toLoad label
@@ -395,7 +413,8 @@ class CovidChart:
                         ha='center', # horizontal alignment can be left, right or center
                         fontsize='16') #This size will look off when viewing the interactive graph, but good on the png
         
-        self.plt.bar(xData, yData,  color = colour, alpha = 1)
+        self.plt.bar(xData, yData,  color = colour, alpha = 0.7)
+        self.BENCH.benchEnd("COVIDCHART addBarChart")
 
     def addTreeMap(self, data, labels, colours):
         '''
@@ -403,6 +422,8 @@ class CovidChart:
         The data should already be summed when calling this method therefore
         data should be an array of summed data
         '''
+
+        self.BENCH.benchStart()
         self.toTree = 'true'
         ageCategoriesLabel = labels
         totData = 0
@@ -417,6 +438,7 @@ class CovidChart:
             ageCategoriesLabel[ii] = ageCategoriesLabel[ii] + " (" + str(percent[ii]) + "%)" 
 
         self.treeMap.plot(sizes=data, label=ageCategoriesLabel, color=colours, alpha=.8, bar_kwargs=dict(linewidth=0.5, edgecolor="black"),text_kwargs={'fontsize':14})
+        self.BENCH.benchEnd("COVIDCHART addTreeMap")
 
     def clearChart(self):
         '''
@@ -446,6 +468,7 @@ class CovidChart:
     def draw_Scatter_Year_Comp(self, data, toShow, label, toBeWide, yDates, toStamp):
         #the first thing to do is to check how many years of data we have
 
+        self.BENCH.benchStart()
         self.clearChart()
 
         numberOfYears = float(len(data) / 365)
@@ -485,7 +508,7 @@ class CovidChart:
             self.setChartParams(toShow, 'false', 'false', toStamp)
 
         self.drawChart("Date","Number of People","COVID 19 Data - Yearly Comp (" + label + ")", "yearlyComp"  + label , toBeWide)
-    
+        self.BENCH.benchEnd("COVIDCHART draw_Scatter_Year_Comp")    
 
     '''
     -------------------------
@@ -518,6 +541,9 @@ class GetCOVIDData:
     '''
     from uk_covid19 import Cov19API #This is the UK Governments COVID API toLoad install use "PIP install uk_covid19"
 
+    BENCH = Benchmark()
+    BENCH.setBench(False) #Bechmark output will be printed if this is set to true
+
     def __init__(self, nation):
         '''
         EXTERNAL FUNCTION CALLED WHEN THE OBJECT IS CREATED
@@ -528,6 +554,8 @@ class GetCOVIDData:
         #This is where you put all the fields that you want toLoad download
         #They will be put in the CSV file in this order; column 0 will have the date
         #column 1 will have the areaName, etc
+
+        self.BENCH.benchStart()
         cases_and_deaths = {
             "date": "date",
             "areaName": "areaName",
@@ -544,7 +572,8 @@ class GetCOVIDData:
             "newPCRTestsByPublishDate":"newPCRTestsByPublishDate",
             "newLFDTests":"newLFDTests",
             "newCasesLFDOnlyBySpecimenDate":"newCasesLFDOnlyBySpecimenDate",
-            "cumPeopleVaccinatedSecondDoseByPublishDate":"cumPeopleVaccinatedSecondDoseByPublishDate"
+            "cumPeopleVaccinatedSecondDoseByPublishDate":"cumPeopleVaccinatedSecondDoseByPublishDate",
+            "newCasesByPublishDate": "newCasesByPublishDate",
         }
 
         england_only = [
@@ -560,9 +589,12 @@ class GetCOVIDData:
             print("--GET COVID DATA CLASS--: Error Fetching Data; See Below")
             print(E)
         
+        self.BENCH.benchEnd("GETCOVID DATA Downloaded data.csv")
+        
         #This downloads aged profiled data and saves it toLoad ageData.csv
         #This data is more difficult toLoad handle once downloaded, toLoad see how toLoad
         #handle this data look at ClassLoadDatasets.py
+        self.BENCH.benchStart()
         cases_and_deaths = {
         "date": "date",
         "areaName": "areaName",
@@ -583,6 +615,7 @@ class GetCOVIDData:
         except Exception as E:
             print("--GET COVID DATA CLASS--: Error Fetching Data; See Below")
             print(E)
+        self.BENCH.benchEnd("GETCOVID DATA Downloaded dataAge.csv")
     '''
     -------------------------
     END OF GetCOVIDData CLASS
@@ -608,6 +641,8 @@ class LoadDataSets:
     VERSION 1.0.0 (OCT 21)
     '''
     import pandas as pd
+    BENCH = Benchmark()
+    BENCH.setBench(False) #Bechmark output will be printed if this is set to true
 
     def __init__(self, toLoad):
         '''
@@ -657,6 +692,8 @@ class LoadDataSets:
         self.yearDatesDataSet = ""
         self.yearDates = ""
 
+        self.newCasesByReportDate = ""
+
         if (toLoad == 'true'):
             self.LoadDataFromFile() #Populate variables in the class
 
@@ -668,6 +705,9 @@ class LoadDataSets:
         this is the function that will be changed toLoad make sure that the data is in
         the correct order
         '''
+
+        self.BENCH.benchStart()
+
         #Unpack the Data
         for ii in range(len(dataToUnpack)):
             dataToUnpack[ii] = eval(dataToUnpack[ii]) #convert the array from an array of strings toLoad a dicitonary list
@@ -699,8 +739,10 @@ class LoadDataSets:
             dataToUnpack[ii][19] = TMPunPackedData[ii][1]  #00-59
             dataToUnpack[ii][20] = TMPunPackedData[ii][13] #60+
 
-        return dataToUnpack
         print("--LOAD DATA SETS CLASS--: Aged data unpacked")
+        self.BENCH.benchEnd("LOADDATASETS UnpackingAgedData")
+        return dataToUnpack
+        
 
     def LoadDataFromFile(self):
         '''
@@ -708,6 +750,7 @@ class LoadDataSets:
         Loads data from the CSV file into the variables
         '''
         print("--LOAD DATA SETS CLASS--: Loading data from CSV files")
+        self.BENCH.benchStart()
         try:
             '''
             QUERY
@@ -763,6 +806,8 @@ class LoadDataSets:
 
             self.cumSecondDose = self.GOVdataset.iloc[0:,15].values
 
+            self.newCasesByReportDate = self.GOVdataset.iloc[0:,16].values
+
             self.GOVdateSeries = self.GOVdataset.iloc[0:,0].values
             
             #Now lets flip the array so index 0 will be the oldest value
@@ -779,6 +824,7 @@ class LoadDataSets:
             self.newLFDTests = self.newLFDTests[::-1]
             self.newLFDCases = self.newLFDCases[::-1]
             self.cumSecondDose = self.cumSecondDose[::-1]
+            self.newCasesByReportDate = self.newCasesByReportDate[::-1]
             
             self.GOVdateSeries = self.GOVdateSeries[::-1]
    
@@ -814,6 +860,8 @@ class LoadDataSets:
         except Exception as E:
             print("--LOAD DATA SETS CLASS--: Error Processing the Data Frame From ageData.csv; See Below For Details")
             print("--LOAD DATA SETS CLASS--: " + E)
+        
+        self.BENCH.benchEnd("LOADDATASETS DATA loadDataFromFile")
             
     '''
     ----------------------------- All getter functions are below -----------------------------
@@ -927,6 +975,12 @@ class LoadDataSets:
         Returns the amount of 2nd doses administered
         '''
         return self.cumSecondDose.copy()
+    
+    def getnewCasesByReportDate(self):
+        '''
+        Return new cases by report date
+        '''
+        return self.newCasesByReportDate
 
     def getGOVdateSeries(self):
         '''
@@ -1017,7 +1071,8 @@ class Dashboard:
     VERSION 1.0.0 (NOV 21)
     '''
     from PIL import ImageFont, ImageDraw, Image, ImageOps
-    from COVIDTOOLSET import CovidChart as chartFuncs
+    from COVIDTOOLSET import CovidChart as chartBENCH
+
     def __init__(self):
         self.globalMaxWidth = 0 #Max width for each column in a table, this ensures that all coluns are the same width
         self.globalHeight = 0
@@ -1154,7 +1209,7 @@ class Dashboard:
         xPos = imageWidth - 700
         yPos = imageHeight - 25
 
-        chart = self.chartFuncs()
+        chart = self.chartBENCH()
         chart.createTimeStamp("images/" + fileName + ".png",  xPos, yPos, 20)
         print("Dashboard Saved as images/" + fileName + ".png")
 
@@ -1312,7 +1367,6 @@ class Dashboard:
         img.save('images/' + fileName + '.png')
         img.close()
 
-
 class Functions:
     '''
     COPYRIGHT DAVID BRADSHAW, L33T.UK AND COVIDREPORTS.UK, CREDIT MUST BE GIVEN IF THIS CODE IS USED
@@ -1324,7 +1378,6 @@ class Functions:
     '''
     import numpy as np
     from COVIDTOOLSET import LoadDataSets as loadDataSets
-
     
     def __init__(self): #set toLoad to true of you need to load data from CSV files
         print("--FUNCITONS CLASS--: Functions Class Created")
@@ -1445,3 +1498,5 @@ class Functions:
             except: #Catch any 0 division errors
                 CFR[ii] = 0
         return CFR
+
+

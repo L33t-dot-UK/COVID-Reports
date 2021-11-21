@@ -1,8 +1,7 @@
-
 '''
-THIS IS WHERE I TEST SOME OF THE CODE IN THE COVIDTOOLSET CLASS
 
-THIS CODE CAN BE IGNORED!!!!!
+THIS CODE WAS USED TO CREATE VISUALISATION YOUTUBE VIDEOS THAT CAN BE VIEW ON THE COVIDREPORTS.UK WEBSITE
+
 '''
 
 
@@ -36,15 +35,12 @@ import numpy as np
 
 cumData = [0] * 19
 
-
 dataSTR = "Cases"
 c = "orange"
 max = 10000
 
-chart.setChartParams("false", "false", "false", "false")
+chart.setChartParams("false", "false", "true", "false")
 
-'''
-#This creates charts used for the cumlative videos
 for ii in range (0, len(ageDates)):
     print(ii)
     chart.clearChart()
@@ -52,30 +48,7 @@ for ii in range (0, len(ageDates)):
 
     total = 0
     for iii in range(0, 19):
-        data = govData.getAgedCaseData(iii)
-        data = data[0:ii]
-        cumData[iii] = np.sum(data)
-
-        total = total + cumData[iii]
-
-    actDate = ageDates[ii]
-
-    total = '{:,}'.format(total)
-
-    chart.addBarChart(govData.getAgeCatStringArray(), cumData, c)
-    chart.drawChart("Age", "Number of " + dataSTR, "Evolution of COVID-19: Cumlative " + dataSTR + " up to " + actDate + " (England) : Total " + dataSTR + " " + str(total), str(ii), "false")
-'''
-
-chart.setChartParams("false", "false", "true", "false")
-
-for ii in range (300, len(ageDates)):
-    print(ii)
-    chart.clearChart()
-    chart.setMaxYvalue(max)
-
-    total = 0
-    for iii in range(0, 19):
-        data = govData.getAgedCaseData(iii)
+        data = govData.getAgedCaseData(iii) #Change this for your data such as cases and deaths etc
         data = data[0:ii]
         cumData[iii] = np.sum(data)
 
@@ -87,6 +60,6 @@ for ii in range (300, len(ageDates)):
 
     total = '{:,}'.format(total)
 
-    #chart.addBarChart(govData.getAgeCatStringArray(), cumData, c)
+    #chart.addBarChart(govData.getAgeCatStringArray(), cumData, c) #Use this for bar charts
     
-    chart.drawChart("Date", "Number of " + dataSTR, "Evolution of COVID-19: " + dataSTR +  " Split by Age Groups (England) : Total " + dataSTR + " " + str(total), str(ii), "true")
+    chart.drawChart("Date", "Number of " + dataSTR, "Evolution of COVID-19: " + dataSTR +  " Split by Age Groups (England) : Total " + dataSTR + " " + str(total), str(ii), "true") #Use this for time series graphs
