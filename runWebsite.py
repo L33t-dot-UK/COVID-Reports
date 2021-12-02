@@ -586,14 +586,14 @@ def draw_Scatter_Aged_Cases_Grouped():
     chart.drawChart("Date", "Number of People", "COVID 19 Data - Daily Cases by Age in England by Age Group", 'ageGroupCases', 'true')
 
 def page_06_Vaccinations():
+    dash = DASH()
+    
     chart.draw_Scatter_Year_Comp(govData.getNewCases(), 'false', 'Cases', 'false', govData.getYearDates(), 'false')
     chart.draw_Scatter_Year_Comp(govData.getNewDeaths(), 'false', 'Deaths', 'false', govData.getYearDates(), 'false')
     chart.draw_Scatter_Year_Comp(govData.getnewAdmssions(), 'false', 'Hospital_Admissions', 'false', govData.getYearDates(), 'false')
     chart.draw_Scatter_Year_Comp(govData.getHospitalCases(), 'false', 'Hospital_Cases', 'false', govData.getYearDates(), 'false')
 
     #Now put the above images side by side
-    dash = DASH()
-
     img = ['images/yearlyCompCases.png', 'images/yearlyCompDeaths.png', 'images/yearlyCompHospital_Admissions.png', 'images/yearlyCompHospital_Cases.png']
     dash.createDashboard('', img, 'yearCompCasesDeaths')    #This will put the images side by side
 
@@ -603,7 +603,29 @@ def page_06_Vaccinations():
 
     img = ['images/ageGroupCases.png', 'images/ageGroupDeaths.png']
     dash.createDashboard('', img, 'agedGroupedData')    #This will put the images side by side
+    
 
+    #WIP
+    
+    for ii in range(0, 19): #Draw a year comp for each age group
+        label = "CFR " + govData.getAgeCatStringArray()[ii]  
+        data = funcs.CalcCFR(18, govData.getAgedDeathData(ii), govData.getAgedCaseData(ii))
+        chart.draw_Scatter_Year_Comp(data, 'false', label, 'true', govData.getYearDates(), 'false')
+    
+
+    #WIP
+    
+    for ii in range(0, 19): #Draw a year comp for each age group
+        label = "Cases " + govData.getAgeCatStringArray()[ii]  
+        chart.draw_Scatter_Year_Comp(govData.getAgedCaseData(ii), 'false', label, 'false', govData.getYearDates(), 'false')
+        label = "Deaths " + govData.getAgeCatStringArray()[ii]  
+        chart.draw_Scatter_Year_Comp(govData.getAgedDeathData(ii), 'false', label, 'false', govData.getYearDates(), 'false')
+
+        img = ['images/yearlyCompCases ' + govData.getAgeCatStringArray()[ii]  + '.png', 'images/yearlyCompDeaths ' + govData.getAgeCatStringArray()[ii]  + '.png']
+        dash.createDashboard('', img, 'XXXyearCompVax' + str(ii))    #This will put the images side by side
+    
+
+    
 def calcAgedCFR(lag):
     deaths, deathsStr = add_Aged_Data('deaths', 0, 6)
     cases, casesStr = add_Aged_Data('cases', 0, 6)

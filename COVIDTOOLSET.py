@@ -42,6 +42,8 @@ class CovidChart:
     import matplotlib.ticker as ticker
 
     import squarify as treeMap
+    import pandas as pd
+    import numpy as np
 
     BENCH = Benchmark() #Used for benchmarking
     BENCH.setBench(False) #Bechmark output will be printed if this is set to true
@@ -58,7 +60,7 @@ class CovidChart:
         self.averagedTime = 7
 
         self.startDatasetDate = self.date(2020, 3,2) #Default start date, if your start date is different change this param
-    
+
         self.figure, self.ax1 = self.plt.subplots()
 
         self.alterXticks = 'true'
@@ -74,6 +76,7 @@ class CovidChart:
         '''
         self.averagedTime = time
 
+    
     def averagedValues(self, nValues, time):
         '''
         USED INTERNALLY TO PLOT LOBF'S
@@ -130,6 +133,32 @@ class CovidChart:
 
         self.BENCH.benchEnd("COVIDCHART averagedValues")
         return newValues
+    
+    '''
+    def averagedValues(self, nValues, time):
+
+        #turn the lists into a dicitonary
+        cntr = [0] * len(nValues)
+        for ii in range(len(nValues)):
+            cntr[ii] = ii
+
+        dictionary = {"data" : nValues}
+        df = self.pd.DataFrame(dictionary)
+
+        nValues = nValues[0: len(nValues) - 8] #remove last 8 days of data
+        cntr = cntr[0: len(cntr) - 8] #remove last 8 day of data
+
+        mymodel = self.np.poly1d(self.np.polyfit(cntr, nValues, 21))
+        myline = self.np.linspace(0, len(nValues), 100)
+
+
+        #self.plt.plot(myline, mymodel(myline))
+        #self.plt.scatter(cntr, nValues)
+        #self.plt.show()
+
+        return mymodel(myline)
+    '''
+        
 
     def setChartParams(self, toShow, showLeg, toAdd, toStamp):
         '''
@@ -159,100 +188,124 @@ class CovidChart:
         CALLED EXTERNALLY
         Draws vertical lines on the graphs indicating key moments. If any key moments need toLoad be added add them in this method
         '''
-        LD1 = self.date(2020,3,23)
-        LD1_2Weeks = self.date(2020,4,6)
-        LD1_S = self.date(2020,6,23)
-        LD1_SchoolsBack = self.date(2020,6,1)
-        FM = self.date(2020,7,24)
-        FFM_2Weeks = self.date(2020,8,7)
-        LD2 = self.date(2020,11,5)
-        LD2_2Weeks = self.date(2020,11,19)
-        LD2_S = self.date(2020,12,2)
-        LD3 = self.date(2021,1,6)
-        LD3_2Weeks = self.date(2021,1,20)
-        LD3_S = self.date(2021,7,19)
+        LD1 = self.np.array(self.date(2020,3,23), dtype='datetime64')
+        LD1_2Weeks = self.np.array(self.date(2020,4,6), dtype='datetime64')
+        LD1_S = self.np.array(self.date(2020,6,23), dtype='datetime64')
+        LD1_SchoolsBack = self.np.array(self.date(2020,6,1), dtype='datetime64')
+        FM = self.np.array(self.date(2020,7,24), dtype='datetime64')
+        FFM_2Weeks = self.np.array(self.date(2020,8,7), dtype='datetime64')
+        LD2 = self.np.array(self.date(2020,11,5), dtype='datetime64')
+        LD2_2Weeks = self.np.array(self.date(2020,11,19), dtype='datetime64')
+        LD2_S = self.np.array(self.date(2020,12,2), dtype='datetime64')
+        LD3 = self.np.array(self.date(2021,1,6), dtype='datetime64')
+        LD3_2Weeks = self.np.array(self.date(2021,1,20), dtype='datetime64')
+        LD3_S = self.np.array(self.date(2021,7,19), dtype='datetime64')
         
-        VAC = self.date(2020,12,8)
-        P2T = self.date(2020,7,13)
-        SLFT = self.date(2021,3,8)
+        VAC = self.np.array(self.date(2020,12,8), dtype='datetime64')
+        P2T = self.np.array(self.date(2020,7,13), dtype='datetime64')
+        SLFT = self.np.array(self.date(2021,3,8), dtype='datetime64')
 
-        TODAY = self.date(2021,11,16)
+        TODAY = self.np.array(self.date(2021,11,16), dtype='datetime64')
 
-        VAC1716 = self.date(2021,8,23)
-        BVACBOOST = self.date(2021,9,20)
+        VAC1716 = self.np.array(self.date(2021,8,23), dtype='datetime64')
+        BVACBOOST = self.np.array(self.date(2021,9,20), dtype='datetime64')
+
         if (self.showLeg == 'true'):
-            self.plt.axvline(x=(LD1 - self.startDatasetDate).days, alpha = 0.2, label = '(VLINE) Lockdown 1.0 & Schools Closed', color = 'steelblue')
-            self.plt.axvline(x=(LD1_2Weeks - self.startDatasetDate).days, alpha = 0.2,  color = 'steelblue', linestyle='-.')
-            self.plt.axvline(x=(LD1_SchoolsBack - self.startDatasetDate).days, alpha = 0.2, color = 'red', label = '(VLINE) LD1 Schools Back')
-            self.plt.axvline(x=(LD1_S - self.startDatasetDate).days, alpha = 0.2, color = 'steelblue')
+            
+            self.plt.axvline(x=(LD1), alpha = 0.2, label = '(VLINE) Lockdown 1.0 & Schools Closed', color = 'steelblue')
+            self.plt.axvline(x=(LD1_2Weeks), alpha = 0.2,  color = 'steelblue', linestyle='-.')
+            self.plt.axvline(x=(LD1_SchoolsBack), alpha = 0.2, color = 'red', label = '(VLINE) LD1 Schools Back')
+            self.plt.axvline(x=(LD1_S), alpha = 0.2, color = 'steelblue')
 
             #Shade in lockdown 1 region
-            for i in range((LD1 - self.startDatasetDate).days, (LD1_S - self.startDatasetDate).days):
-                self.plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
+            #for i in range((LD1), (LD1_S)):
+            #    self.plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
 
-            self.plt.axvline(x=(P2T - self.startDatasetDate).days, alpha = 0.2, label = '(VLINE) Large Scale P2 Tests Introduced', color = 'red')
+            self.plt.axvline(x=(P2T), alpha = 0.2, label = '(VLINE) Large Scale P2 Tests Introduced', color = 'red')
             
-            self.plt.axvline(x=(FM - self.startDatasetDate).days, alpha = 0.2, label = '(VLINE) Mandatory Face Masks', color = 'deepskyblue')
-            self.plt.axvline(x=(FFM_2Weeks - self.startDatasetDate).days, alpha = 0.2,  color = 'deepskyblue' , linestyle='-.')
+            self.plt.axvline(x=(FM), alpha = 0.2, label = '(VLINE) Mandatory Face Masks', color = 'deepskyblue')
+            self.plt.axvline(x=(FFM_2Weeks), alpha = 0.2,  color = 'deepskyblue' , linestyle='-.')
 
-            self.plt.axvline(x=(LD2 - self.startDatasetDate).days, alpha = 0.2, label = '(VLINE) Lockdown 2.0', color = 'cadetblue')
-            self.plt.axvline(x=(LD2_2Weeks - self.startDatasetDate).days, alpha = 0.2,  color = 'cadetblue', linestyle='-.')
-            self.plt.axvline(x=(LD2_S - self.startDatasetDate).days, alpha = 0.2, color = 'cadetblue')
+            self.plt.axvline(x=(LD2), alpha = 0.2, label = '(VLINE) Lockdown 2.0', color = 'cadetblue')
+            self.plt.axvline(x=(LD2_2Weeks), alpha = 0.2,  color = 'cadetblue', linestyle='-.')
+            self.plt.axvline(x=(LD2_S), alpha = 0.2, color = 'cadetblue')
 
             #Shade in lockdown 2 region
-            for i in range((LD2 - self.startDatasetDate).days, (LD2_S - self.startDatasetDate).days):
-                self.plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
+            #for i in range((LD2), (LD2_S)):
+            #    self.plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
 
-            self.plt.axvline(x=(VAC - self.startDatasetDate).days, alpha = 0.4, color = 'red', label = '(VLINE) Vaccine Rollout Starts')
+            self.plt.axvline(x=(VAC), alpha = 0.4, color = 'red', label = '(VLINE) Vaccine Rollout Starts')
 
-            self.plt.axvline(x=(LD3 - self.startDatasetDate).days, alpha = 0.2, label = '(VLINE) Lockdown 3.0 & Schools Closed', color = 'steelblue')
-            self.plt.axvline(x=(LD3_2Weeks - self.startDatasetDate).days, alpha = 0.2,  color = 'steelblue', linestyle='-.')
-            self.plt.axvline(x=(LD3_S - self.startDatasetDate).days, alpha = 0.2, color = 'steelblue')
+            self.plt.axvline(x=(LD3), alpha = 0.2, label = '(VLINE) Lockdown 3.0 & Schools Closed', color = 'steelblue')
+            self.plt.axvline(x=(LD3_2Weeks), alpha = 0.2,  color = 'steelblue', linestyle='-.')
+            self.plt.axvline(x=(LD3_S), alpha = 0.2, color = 'steelblue')
 
-            self.plt.axvline(x=(SLFT - self.startDatasetDate).days, alpha = 0.2, label = '(VLINE) LD3 Schools Back with LFTs', color = 'red')
+            self.plt.axvline(x=(SLFT), alpha = 0.2, label = '(VLINE) LD3 Schools Back with LFTs', color = 'red')
             
-            self.plt.axvline(x=(VAC1716 - self.startDatasetDate).days, alpha = 0.4, label = '(VLINE) Vaccinate 16 & 17 Year Olds', color = 'red')
-            self.plt.axvline(x=(BVACBOOST - self.startDatasetDate).days, alpha = 0.4, label = '(VLINE) Vaccinate 12 - 15 & Booster Rollout', color = 'red')
+            self.plt.axvline(x=(VAC1716), alpha = 0.4, label = '(VLINE) Vaccinate 16 & 17 Year Olds', color = 'red')
+            self.plt.axvline(x=(BVACBOOST), alpha = 0.4, label = '(VLINE) Vaccinate 12 - 15 & Booster Rollout', color = 'red')
         else:
-            self.plt.axvline(x=(LD1 - self.startDatasetDate).days, alpha = 0.2,  color = 'steelblue')
-            self.plt.axvline(x=(LD1_2Weeks - self.startDatasetDate).days, alpha = 0.2,  color = 'steelblue', linestyle='-.')
-            self.plt.axvline(x=(LD1_SchoolsBack - self.startDatasetDate).days, alpha = 0.2, color = 'red')
-            self.plt.axvline(x=(LD1_S - self.startDatasetDate).days, alpha = 0.2, color = 'steelblue')
+            self.plt.axvline(x=(LD1), alpha = 0.2,  color = 'steelblue')
+            self.plt.axvline(x=(LD1_2Weeks), alpha = 0.2,  color = 'steelblue', linestyle='-.')
+            self.plt.axvline(x=(LD1_SchoolsBack), alpha = 0.2, color = 'red')
+            self.plt.axvline(x=(LD1_S), alpha = 0.2, color = 'steelblue')
 
             #Shade in lockdown 1 region
-            for i in range((LD1 - self.startDatasetDate).days, (LD1_S - self.startDatasetDate).days):
-                self.plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
+            #for i in range((LD1), (LD1_S)):
+            #    self.plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
 
-            self.plt.axvline(x=(P2T - self.startDatasetDate).days, alpha = 0.2, color = 'red')
+            self.plt.axvline(x=(P2T), alpha = 0.2, color = 'red')
             
-            self.plt.axvline(x=(FM - self.startDatasetDate).days, alpha = 0.2, color = 'deepskyblue')
-            self.plt.axvline(x=(FFM_2Weeks - self.startDatasetDate).days, alpha = 0.2, linestyle='-.')
+            self.plt.axvline(x=(FM), alpha = 0.2, color = 'deepskyblue')
+            self.plt.axvline(x=(FFM_2Weeks), alpha = 0.2, linestyle='-.')
 
-            self.plt.axvline(x=(LD2 - self.startDatasetDate).days, alpha = 0.2, color = 'cadetblue')
-            self.plt.axvline(x=(LD2_2Weeks - self.startDatasetDate).days, alpha = 0.2,  color = 'cadetblue', linestyle='-.')
-            self.plt.axvline(x=(LD2_S - self.startDatasetDate).days, alpha = 0.2, color = 'cadetblue')
+            self.plt.axvline(x=(LD2), alpha = 0.2, color = 'cadetblue')
+            self.plt.axvline(x=(LD2_2Weeks), alpha = 0.2,  color = 'cadetblue', linestyle='-.')
+            self.plt.axvline(x=(LD2_S), alpha = 0.2, color = 'cadetblue')
 
             #Shade in lockdown 2 region
-            for i in range((LD2 - self.startDatasetDate).days, (LD2_S - self.startDatasetDate).days):
-                self.plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
+            #for i in range((LD2 - self.startDatasetDate).days, (LD2_S - self.startDatasetDate).days):
+            #    self.plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
 
-            self.plt.axvline(x=(VAC - self.startDatasetDate).days, alpha = 0.4, color = 'red')
+            self.plt.axvline(x=(VAC), alpha = 0.4, color = 'red')
 
-            self.plt.axvline(x=(LD3 - self.startDatasetDate).days, alpha = 0.2, color = 'steelblue')
-            self.plt.axvline(x=(LD3_2Weeks - self.startDatasetDate).days, alpha = 0.2,  color = 'steelblue', linestyle='-.')
-            self.plt.axvline(x=(LD3_S - self.startDatasetDate).days, alpha = 0.2, color = 'steelblue')
+            self.plt.axvline(x=(LD3), alpha = 0.2, color = 'steelblue')
+            self.plt.axvline(x=(LD3_2Weeks), alpha = 0.2,  color = 'steelblue', linestyle='-.')
+            self.plt.axvline(x=(LD3_S), alpha = 0.2, color = 'steelblue')
 
-            self.plt.axvline(x=(SLFT - self.startDatasetDate).days, alpha = 0.2, color = 'red')
+            self.plt.axvline(x=(SLFT), alpha = 0.2, color = 'red')
             
-            self.plt.axvline(x=(VAC1716 - self.startDatasetDate).days, alpha = 0.4, color = 'red')
-            self.plt.axvline(x=(BVACBOOST - self.startDatasetDate).days, alpha = 0.4, color = 'red')
+            self.plt.axvline(x=(VAC1716), alpha = 0.4, color = 'red')
+            self.plt.axvline(x=(BVACBOOST), alpha = 0.4, color = 'red')
 
             #self.plt.axvline(x=(TODAY - self.startDatasetDate).days, alpha = 0.4, color = 'red')
 
 
-        #Shade in lockdown 3 region
-        for i in range((LD3 - self.startDatasetDate).days, (LD3_S - self.startDatasetDate).days):
-            self.plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
+        #Shade in lockdown regions
+
+        LD1 = self.date(2020,3,23)
+        LD1_S = self.date(2020,6,23)
+        startFill = (LD1 - self.startDatasetDate).days 
+        endFill = (LD1_S - self.startDatasetDate).days
+        startDate = self.np.datetime64(self.startDatasetDate) + self.np.timedelta64(startFill,'D')
+        endDate = self.np.datetime64(self.startDatasetDate) + self.np.timedelta64(endFill,'D')
+        self.plt.axvspan(startDate, endDate, facecolor='grey', alpha=0.1)
+
+        LD2 = self.date(2020,11,5)
+        LD2_S = self.date(2020,12,2)
+        startFill = (LD2 - self.startDatasetDate).days 
+        endFill = (LD2_S - self.startDatasetDate).days
+        startDate = self.np.datetime64(self.startDatasetDate) + self.np.timedelta64(startFill,'D')
+        endDate = self.np.datetime64(self.startDatasetDate) + self.np.timedelta64(endFill,'D')
+        self.plt.axvspan(startDate, endDate, facecolor='grey', alpha=0.1)
+
+        LD3 = self.date(2021,1,6)
+        LD3_S = self.date(2021,7,19)
+        startFill = (LD3 - self.startDatasetDate).days 
+        endFill = (LD3_S - self.startDatasetDate).days
+        startDate = self.np.datetime64(self.startDatasetDate) + self.np.timedelta64(startFill,'D')
+        endDate = self.np.datetime64(self.startDatasetDate) + self.np.timedelta64(endFill,'D')
+        self.plt.axvspan(startDate, endDate, facecolor='grey', alpha=0.1)
 
 
     def createTimeStamp(self, imgPath, xPos, yPos, fontSize):
@@ -497,12 +550,18 @@ class CovidChart:
 
             yNum = ii + 1
 
-            dailyAvg = totals / len(plotData)
-            dailyAvg = int(dailyAvg)
-            dailyAvg = "{:,}".format(dailyAvg)
+            dailyAvg = float(totals / len(plotData))
+            if dailyAvg > 10:
+                dailyAvg = int(dailyAvg)
+                dailyAvg = "{:,}".format(dailyAvg)
+            else:
+                dailyAvg = "{:.4f}".format(dailyAvg)
+
 
             totals = int(totals) #Remove the decimal point
             totals = "{:,}".format(totals)
+
+
             self.addScatterplot(yDates, plotData, colours[ii], "Year " + str(yNum) + " " + label + " (Total: " + str(totals) + " / Daily Avg: " + str(dailyAvg) + ")", 'false')
 
             self.setChartParams(toShow, 'false', 'false', toStamp)
@@ -540,10 +599,11 @@ class GetCOVIDData:
     VERSION 1.0.0 (OCT 21)
     '''
     from uk_covid19 import Cov19API #This is the UK Governments COVID API toLoad install use "PIP install uk_covid19"
+    from urllib.parse import urlencode
 
     BENCH = Benchmark()
     BENCH.setBench(False) #Bechmark output will be printed if this is set to true
-
+    
     def __init__(self, nation):
         '''
         EXTERNAL FUNCTION CALLED WHEN THE OBJECT IS CREATED
@@ -567,24 +627,25 @@ class GetCOVIDData:
             "newPillarTwoTestsByPublishDate": "newPillarTwoTestsByPublishDate",
             "newDeaths28DaysByPublishDate": "newDeaths28DaysByPublishDate",
             "newPillarOneTestsByPublishDate": "newPillarOneTestsByPublishDate",
-            "newCasesLFDConfirmedPCRBySpecimenDate":"newCasesLFDConfirmedPCRBySpecimenDate",
-            "newCasesPCROnlyBySpecimenDate":"newCasesPCROnlyBySpecimenDate",
-            "newPCRTestsByPublishDate":"newPCRTestsByPublishDate",
-            "newLFDTests":"newLFDTests",
-            "newCasesLFDOnlyBySpecimenDate":"newCasesLFDOnlyBySpecimenDate",
-            "cumPeopleVaccinatedSecondDoseByPublishDate":"cumPeopleVaccinatedSecondDoseByPublishDate",
-            "newCasesByPublishDate": "newCasesByPublishDate",
+            "newCasesLFDConfirmedPCRBySpecimenDate": "newCasesLFDConfirmedPCRBySpecimenDate",
+            "newCasesPCROnlyBySpecimenDate": "newCasesPCROnlyBySpecimenDate",
+            "newPCRTestsByPublishDate": "newPCRTestsByPublishDate",
+            "newLFDTests": "newLFDTestsBySpecimenDate",
+            "newCasesLFDOnlyBySpecimenDate": "newCasesLFDOnlyBySpecimenDate",
+            "cumPeopleVaccinatedSecondDoseByPublishDate": "cumPeopleVaccinatedSecondDoseByPublishDate",
+            "newCasesByPublishDate": "newCasesByPublishDate"
         }
 
         england_only = [
-            'areaType=nation',
-            'areaName=' + nation
+            "areaType=nation",
+            "areaName=" + nation
         ]
 
         try:
             api = self.Cov19API(filters=england_only, structure=cases_and_deaths)
             api.get_csv(save_as="data.csv")
             print("--GET COVID DATA CLASS--: Data aquired and saved toLoad data.csv")
+
         except Exception as E:
             print("--GET COVID DATA CLASS--: Error Fetching Data; See Below")
             print(E)
@@ -595,6 +656,7 @@ class GetCOVIDData:
         #This data is more difficult toLoad handle once downloaded, toLoad see how toLoad
         #handle this data look at ClassLoadDatasets.py
         self.BENCH.benchStart()
+
         cases_and_deaths = {
         "date": "date",
         "areaName": "areaName",
@@ -604,8 +666,8 @@ class GetCOVIDData:
         }
 
         england_only = [
-        'areaType=nation',
-        'areaName=England' #This age profiled data is only available for England
+        "areaType=nation",
+        "areaName=England" #This age profiled data is only available for England
         ]
 
         try:
@@ -613,7 +675,7 @@ class GetCOVIDData:
             api.get_csv(save_as="dataAge.csv")
             print("--GET COVID DATA CLASS--: Aged data aquired and saved toLoad dataAge.csv")
         except Exception as E:
-            print("--GET COVID DATA CLASS--: Error Fetching Data; See Below")
+            print("--GET COVID DATA CLASS--: Error Aged Fetching Data; See Below")
             print(E)
         self.BENCH.benchEnd("GETCOVID DATA Downloaded dataAge.csv")
     '''
@@ -641,6 +703,7 @@ class LoadDataSets:
     VERSION 1.0.0 (OCT 21)
     '''
     import pandas as pd
+    import numpy as np
     BENCH = Benchmark()
     BENCH.setBench(False) #Bechmark output will be printed if this is set to true
 
@@ -656,8 +719,11 @@ class LoadDataSets:
         #functions included in the class
         
         #Hard coded population stats from the ONS
-        self.population = [3299637,3538206,3354246,3090232,3487863,3801409,3807954,3733642,3414297,3715812,3907461,3670651,3111835,
-                  2796740,2779326,1940686,1439913,879778,517273] # 2019 Population Data for England
+        self.population = [3299637,
+                            3538206,3354246,3090232,
+                            3487863,3801409,3807954,3733642,3414297,3715812,3907461,3670651,3111835,
+                            2796740,2779326,1940686,1439913,
+                            879778,517273] # 2019 Population Data for England
 
         #Line colour and age cats are used when creating the graphs toLoad keep things the same. If you change these here it will affect all graphs
         self.lineColour = ['black', 'gray', 'rosybrown', 'maroon', 'salmon', 'sienna', 'sandybrown', 'goldenrod', 'olive', 'lawngreen', 'darkseagreen', 'green', 'lightseagreen', 'darkcyan', 'steelblue', 'navy', 'indigo', 'purple', 'crimson']
@@ -986,25 +1052,38 @@ class LoadDataSets:
         '''
         Returns a date array toLoad be used for the xAxis on charts
         '''
-        return self.GOVdateSeries
-    
+        #return self.GOVdateSeries
+        return self.np.array(self.GOVdateSeries, dtype='datetime64')
+
+
     def getAgedGOVdateSeries(self):
         '''
         Returns a date array toLoad be used for the xAxis on charts when using age separated data
         '''
-        return self.agedGOVdateSeries.copy()
+        #return self.agedGOVdateSeries.copy()
+        return self.np.array(self.agedGOVdateSeries, dtype='datetime64')
+    
+    def getAgedGOVdateSeriesNPDTG(self):
+        '''
+        Returns a list of numpy datetime64 dates
+        use these dates instead of the list if you need to plot misaligned data
+        '''
+        
+        return self.np.array(self.agedGOVdateSeries.copy(), dtype='datetime64')
 
     def getYearDatesDataSet(self):
         '''
         QUERY
         '''
-        return self.yearDatesDataSet.copy()
+        #return self.yearDatesDataSet.copy()
+        return self.np.array(self.yearDatesDataSet.copy(), dtype='datetime64')
 
     def getYearDates(self):
         '''
         Returns dates in a year for use with the year comparasons and requres the CSV file dates.csv
         '''
         return self.yearDates.copy()
+        #return self.np.array(self.yearDates.copy(), dtype='datetime64')
 
     '''
     ----------------------------------------------------
@@ -1500,3 +1579,96 @@ class Functions:
         return CFR
 
 
+class readHospitalData():
+    '''
+    This class is designed to help wrangle data from the monthly hospital spreadsheets found at
+
+    https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-hospital-activity/
+
+    This verion of the class will allow you to get regonal total data from any worksheet 
+    '''
+    import pandas as pd
+    import os
+
+    def __init__(self):
+        pass
+
+    def readinTotals(self, excel_file, ws):
+        '''
+        This will read the Hospitals worksheet from 
+
+        https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-hospital-activity/
+
+        and turn the top of the worksheet into a dataframe, this only reads the totals from each worksheet for ENGLAND and the regions
+
+        '''
+        master_df = self.pd.read_excel(excel_file, sheet_name=ws, engine='openpyxl')
+
+        #now we need to create a df for just to total data
+        column_names = master_df.iloc[12:21, 3].tolist() #These will be our column names
+        dates = master_df.iloc[11, 4:len(master_df.columns) - 3].tolist() #get the dates as list
+        column_values = master_df.iloc[12:21, 4:len(master_df.columns) - 3].copy() #read in the values excluding the dates
+
+        #Now we need to create a df with the trusts as column names, dates as row indexes and the values as values
+
+        values_dict = { "Dates" : dates} #Add the dates, these will be used as the index
+        for ii in range(0, len(column_names)):
+
+            values_dict[column_names[ii]] = column_values.iloc[ii, 0:len(column_values.columns)].tolist()  #create an array of dictionaries with values for each row
+
+        totals_df = self.pd.DataFrame(values_dict)
+        totals_df = totals_df.drop(index=2)
+        totals_df = totals_df.set_index('Dates')
+        
+
+        return totals_df.copy()
+
+    def readinAllTotals(self, directory):
+        '''
+        This will read in totals from all worksheets, takes around 7 seconds for each worksheet
+        it will also merge files from the directory so ensure you just have your hospital data in
+        there!
+        '''
+
+        #iterate through the directory
+        excelFiles = self.os.listdir(directory)
+
+        for ii in range(len(excelFiles)): #for each excel file
+            print("Processing file " + excelFiles[ii])
+            dataLocation = self.os.path.join(directory, excelFiles[ii]) #create the path to the excel file
+            excel_file = self.pd.ExcelFile(dataLocation, engine='openpyxl') #open the excel file
+            sheetNames = excel_file.sheet_names #get a list of sheet names
+
+            df = [0] * len(sheetNames)
+            for iii in range(len(sheetNames)):
+                print("Processing worksheet " + sheetNames[iii])
+                df[iii] = self.readinTotals(excel_file, sheetNames[iii])
+
+        return df, sheetNames #return an array of dataframes and the sheet names
+
+    def joinTotalsDataSets(self, directory, ws):
+        '''
+        This will scan the directory open each excel file and
+        join the dataframes for totals for a specific worksheet
+        '''
+        #iterate through the directory
+        excelFiles = self.os.listdir(directory)
+
+        excel_file = [0] * len(excelFiles)
+        for ii in range(len(excelFiles)): #load each excel file
+            print("Processing file " + excelFiles[ii])
+            dataLocation = self.os.path.join(directory, excelFiles[ii]) #create the path to the excel file
+            excel_file[ii] = self.pd.ExcelFile(dataLocation, engine='openpyxl') #open the excel file
+
+        df = [0] * len(excelFiles)
+        for ii in range(len(excelFiles)): #Read the worksheet from each excel file
+            df[ii] = self.readinTotals(excel_file[ii], ws)
+
+        if (ws == "MV Beds Occupied Covid-19") or (ws == "MV Beds Occupied") or (ws == "Total HospAdm From Care Nursing") or (ws == "Reported Admissions & Diagnoses"):
+            df[0].drop(df[0].tail(1).index,inplace=True) # drop last n rows, these worksheets contain extra number of rows
+
+        #now merge the dataframes
+
+        final_df = self.pd.concat(df)
+
+        return final_df #return an array of dataframes and the sheet names
