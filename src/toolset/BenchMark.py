@@ -1,26 +1,45 @@
-
-#[COMPLETED V1.0.0]
 class Benchmark:
     '''
-    This class was used to benchmark various functions during development
-    Benchmark code has been left in the toolset however setBench has been
-    set to False in most cases
+    Benchmarks functions when developing code. Used to test the performance of various functions during development.
     '''
     import time
 
+
     def __init__(self):
-        self.toPrintBench = True
+        self.to_print_bench = True
         self.startTime = self.time.time()
-        
-    def benchStart(self):
+
+        #self.file = open("reports/benchmark.txt", "w")
+
+
+    def bench_start(self):
+        '''
+        Starts the benchmark counter.
+        '''
         self.startTime = self.time.time()
-        if self.toPrintBench:
+        if self.to_print_bench:
             print("--BENCHMARK STARTED--")
         
-    def benchEnd(self, printedText):
-        endTime = self.time.time() - self.startTime
-        if self.toPrintBench:
-            print("--BENCHMARK-- Time for Benchmark " + printedText + " : " + str(endTime))
 
-    def setBench(self, toPrint):
-        self.toPrintBench = toPrint
+    def bench_end(self, printed_text):
+        """
+        Stops the benchmark counter
+
+        Args:
+            printed_text: String value, This will be the label assigned to the benchmark when printed to the console.
+        """
+
+        endTime = self.time.time() - self.startTime
+        if self.to_print_bench:
+            #self.file.write("--BENCHMARK-- Time for Benchmark " + printed_text + " : " + str(endTime) + "\n")
+            print("--BENCHMARK-- Time for Benchmark " + printed_text + " : " + str(endTime))
+
+
+    def set_bench(self, to_print):
+        '''
+        Sets if the benchmark results should be printed to the console
+
+        Args:
+            to_print: Boolean value denoting whether to print benchmark results
+        '''
+        self.to_print_bench = to_print

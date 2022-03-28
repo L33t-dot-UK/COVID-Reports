@@ -1,14 +1,12 @@
 class Dashboard:
     '''
-    COPYRIGHT DAVID BRADSHAW, L33T.UK AND COVIDREPORTS.UK, CREDIT MUST BE GIVEN IF THIS CODE IS USED
+    Used to create dashboards and tables from COVID data. 
 
-    Creates methods used to create dashboards from PNG images 
-
-    CLASS COMPLETE AND DOCUMENTED
-    VERSION 1.0.0 (NOV 21)
+    This class can be used to create dashboards from a list of images and to create tables from Lists that can be added to dashbaords or graphs. An example is included below.
     '''
     from PIL import ImageFont, ImageDraw, Image, ImageOps
-    from toolset.CovidChart import CovidChart as chartBENCH
+    from .CovidChart import CovidChart as chartBENCH
+
 
     def __init__(self):
         self.globalMaxWidth = 0 #Max width for each column in a table, this ensures that all coluns are the same width
@@ -16,15 +14,20 @@ class Dashboard:
         pass
 
 
-    def createDashboard(self, title, images, fileName):
+    def create_dashboard(self, title, images, file_name):
         '''
-        Takes a list of PNG images and creates a dashboard
-        Images will be displayed in order
+        Takes a list of PNG images and creates a dashboard. Images will be displayed in order
 
-        Only give 2 sizes of image to this function all portrait images should be the same size and
-        all landscape images should be the same size
+        Args:
+            title: String Value, this is the title of the dashboard
+            images: List, this will be a list of images to be used for the dashboard
+            file_name: String Value, this is the name of the image file for the dashbaord, do not include the file extension
 
-        If you give portrait images they should be in an even number as these are laid side by side
+        .. Note:: Do not include the file extension for the file_name argument
+
+        .. Note:: Only give 2 sizes of images to this function all portrait images should be the same size and all landscape images should be the same size
+
+        .. Note:: If you give portrait images they should be in an even number as these are laid side by side
         '''
         padding = 10
         titlePadding = 200
@@ -141,21 +144,223 @@ class Dashboard:
                     xPos = (((imageWidth / 2) - imageResWidth[ii]) / 2) + (imageWidth / 2)
                     img.paste(image, (int(xPos), int(yPos)))
 
-        img.save('reports/images/' + fileName + '.png')
+        img.save('reports/images/' + file_name + '.png')
 
         xPos = imageWidth - 700
         yPos = imageHeight - 25
 
         chart = self.chartBENCH()
-        chart.createTimeStamp("reports/images/" + fileName + ".png",  xPos, yPos, 20, False)
-        print("Dashboard Saved as reports/images/" + fileName + ".png")
+        chart.create_time_stamp("reports/images/" + file_name + ".png",  xPos, yPos, 20, False)
+        print("Dashboard Saved as reports/images/" + file_name + ".png")
+   
 
-    def getMaxWidths(self, data, imagePath, toTotal, xPadding, fontsize):
+    def create_table(self, x_start, y_start, x_padding, y_padding, data, fill_colour, line_colour, label, to_total, image_path, fontsize, title_row, table_title):
         '''
-        Send all data for your table to this array and it will calculate the maximum width needed
-        this ensures that all columns are of the same width
+        Create a table and saves to PNG image, this method uses the create_row method in a loop to create tables.
+
+        Args:
+            x_start: Integer Value, start location on the x-axis 
+            y_start: Integer Value, start location on the y-axis
+            x_padding: Integer Value, the amount of padding to have in the x-axis in pixels
+            y_padding: Integer Value, the amount of padding to have in the y-axis in pixels
+            data: List[][], data that will be used in the tables row, this is multidimensional List[row][column]
+            fill_colour: String Value, background colour of the cells
+            line_colour: String Value, Line colour of the table lines
+            label: List, title for each column
+            to_total: Boolean Value, this will be true if the values are to be added and a totals column inserted
+            image_path: String Value, locaiton of the image that the table row will be inserted into, this must already exist
+            fonstsize: Integer Value, size of the fonts to be used when generating the table
+            title_row: List, title of each row, there must be a title for each row and a blank title for the top row if your using title_row
+            table_title: String Value, title of the table
+
+        .. Note:: Data is a multidimenstional list data[row][column]
+
+        .. Note:: Please note that len(label) must be equal to the number of rows, this is the title for each row, 
+        
+        .. Note:: If title_row is used then a blank label must be included in the label List i.e label = ['','20 -24', '25 - 29', '30 - 34']
+
+        .. Note:: If to_total is true then ensure that all data apart from the title header is numeric, for non numeric data set to_total to False
+
+        Example:
+
+            from toolset.CovidDashboard import Dashboard as chart
+
+            chart = chart()
+
+            label = ['', 'Cases', 'Deaths', 'CFR']
+            title_row = ['0-4', '5-9', '10-14']
+            data = [title_row,[20156,22514,30145],[0,1,2],['0%','0%','0%']]
+
+            chart.create_table(500, 200, 15, 15, data, "white", "black", label, False, "reports/images/test_Table.png", 30, True, "Just a test table")
+
+            +------------------------+------------+----------+----------+
+            |                        |    0-4     |   5-9    |   10-14  |
+            |                        |            |          |          |
+            +========================+============+==========+==========+
+            | Cases                  |   20,156   |  22,514  |  30,145  |
+            +------------------------+------------+----------+----------+
+            | Deaths                 |     0      |    1     |    2     |
+            +------------------------+------------+----------+----------+
+            | CFR                    |     0%     |     0%   |   0%     |
+            +------------------------+------------+----------+----------+
+
+
         '''
-        img = self.Image.open(imagePath)
+        self.globalMaxWidth = 0 #Reset this value when creating a new table
+        #Before doing anything lets find what our column widths will be
+        for record in data:
+            self._get_max_widths(record, image_path, to_total, x_padding, fontsize)
+        
+        if (table_title != ''): #If a table title is used
+            img = self.Image.open(image_path)
+            d = self.ImageDraw.Draw(img)
+            font = self.ImageFont.truetype("arial.ttf", (fontsize * 2)) #Title will be twice the size of the table text
+            draw = self.ImageDraw.Draw(img)
+            titleWidth, titleHeight =  draw.textsize(table_title, font=font)
+
+            #Now we have the size of the title we now need to place it
+            #calc table width
+            tableWidth = (self.globalMaxWidth * len(data[0]))
+            if (to_total == True): tableWidth = tableWidth + self.globalMaxWidth #add an extra column to the calculaiton for the totals
+
+            #Calc the middle of the table to centre align the text
+            tableStart = x_start + (      (tableWidth / 2) - (titleWidth / 4)           )
+
+            d.text((tableStart,  (y_start + y_padding)), table_title, fill=(100,8,58), font=font)
+            y_start = y_start + (titleHeight + (y_padding * 2))
+
+            img.save(image_path)
+
+        if (title_row == True):
+            #Add a title Row, use element 1 for column headings
+            tmpData = data[0]
+            self.create_row(x_start, y_start, x_padding, y_padding, tmpData, 'lightgrey', line_colour, '', False, image_path, fontsize)
+            y_start = y_start + (self.globalHeight + (y_padding * 2)) #Increment Y-Coords
+     
+        cntr = 0
+        for record in data:
+            if (title_row == True and cntr == 0):
+                pass #do nothing
+            else: #add the rows
+                self.create_row(x_start, y_start, x_padding, y_padding, record, fill_colour, line_colour, label[cntr], to_total, image_path, fontsize)
+                y_start = y_start + (self.globalHeight + (y_padding * 2)) #Increment Y-Coords
+            cntr = cntr + 1
+
+
+    def create_row(self, x_start, y_start, x_padding, y_padding, data, fill_colour, line_colour, label, to_total, image_path, fontsize):
+        '''
+        Creates a row of a table from a list of data
+
+        Args,
+            x_start: Integer Value, start location on the x-axis 
+            y_start: Integer Value, start location on the y-axis
+            x_padding: Integer Value, the amount of padding to have in the x-axis in pixels
+            y_padding: Integer Value, the amount of padding to have in the y-axis in pixels
+            data: List, data that will be used in the tables row
+            fill_colour: String Value, background colour of the cells
+            line_colour: String Value, Line colour of the table lines
+            label: String Value, title for the row
+            to_total: Boolean Value, this will be true if the values are to be added and a totals column inserted
+            image_path: String Value, locaiton of the image that the table row will be inserted into, this must already exist
+            fonstsize: Integer Value, size of the fonts to be used when generating the table
+        
+        .. Note:: give this funciton one row of data at a time
+        '''
+        total = 0
+
+        img = self.Image.open(image_path)
+        d = self.ImageDraw.Draw(img)
+        font = self.ImageFont.truetype("arial.ttf", fontsize)
+        draw = self.ImageDraw.Draw(img)
+
+        width = [0] * len(data)
+        height = [0] * len(data)
+
+        for ii in range(len(data)): #Calculate the width and height of the text
+            width[ii], height[ii] = draw.textsize(str(data[ii]), font=font)
+            width[ii] = width[ii] + (x_padding * 2) #Add padding to the calculations
+            height[ii] = height[ii] + (y_padding * 2)
+
+        #Find the maxwidth so all colums are the same size
+        maxWidth = max(width)
+
+        if (self.globalMaxWidth > 0): #if the global max width is being used
+            maxWidth = self.globalMaxWidth
+
+        maxHeight = max(height)
+
+        if (self.globalHeight > 0): #if the global ax width is being used
+            maxHeight = (self.globalHeight + (y_padding * 2))
+
+        #Now write the label
+        lblWidth, lblHeight =  draw.textsize(str(label), font=font)
+
+        d.text((x_start - (lblWidth + (x_padding)),  y_start + (lblHeight - (y_padding))), label, fill=(100,8,58), font=font)
+
+        for ii in range(len(data)):
+            if(to_total == True):
+                try:
+                    total = int(total)  + int(data[ii])
+                except:
+                    total = str('N/A')
+                    pass
+            try:
+                intData = int(data[ii])
+                intData = f'{intData:,}' 
+                data[ii] = intData
+            except Exception as E: #An error will be given for incorrect data types
+                pass
+            
+            draw.rectangle((x_start, y_start, x_start + (maxWidth + x_padding * 2), y_start + maxHeight), fill=(fill_colour), outline=(line_colour))
+            d.text((x_start  + (((maxWidth / 2) + (x_padding * 2)) - ((width[ii]) / 2)),  (y_start + y_padding)), data[ii], fill=(100,8,58), font=font)
+            
+            x_start = x_start + (maxWidth + x_padding * 2)
+
+        if(to_total == True):
+            try:
+                total = f'{total:,}' #Use a try incase the total is a string value
+            except:
+                pass
+            totWidth, totHeight =  draw.textsize(str(total), font=font)
+
+            draw.rectangle((x_start, y_start, x_start + (maxWidth + x_padding * 2), y_start + maxHeight), fill=(fill_colour), outline=(line_colour))
+            d.text((x_start  + (((maxWidth / 2) + ((x_padding)) - ((totWidth) / 2))),  (y_start + y_padding)), total, fill=(100,8,58), font=font)
+            
+        img.save(image_path)
+
+
+    def create_PNG(self, width, height, file_name, fontsize):
+        '''
+        Creates a png file with specified dimensions and pink boarder
+
+        Args:
+            width: Integer Value, width of the image in pixels
+            height: Integer Value, height of the image in pixels
+            file_name: String Value, the loaction where the file will be saved, do not include file extension or file path just the file_name
+            fontsize: Integer Value, not used at this time
+        '''
+
+        img = self.Image.new('RGB', (width, height), color = 'white')
+        img = self.ImageOps.expand(img, border=2,fill='pink')
+        d = self.ImageDraw.Draw(img)
+
+        img.save('reports/images/' + file_name + '.png')
+        img.close()
+
+
+    def _get_max_widths(self, data, image_path, to_total, x_padding, fontsize):
+        '''
+        Used to calulate cell widths when creating tables
+
+        Args:
+            data: List, data that will be used to create the table
+            image_path: String Value, location where the image resides that the table will be inserted into
+            to_total: Boolean Value, this will be true if the values are to be added and a totals column inserted
+            x_padding: Integer Value, the amount of padding to have in the x axis in pixels
+            fontsize: Integer Value, size of the fonts to be used when generating the table
+
+        '''
+        img = self.Image.open(image_path)
         draw = self.ImageDraw.Draw(img)
         font = self.ImageFont.truetype("arial.ttf", fontsize)
 
@@ -170,136 +375,11 @@ class Dashboard:
 
         self.globalHeight = max(height) #This will be the sae for all rows 
 
-        if (toTotal == True):
+        if (to_total == True):
             try: #Put this in a try incase we have string values
                 tmpVal = sum(data)
                 x, y =  draw.textsize(str(tmpVal), font=font)
-                if ((x + (xPadding * 2)) > self.globalMaxWidth):
-                    self.globalMaxWidth = x + (xPadding * 2)
+                if ((x + (x_padding * 2)) > self.globalMaxWidth):
+                    self.globalMaxWidth = x + (x_padding * 2)
             except:
                 pass
-           
-
-    def createRow(self, xStart, yStart, xPadding, yPadding, data, fillColour, lineColour, label, toTotal, imagePath, fontsize):
-        '''
-        Creates a row of a table with a list of data
-        give this funciton a row of data at a time
-        '''
-        total = 0
-
-        img = self.Image.open(imagePath)
-        d = self.ImageDraw.Draw(img)
-        font = self.ImageFont.truetype("arial.ttf", fontsize)
-        draw = self.ImageDraw.Draw(img)
-
-        width = [0] * len(data)
-        height = [0] * len(data)
-
-        for ii in range(len(data)): #Calculate the width and height of the text
-            width[ii], height[ii] = draw.textsize(str(data[ii]), font=font)
-            width[ii] = width[ii] + (xPadding * 2) #Add padding to the calculations
-            height[ii] = height[ii] + (yPadding * 2)
-
-        #Find the maxwidth so all colums are the same size
-        maxWidth = max(width)
-
-        if (self.globalMaxWidth > 0): #if the global max width is being used
-            maxWidth = self.globalMaxWidth
-
-        maxHeight = max(height)
-
-        if (self.globalHeight > 0): #if the global ax width is being used
-            maxHeight = (self.globalHeight + (yPadding * 2))
-
-        #Now write the label
-        lblWidth, lblHeight =  draw.textsize(str(label), font=font)
-
-        d.text((xStart - (lblWidth + (xPadding)),  yStart + (lblHeight - (yPadding))), label, fill=(100,8,58), font=font)
-
-        for ii in range(len(data)):
-            if(toTotal == True):
-                try:
-                    total = int(total)  + int(data[ii])
-                except:
-                    total = str('N/A')
-                    pass
-            try:
-                intData = int(data[ii])
-                intData = f'{intData:,}' 
-                data[ii] = intData
-            except Exception as E: #An error will be given for incorrect data types
-                pass
-            
-            draw.rectangle((xStart, yStart, xStart + (maxWidth + xPadding * 2), yStart + maxHeight), fill=(fillColour), outline=(lineColour))
-            d.text((xStart  + (((maxWidth / 2) + (xPadding * 2)) - ((width[ii]) / 2)),  (yStart + yPadding)), data[ii], fill=(100,8,58), font=font)
-            
-            xStart = xStart + (maxWidth + xPadding * 2)
-
-        if(toTotal == True):
-            try:
-                total = f'{total:,}' #Use a try incase the total is a string value
-            except:
-                pass
-            totWidth, totHeight =  draw.textsize(str(total), font=font)
-
-            draw.rectangle((xStart, yStart, xStart + (maxWidth + xPadding * 2), yStart + maxHeight), fill=(fillColour), outline=(lineColour))
-            d.text((xStart  + (((maxWidth / 2) + ((xPadding)) - ((totWidth) / 2))),  (yStart + yPadding)), total, fill=(100,8,58), font=font)
-            
-        img.save(imagePath)
-
-    def createTable(self, xStart, yStart, xPadding, yPadding, data, fillColour, lineColour, label, toTotal, imagePath, fontsize, titleRow, tableTitle):
-        '''
-        Create a table and saves to PNG image
-        Data is a multidimenstional list data[row][column]
-        Please note that len(label) must be equal to the number of rows, if titleRow is used then this is classed as a row
-        so a blank string must be used for this row otherwise an error will be returned
-
-        If toTotal is true then ensure that all data apart from the title header is numeric
-        '''
-        self.globalMaxWidth = 0 #Reset this value when creating a new table
-        #Before doing anything lets find what our column widths will be
-        for record in data:
-            self.getMaxWidths(record, imagePath, toTotal, xPadding, fontsize)
-        
-        if (tableTitle != ''): #If a table title is used
-            img = self.Image.open(imagePath)
-            d = self.ImageDraw.Draw(img)
-            font = self.ImageFont.truetype("arial.ttf", (fontsize * 2)) #Title will be twice the size of the table text
-            draw = self.ImageDraw.Draw(img)
-            titleWidth, titleHeight =  draw.textsize(tableTitle, font=font)
-
-            #Now we have the size of the title we now need to place it
-            #calc table width
-            tableWidth = (self.globalMaxWidth * len(data[0]))
-            if (toTotal == True): tableWidth = tableWidth + self.globalMaxWidth #add an extra column to the calculaiton for the totals
-
-            #Calc the middle of the table to centre align the text
-            tableStart = xStart + (      (tableWidth / 2) - (titleWidth / 4)           )
-
-            d.text((tableStart,  (yStart + yPadding)), tableTitle, fill=(100,8,58), font=font)
-            yStart = yStart + (titleHeight + (yPadding * 2))
-
-            img.save(imagePath)
-
-        if (titleRow == True):
-            #Add a title Row, use element 1 for column headings
-            tmpData = data[0]
-            self.createRow(xStart, yStart, xPadding, yPadding, tmpData, 'lightgrey', lineColour, '', False, imagePath, fontsize)
-            yStart = yStart + (self.globalHeight + (yPadding * 2)) #Increment Y-Coords
-     
-        cntr = 0
-        for record in data:
-            if (titleRow == True and cntr == 0):
-                pass #do nothing
-            else: #add the rows
-                self.createRow(xStart, yStart, xPadding, yPadding, record, fillColour, lineColour, label[cntr], toTotal, imagePath, fontsize)
-                yStart = yStart + (self.globalHeight + (yPadding * 2)) #Increment Y-Coords
-            cntr = cntr + 1
-
-    def createPNG(self, xWidth, yWidth, fileName, fontsize):
-        img = self.Image.new('RGB', (xWidth, yWidth), color = 'white')
-        img = self.ImageOps.expand(img, border=2,fill='pink')
-        d = self.ImageDraw.Draw(img)
-
-        img.save('reports/images/' + fileName + '.png')
-        img.close()

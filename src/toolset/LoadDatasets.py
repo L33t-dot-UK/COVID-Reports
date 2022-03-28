@@ -3,6 +3,8 @@
 
 #NEED TO ADD DATA FRAME FUNCTIONALITY
 
+# AMEND THIS ONE LAST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 class LoadDataSets:
     '''
 
@@ -31,19 +33,19 @@ class LoadDataSets:
     '''
     import pandas as pd
     import numpy as np
-    from toolset.BenchMark import Benchmark as Benchmark
+    from .BenchMark import Benchmark as Benchmark
     import ast
 
     BENCH = Benchmark()
-    BENCH.setBench(False) #Bechmark output will be printed if this is set to true
+    BENCH.set_bench(False) #Bechmark output will be printed if this is set to true
 
-    def __init__(self, toLoad, NATION):
+    def __init__(self, toLoad, nation):
         '''
         EXTERNAL FUNCTION CALLED WHEN THE OBJECT IS CREATED
         Sets up various variables used in the function contained in this class
         '''
 
-        self.nation = NATION
+        self.nation = nation
         print("--LOAD DATA SETS CLASS--: LoadDataSets Object Created")
 
         #All variables below will be used in this class and accessible outside of this class
@@ -58,13 +60,13 @@ class LoadDataSets:
                             879778,517273] # 2019 Population Data for England
 
         #Line colour and age cats are used when creating the graphs to keep things the same. If you change these here it will affect all graphs
-        #self.lineColour = ['black', 'gray', 'rosybrown', 'maroon', 'salmon', 'sienna', 'sandybrown', 'goldenrod', 'olive', 'lawngreen', 'darkseagreen', 'green', 'lightseagreen', 'darkcyan', 'steelblue', 'navy', 'indigo', 'purple', 'crimson']
-        self.lineColour = ['#800000', '#9A6324', '#808000', '#469990', '#000075', '#000000', '#e6194B', '#f58231', '#ffe119', '#bfef45', '#3cb44b', '#42d4f4', '#4363d8', '#911eb4', '#f032e6', '#fabed4', '#ffd8b1', '#aaffc3', '#dcbeff']
-        self.lineColour.reverse()
+        #self.line_colour = ['black', 'gray', 'rosybrown', 'maroon', 'salmon', 'sienna', 'sandybrown', 'goldenrod', 'olive', 'lawngreen', 'darkseagreen', 'green', 'lightseagreen', 'darkcyan', 'steelblue', 'navy', 'indigo', 'purple', 'crimson']
+        self.line_colour = ['#800000', '#9A6324', '#808000', '#469990', '#000075', '#000000', '#e6194B', '#f58231', '#ffe119', '#bfef45', '#3cb44b', '#42d4f4', '#4363d8', '#911eb4', '#f032e6', '#fabed4', '#ffd8b1', '#aaffc3', '#dcbeff']
+        self.line_colour.reverse()
 
         self.ageCategoriesString = ['Under 5', '05-09', '10-14', '15-19', '20-24', '25-29', '30-34', '35-39', '40-44', '45-49', '50-54', '55-59', '60-64', '65-69', '70-74', '75-79', '80-84', '85-89', '90+']
 
-        self.AgeGroups = ['00_04', '05_09','10_14', '15_19', '20_24','25_29', '30_34', '35_39', '40_44', '45_49', '50_54', '55_59', '60_64', '65_69', '70_74', '75_79', '80_84', '85_89', '90+']
+        self.age_groups = ['00_04', '05_09','10_14', '15_19', '20_24','25_29', '30_34', '35_39', '40_44', '45_49', '50_54', '55_59', '60_64', '65_69', '70_74', '75_79', '80_84', '85_89', '90+']
 
         self.hospitalCases = ""
         self.newAdmssions = ""
@@ -113,7 +115,7 @@ class LoadDataSets:
         the correct order for our graphs
         '''
 
-        self.BENCH.benchStart()
+        self.BENCH.bench_start()
 
         #Unpack the Data
         for ii in range(len(dataToUnpack)):
@@ -147,15 +149,15 @@ class LoadDataSets:
             dataToUnpack[ii][20] = TMPunPackedData[ii][13] #60+
 
         print("--LOAD DATA SETS CLASS--: Aged data unpacked")
-        self.BENCH.benchEnd("LOADDATASETS UnpackingAgedData")
+        self.BENCH.bench_end("LOADDATASETS UnpackingAgedData")
         return dataToUnpack
         
-    def unpackData(self, field):
+    def unpack_data(self, field):
         '''
         unpacks the aged data in to a dataframe
         '''
         df = self.pd.read_csv('data/autoimport/dataAge.csv') #load the aged dataset from the CSV file
-        df.drop(df.tail(32).index,inplace=True) #Remove the first daysToSub rows, for time series chart drop the first 32 rows 32 the data starts on the 02/03/20
+        df.drop(df.tail(32).index,inplace=True) #Remove the first days_to_sub rows, for time series chart drop the first 32 rows 32 the data starts on the 02/03/20
         #Full DF
         new_df = self.pd.DataFrame(df[["date", field]])
 
@@ -189,7 +191,7 @@ class LoadDataSets:
         Loads data from the CSV file into the variables
         '''
         print("--LOAD DATA SETS CLASS--: Loading data from CSV files")
-        self.BENCH.benchStart()
+        self.BENCH.bench_start()
         try:
             self.yearDatesDataSet = self.pd.read_csv('data/static/dates.csv') #This will be used for yearly comparisons
             self.yearDates = self.yearDatesDataSet.iloc[0:,0].values
@@ -270,7 +272,7 @@ class LoadDataSets:
         print("--LOAD DATA SETS CLASS--: Assigning Values From dataAge.csv")
 
         try:
-            self.agedGOVdataset.drop(self.agedGOVdataset.tail(32).index,inplace=True) #Remove the first daysToSub rows, for time series chart drop the first 32 rows 32 the data starts on the 02/03/20
+            self.agedGOVdataset.drop(self.agedGOVdataset.tail(32).index,inplace=True) #Remove the first days_to_sub rows, for time series chart drop the first 32 rows 32 the data starts on the 02/03/20
             self.agedGOVdataset.fillna(0, inplace=True) #replace all null values with 0
             
             self.caseDataByAge = self.agedGOVdataset.iloc[0:,3].values
@@ -295,11 +297,11 @@ class LoadDataSets:
             print("--LOAD DATA SETS CLASS--: Error Processing the Data Frame From ageData.csv; See Below For Details")
             print("--LOAD DATA SETS CLASS--: " + E)
         
-        self.BENCH.benchEnd("LOADDATASETS DATA loadDataFromFile")
+        self.BENCH.bench_end("LOADDATASETS DATA loadDataFromFile")
 
             #Now we will create a dataframe enabling us to access this data using dataframe functions
-        self.fullDataFrameAgeCases = self.unpackData("newCasesBySpecimenDateAgeDemographics")
-        self.fullDataFrameAgeDeaths = self.unpackData("newDeaths28DaysByDeathDateAgeDemographics")
+        self.fullDataFrameAgeCases = self.unpack_data("newCasesBySpecimenDateAgeDemographics")
+        self.fullDataFrameAgeDeaths = self.unpack_data("newDeaths28DaysByDeathDateAgeDemographics")
     
     '''
     ----------------------------- All getter functions are below -----------------------------
@@ -330,18 +332,18 @@ class LoadDataSets:
         '''
         return self.fullDataFrameAgeCases.copy(), self.fullDataFrameAgeDeaths.copy()
 
-    def getAgedDataCases(self, ageGroup):
+    def getAgedDataCases(self, age_group):
         '''
         returns aged case data for a given age group as a dataframe
         '''
-        df = self.fullDataFrameAgeCases[self.fullDataFrameAgeCases['age'] == ageGroup]
+        df = self.fullDataFrameAgeCases[self.fullDataFrameAgeCases['age'] == age_group]
         return df["cases"].copy()
 
-    def getAgedDataDeaths(self, ageGroup):
+    def getAgedDataDeaths(self, age_group):
         '''
         returns aged death data for a given age group as a dataframe
         '''
-        df = self.fullDataFrameAgeDeaths[self.fullDataFrameAgeDeaths['age'] == ageGroup]
+        df = self.fullDataFrameAgeDeaths[self.fullDataFrameAgeDeaths['age'] == age_group]
         return df["deaths"].copy()
 
     def getPopulationNumberArray(self):
@@ -350,11 +352,11 @@ class LoadDataSets:
         '''
         return self.population.copy()
     
-    def getLineColourArray(self):
+    def getline_colourArray(self):
         '''
         Returns line colours for graphs making all graphs look the same, used for age profiled graphs
         '''
-        return self.lineColour.copy()
+        return self.line_colour.copy()
     
     def getAgeCatStringArray(self):
         '''
@@ -491,51 +493,51 @@ class LoadDataSets:
     def getDeathDataByAgeAll(self):
         return self.deathDataByAge
         
-    def getDeathDataByAge(self, dayOfYear, ageGroup):
+    def getDeathDataByAge(self, dayOfYear, age_group):
         '''
         This will return the number of deaths for a given day and a given age group
         Age groups go from 0 to 18 and days go from 0 to len(n)
         '''
-        return self.deathDataByAge[dayOfYear][ageGroup]['deaths']
+        return self.deathDataByAge[dayOfYear][age_group]['deaths']
 
     def getRawDeathData(self):
         return self.deathDataByAge
  
-    def getAgedDeathData(self, ageGroup):
+    def getAgedDeathData(self, age_group):
         '''
         Returns an array of death values ready to plot, age groups from 0-18
         '''
         returnedData = [0]*len(self.deathDataByAge)
         for ii in range(0, len(self.deathDataByAge)):
-            returnedData[ii] = self.deathDataByAge[ii][ageGroup]['deaths']
+            returnedData[ii] = self.deathDataByAge[ii][age_group]['deaths']
         return returnedData.copy()
 
 
-    def getCaseDataByAge(self, dayOfYear, ageGroup):
+    def getCaseDataByAge(self, dayOfYear, age_group):
         '''
         This will return the number of cases for a given day and a given age group
         Age groups go from 0 to 18 and days go from 0 to len(n)
         '''
-        return self.caseDataByAge[dayOfYear][ageGroup]['cases']
+        return self.caseDataByAge[dayOfYear][age_group]['cases']
 
-    def getAgedCaseData(self, ageGroup):
+    def getAgedCaseData(self, age_group):
         '''
         Returns an array of case values ready to plot, age groups from 0-18
         '''
         returnedData = [0]*len(self.caseDataByAge)
         for ii in range(0, len(self.caseDataByAge)):
-            returnedData[ii] = self.caseDataByAge[ii][ageGroup]['cases']
+            returnedData[ii] = self.caseDataByAge[ii][age_group]['cases']
         return returnedData.copy()
     
 
-    def getAgeGroups(self, ageGroup):
+    def getage_groups(self, age_group):
         '''
-        Returns a given age group for a givn agegroup index, age groups from 0-18
+        Returns a given age group for a givn age_group index, age groups from 0-18
         '''
-        return self.caseDataByAge[0][ageGroup]['age']
+        return self.caseDataByAge[0][age_group]['age']
 
-    def getAgeGroupsLiteral(self):
+    def getage_groupsLiteral(self):
         '''
         Returns a list of age groups used in the aged data dataframe
         '''
-        return self.AgeGroups
+        return self.age_groups

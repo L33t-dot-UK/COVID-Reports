@@ -1,43 +1,35 @@
-#[COMPLETED V1.0.0]
-
-
-
-#NEED TO AMEND EXAMPLE
-
-
 class GetCOVIDData:
     '''
-
-    COPYRIGHT DAVID BRADSHAW, L33T.UK AND COVIDREPORTS.UK, CREDIT MUST BE GIVEN IF THIS CODE IS USED
-
-    Just create the object and 2 CSV files will be created data.csv and ageData.csv
+    Create the object and 2 CSV files will be created data.csv and ageData.csv.
     These files contain the fields indicated below and downloads, data from the
-    UK Governments COVID Dashboard using there own API version 1.
+    UK Governments COVID Dashboard using their own API version 1.
+
+    This class has not methods everything is done in the constructor.
 
     If you want different datasets goto https://coronavirus.data.gov.uk/details/download to
     choose which datasets to download and amend the below code. If new datasets are downloaded 
     then the Class LoadDataSets.py will need to be amended if your using it.
 
-    CLASS COMPLETE AND DOCUMENTED
-    VERSION 1.0.0 (OCT 21)
+    .. Note:: Age profiled data for Scotland, Wales and NI is not available. If you select one of these nations the age profiled data will not be downloaded. You will only download non-age specific data saved in data.csv
     '''
     from uk_covid19 import Cov19API #This is the UK Governments COVID API to install use "PIP install uk_covid19"
-    from toolset.BenchMark import Benchmark as Benchmark
+    from .BenchMark import Benchmark as Benchmark
     BENCH = Benchmark()
-    BENCH.setBench(False) #Bechmark output will be printed if this is set to true
+    BENCH.set_bench(False) #Bechmark output will be printed if this is set to true
     
     def __init__(self, nation):
         '''
-        EXTERNAL FUNCTION CALLED WHEN THE OBJECT IS CREATED
-        Will download the data and create data.csv and ageData.csv
+        Will download the data, create data.csv and ageData.csv
 
-        nation can be "England", "Scotland" or "Wales"
+        Args:
+            nations: String Value, can be "England", "Scotland" or "Wales"
         '''
+
         #This is where you put all the fields that you want to download
         #They will be put in the CSV file in this order; column 0 will have the date
         #column 1 will have the areaName, etc
 
-        self.BENCH.benchStart()
+        self.BENCH.bench_start()
         cases_and_deaths = {
             "date": "date",
             "areaName": "areaName",
@@ -72,10 +64,10 @@ class GetCOVIDData:
             print("--GET COVID DATA CLASS--: Error Fetching Data; See Below")
             print(E)
         
-        self.BENCH.benchEnd("GETCOVID DATA Downloaded data.csv")
+        self.BENCH.bench_end("GETCOVID DATA Downloaded data.csv")
         
         #Download the vaccine data
-        self.BENCH.benchStart()
+        self.BENCH.bench_start()
         cases_and_deaths = {
             "date": "date",
             "areaName": "areaName",
@@ -90,20 +82,20 @@ class GetCOVIDData:
 
         try:
             api = self.Cov19API(filters=england_only, structure=cases_and_deaths)
-            api.get_csv(save_as="data/autoimport/vaxData" + nation + ".csv")
-            print("--GET COVID DATA CLASS--: Data aquired and saved to vaxData.csv")
+            api.get_csv(save_as="data/autoimport/vax_data" + nation + ".csv")
+            print("--GET COVID DATA CLASS--: Data aquired and saved to vax_data.csv")
 
         except Exception as E:
             print("--GET COVID DATA CLASS--: Error Fetching Data; See Below")
             print(E)
         
-        self.BENCH.benchEnd("GETCOVID DATA Downloaded vaxData.csv")
+        self.BENCH.bench_end("GETCOVID DATA Downloaded vax_data.csv")
 
 
         #This downloads aged profiled data and saves it to ageData.csv
         #This data is more difficult to handle once downloaded, to see how to
         #handle this data look at Class LoadDatasets.py
-        self.BENCH.benchStart()
+        self.BENCH.bench_start()
 
         print("--GET COVID DATA CLASS--: Aged profiled data is only available for England, Data saved in agedData.csv will be for England only")
         cases_and_deaths = {
@@ -126,9 +118,4 @@ class GetCOVIDData:
         except Exception as E:
             print("--GET COVID DATA CLASS--: Error Aged Fetching Data; See Below")
             print(E)
-        self.BENCH.benchEnd("GETCOVID DATA Downloaded dataAge.csv")
-    '''
-    -------------------------
-    END OF GetCOVIDData CLASS
-    -------------------------
-    '''
+        self.BENCH.bench_end("GETCOVID DATA Downloaded dataAge.csv")

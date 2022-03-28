@@ -1,15 +1,7 @@
 class CovidChart:
     '''
-
-    COPYRIGHT DAVID BRADSHAW, L33T.UK AND COVIDREPORTS.UK, CREDIT MUST BE GIVEN IF THIS CODE IS USED
-
-    This class is used to create charts using COVID data.
-    I created the class so all charts have a consistent look and feel
-    All formatting is carried out by this class with LOBF added by the 
-    class when scatter graphs are created.
-
-    CLASS COMPLETE AND DOCUMENTED
-    VERSION 2.0.0 (March 22)
+    This class is used to create charts using COVID-19 data.
+    All formatting is carried out by this class with line of best fit added when scatter graphs are created.
     '''
     import matplotlib.pyplot as plt
     import matplotlib.dates as mdates
@@ -26,138 +18,358 @@ class CovidChart:
     import pandas as pd
     import numpy as np
 
-    from toolset.BenchMark import Benchmark as Benchmark
+    from .BenchMark import Benchmark as Benchmark
 
     BENCH = Benchmark() #Used for benchmarking
-    BENCH.setBench(False) #Bechmark output will be printed if this is set to true
+    BENCH.set_bench(False) #Bechmark output will be printed if this is set to true
+
 
     def __init__(self):
         '''
         Construtor for the class sets certain variables to default values
         '''
-        self.BENCH.benchStart()
-        self.toShow = False #set to true if you want to see the chart in Python set to false for batch jobs when you just want to png image
-        self.showLeg = False #set to true to show the default legend
-        self.toAdd = False #set to true to add vertical lines and lockdowns for this to work the first date must be 2nd March 2020
-        self.toStamp = False #set to true to add a timestamp
-        self.averagedTime = 7 #sets the averge time for the line of best fit
+        self.BENCH.bench_start()
+        self.to_show = False #set to true if you want to see the chart in Python set to false for batch jobs when you just want to png image
+        self.show_leg = False #set to true to show the default legend
+        self.to_add = False #set to true to add vertical lines and lockdowns for this to work the first date must be 2nd March 2020
+        self.to_stamp = False #set to true to add a timestamp
+        self.averaged_time = 7 #sets the averge time for the line of best fit
 
-        self.startDatasetDate = self.date(2020, 3,2) #Default start date, if your start date is different change this param
+        self.start_dataset_date = self.date(2020, 3,2) #Default start date, if your start date is different change this param
 
         self.figure, self.ax1 = self.plt.subplots()
 
-        self.alterXticks = True
+        self.alter_x_ticks = True
 
-        self.toTree = False #Used internally for the drawChart function
-        self.toBar = False #Used internally for the drawChart function
+        self.to_tree = False #Used internally for the draw_chart function
+        self.to_bar = False #Used internally for the draw_chart function
 
         self.columns = 14 #number of columns for the legend
-        self.legendBottom = True #If you want the legend at the bottom set to true
-        self.BENCH.benchEnd("CREATE COVIDCHART CLASS")
+        self.legend_bottom = True #If you want the legend at the bottom set to true
+        self.BENCH.bench_end("CREATE COVIDCHART CLASS")
   
-    def changeLOBFtime(self, time):
+
+    def add_scatter_plot(self, x_data, y_data, colour, label, to_dash, data_complete):
         '''
-        CALLED EXTERNALLY
-        Changes the averaged time for LOBF set my the argument time
+        Adds a scatter plot with line of best fit to a plot, this just adds the data
+        once draw_chart is called the plot will be saved and/or displayed on screen
+
+        Args:
+            x_data: List or DataFrame, data for the x-axis of your scatter chart
+            y_data: List or DataFrame, data for the y-axis of your chart
+            colour: String Value, color of the plot, can be a word such as "red" or a hex value
+            label: String Value, The label for the plot, this will be used in the legend
+            to_dash: Boolean Value, decides if the plot should have a solid or dashed line of best fit
+            data_complete: Boolean value, if set to true the LOBF will go to the end, if set to False the LOBF will go to (values - (time/2)), set to False if data is incomplete
         '''
-        self.averagedTime = time
 
-    def averagedValues(self, nValues, time):
-        '''
-        USED INTERNALLY TO PLOT LOBF'S
-        Averages values nValues by the amount time. Used to draw lines of best fit on plots
-        will take n/2 values before and after the datapoint to average values. Will not average
-        the last n values.
-        '''
-        self.BENCH.benchStart()
-        pointer = 0
-        tmpVal = 0
-        
-        if(time % 2 != 0): # Not even
-            time = time + 1 # make the number even
+        self.BENCH.bench_start()
 
-        values = nValues
-        newValues = [0] * len(values)
+        #Make sure that the data is a list otherwiae the data could be reversed
+        if isinstance(x_data, list):
+            pass
+        else:
+            x_data = x_data.tolist()
+        #Make sure that the data is a list otherwiae the data could be reversed
+        if isinstance(y_data, list):
+            pass
+        else:
+            y_data = y_data.tolist()
 
-        if len(nValues) > time:
-            #Now average the first half of the selected time frame using n + 1 and n - 1
-            newValues[0] = values[0] #The first value will not be averaged
-            for ii in range(1, int(time / 2)):
-                tmpVal = 0
-                tmpVal = values[ii] + values[ii + 1] + values[ii - 1]
-                newValues[ii] = tmpVal / 3
+        self.BENCH.bench_start()
+        LOBF_Data = self._averaged_values(y_data.copy(), self.averaged_time)
 
-            #calculate averages for the rest of the values apart from the last n / 2 values
-            for ii in range(int(time / 2) , (len(values) - int(time / 2))):
-                tmpVal = 0
-                #getting values from after the datapoint
-                for iv in range(0, int(time / 2)):
-                    pointer = ii - int(iv)
-                    tmpVal = tmpVal + values[pointer]
+        if (data_complete == False):
+            #If the data is not complete don't add a line of best fit for the last 7 days
 
-                #getting values from before
-                for iv in range(0, int(time / 2)):
-                    pointer = (ii) + int(iv)
-                    tmpVal = tmpVal + values[pointer]
-                tmpVal = tmpVal / time
-                newValues[ii] = tmpVal
+            #Now we will chop the last 4 days worth of data as this data is probably incomplete and 
+            #will make our LOBF look a little funny if we include it.
+            values = [0]*(len(x_data) - 7)
+            for ii in range (0 , len(values)):
+                values[ii] = x_data[ii]
 
-            tmpVal = 0
 
-            #Now average the last half of the selected time frame using n + 1 and n - 1
-            #If the data is incomplete or varies too much the LOBF could look a little strange
-            for ii in range(int((len(values) - ((time / 2)))), len(values) - 1):
-                tmpVal = 0
-                tmpVal = values[ii] + values[ii + 1] + values[ii - 1]
-                newValues[ii] = tmpVal / 3
+            nData = [0]* (len(LOBF_Data) - 7)
+            for ii in range (0 , len(nData)):
+                nData[ii] = LOBF_Data[ii]
+        else:
+            values = x_data
+            nData = LOBF_Data
 
-            #Do this so the line doesnt fall off the end of the chart due to nill values
-            if (values[len(values)- 1] == 0):
-                values[len(values)- 1] = values[len(values)- 2]
-
-            newValues[len(values)- 1] = (values[len(values) - 1] + values[len(values) - 2]) / 2
-
-        self.BENCH.benchEnd("COVIDCHART averagedValues")
-        return newValues
+        if (to_dash)==True:
+             self.plt.plot(values, nData, '--', color = colour, alpha = 1, label = label)
+        else:
+            self.plt.plot(values, nData,  color = colour, alpha = 1, label = label) #Line of best fit
     
-    def setChartParams(self, toShow, showLeg, toAdd, toStamp):
-        '''
-        CALLED EXTERNALLY
-        Use to change the parameters of the chart i.e. to show the chart, to add a time stamp, etc
-        You should call this before you call drawChart
-        '''
-        self.toShow = toShow
-        self.showLeg = showLeg
-        self.toAdd = toAdd
-        self.toStamp = toStamp
+        self.plt.scatter(x_data, y_data,  color = colour, alpha = 0.2, s =3) #Scatter plot
+        self.BENCH.bench_end("COVIDCHART add_scatter_plot")
 
-    def setMaxYvalue(self, value):
-        '''
-        sets the maximum Y valve
-        '''
-        self.plt.ylim(ymax = value)
 
-    def resetMaxYvalue(self):
+    def add_bar_plot(self, x_data, y_data, colour, label):
         '''
-        Resets ylimit if it was explicitly set
-        '''
-        self.plt.autoscale()
+        Adds a bar plot with line of best fit to a plot, this just adds the data
+        once draw_chart is called the plot will be saved and/or displayed on screen
 
-    def setStartDate(self, startDate):
+        Args:
+            x_data: List or DataFrame, data for the x-axis of your bar plot 
+            y_data: List or DataFrame, data for the y-axis of your bar plot
+            colour: String Value, color of the plot, can be a word such as "red" or a hex value
+            label: String Value, The label for the plot, this will be used in the legend
         '''
-        CALLED EXTERNALLY
-        Sets the start date for the graph to be used if you want to show VLINES when starting from a different date
-        '''
-        self.startDatasetDate = startDate
 
-    def drawVlines(self):
+        self.BENCH.bench_start()
+
+        #Make sure that the data is a list otherwiae the data could be reversed
+        if isinstance(x_data, list):
+            pass
+        else:
+            x_data = x_data.tolist()
+        #Make sure that the data is a list otherwiae the data could be reversed
+        if isinstance(y_data, list):
+            pass
+        else:
+            y_data = y_data.tolist()
+        
+        LOBF_Data = self._averaged_values(y_data.copy(), self.averaged_time)
+
+        #Now we will chop the last 4 days worth of data as this data is probably incomplete and 
+        #will make our LOBF look a little funny of we include it. However we will draw the scatter plots for this data.
+        values = [0]*(len(x_data) - 7)
+        for ii in range (0 , len(values)):
+            values[ii] = x_data[ii]
+
+        nData = [0]* (len(LOBF_Data) - 7)
+        for ii in range (0 , len(nData)):
+            nData[ii] = LOBF_Data[ii]
+
+        self.plt.plot(values, nData,  color = colour, alpha = 1, label = label)
+        self.plt.bar(x_data, y_data,  color = colour, alpha = 0.5)
+        self.BENCH.bench_end("COVIDCHART add_bar_plot")
+
+
+    def add_bar_chart(self, x_data, y_data, colour):
         '''
-        CALLED EXTERNALLY
-        Draws vertical lines on the graphs indicating key moments. If any key moments need to be added add them in this method
+        Use when creating just bar charts without a line of best fit and totals at the top of each bar
+
+        Args:
+            x_data: List or DataFrame, data for the x-axis of your bar plot 
+            y_data: List or DataFrame, data for the y-axis of your bar plot
+            colour: String Value, color of the plot, can be a word such as "red" or a hex value
+        '''
+
+        self.BENCH.bench_start()
+
+        #Make sure that the data is a list otherwiae the data could be reversed
+        if isinstance(x_data, list):
+            pass
+        else:
+            x_data = x_data.tolist()
+        #Make sure that the data is a list otherwiae the data could be reversed
+        if isinstance(y_data, list):
+            pass
+        else:
+            y_data = y_data.tolist()
+        
+        self.to_bar = True
+        self.alter_x_ticks = False
+        for x in range(len(y_data)):
+            y_data[x] = int(y_data[x])
+            label3 = f'{y_data[x]:,}'
+            self.plt.annotate(label3, # this is the text
+                        (x_data[x],y_data[x]), # this is the point to label
+                        textcoords="offset points", # how to position the text
+                        xytext=(0,10), # distance from text to points (x,y)
+                        ha='center', # horizontal alignment can be left, right or center
+                        fontsize='16', color="#6D6D6D") #This size will look off when viewing the interactive graph, but good on the png
+        
+        self.plt.bar(x_data, y_data,  color = colour, alpha = 0.7)
+        self.BENCH.bench_end("COVIDCHART add_bar_chart")
+
+
+    def add_treemap(self, data, labels, colours):
+        '''
+        Creates a treeMap diagram with data (array) and labels (array)
+        The data should already be summed when calling this method therefore
+        data should be an array of summed data
+
+        Args:
+            data: List or DataFrame, data for the treemap. This data should not be timeseries, see the example in example.py
+            labels: List or DataFrame, The label for the plot, this will be used in the legend
+            colours: List or DataFrame, color of the plot, can be a word such as "red" or a hex value
+        '''
+
+        self.BENCH.bench_start()
+
+        #Make sure that the data is a list otherwise the data could be reversed
+        if isinstance(data, list):
+            pass
+        else:
+            data = data.tolist()
+
+        self.to_tree = True
+        ageCategoriesLabel = labels
+        totData = 0
+
+        for ii in range(len(data)):
+            totData = totData + data[ii]
+
+        percent = [0]*len(data)
+        for ii in range(len(data)):
+            percent[ii] = (data[ii]/ totData) * 100
+            percent[ii] = str(round(percent[ii],2))
+            ageCategoriesLabel[ii] = ageCategoriesLabel[ii] + " (" + str(percent[ii]) + "%)" 
+
+        self.treeMap.plot(sizes=data, label=ageCategoriesLabel, color=colours, alpha=.8, bar_kwargs=dict(linewidth=0.5, edgecolor="black"),text_kwargs={'fontsize':14})
+        self.BENCH.bench_end("COVIDCHART add_treemap")
+
+
+    def draw_chart(self, x_axis_title, y_axis_title, title, file_name, to_be_wide):
+        '''
+        Draws the chart either on screen if to_show == true (set_chart_params) or as a png image saved with the file_name variable
+        These graphs use ONS guidelines for formatting
+
+        Args:
+            x_axis_title: String Value, Title for the x-axis
+            y_axis_title: String Value, Title for the y-axis
+            title: String Value, Title for the chart
+            file_name: String Value, file_name of the chart (DO NOT INCLUDE FILE EXTENSION; this is added by this method)
+            to_be_wide: Boolean value, decides the aspect ratio of the chart, wide or portrait
+
+            .. Note:: Do not add the file extension for the file_name argument, this extension will always be .png and is added by this method
+        '''
+
+        if self.show_leg == True and self.columns == 14:
+            self.columns = 7 #change the number of columns in the legend if were adding the VLINES
+
+        #Add vertical lines
+        if (self.to_add == True):
+            self.draw_v_lines() #Draws vertical lines on the graph showing key moments
+            
+        #Format the axis
+        axes = self.plt.gca()
+
+        if (to_be_wide == True):
+            self.figure.set_size_inches(56, 20) #dimensions if the graph is to be wide
+        else:
+            self.figure.set_size_inches(28, 20) #dimensions for a non wide graph :)
+
+        self.plt.ylim(ymin=0)
+
+        axes.margins(x=0)
+        axes.margins(y=0)
+        #axes.yaxis.grid(alpha=0.5)
+        axes.tick_params(axis="x",colors="#6D6D6D")
+        axes.tick_params(axis="y", colors="#6D6D6D")
+        axes.margins(x=0)
+
+        axes.spines["right"].set_visible(False)
+        axes.spines["top"].set_visible(False)
+        axes.spines["left"].set_visible(False)
+        axes.spines["bottom"].set_position("zero")
+        axes.set_axisbelow(True)
+
+        # Gridlines
+        axes.grid(b=False, which="both", axis="x", color="white", alpha = 0.0) 
+        axes.grid(b=True, which="both", axis="y", color="#BEBEBE")
+
+        self.plt.title(title, fontname="Arial", size=40, loc="center", color = "#6D6D6D")
+        
+        #self.plt.xlabel(x_axis_title)
+        self.plt.ylabel(y_axis_title)
+
+        #format xAxis labels
+        if (self.alter_x_ticks == True):
+            self.ax1.xaxis.set_major_locator(self.ticker.MaxNLocator(75)) #set max number of labels so they dont overlap
+
+        #self.ax1.set_facecolor("whitesmoke") #Change the background colour of the chart
+        self.ax1.set_facecolor("white")
+
+        #self.plt.xlabel(x_axis_title, fontsize=18,  color = "#6D6D6D")
+        self.plt.ylabel(y_axis_title, fontsize=18,  color = "#6D6D6D")
+        self.plt.xticks(rotation = 90, fontsize = 16)
+        self.plt.yticks(fontsize = 16)
+
+        if (self.to_tree == True or  self.to_bar == True):
+            #Do nothing
+            pass
+        elif self.legend_bottom == True:
+            #self.plt.legend(loc='upper left', fontsize = 18) #Only draw a legend if its not a treemap or barchart
+            #Set Legends
+            legend = axes.legend(bbox_to_anchor=(0, -0.2, 1, .102), loc="upper left",
+                            ncol=self.columns, mode="expand", borderaxespad=0,
+                            prop={"family": "Arial", "size":16},
+                            frameon=False);
+        elif self.legend_bottom == False:
+            legend = axes.legend(loc="upper left",
+                                ncol=1, borderaxespad=1,
+                                prop={"family": "Arial", "size":16},
+                                frameon=True);
+
+        # Loop through each thing in the legend to change the text colour
+        try:
+            for text in legend.get_texts():
+                text.set_color("#6D6D6D")
+        except:
+            pass
+
+        if self.to_tree == True:
+            self.plt.axis('off') #Do not draw axis for treemaps
+        else:
+            self.plt.axis('on')
+
+        self.plt.savefig("reports/images/" + file_name + '.png')
+
+        #Add time stamp to the png file
+        if (self.to_stamp == True):
+            if (to_be_wide == True):
+                self.create_time_stamp("reports/images/" + file_name + '.png', 4300, 200, 24, to_be_wide)
+            else:
+                self.create_time_stamp("reports/images/" + file_name + '.png', 1795, 1930, 24, to_be_wide)
+
+        print ("--CHART CLASS--: Graph saved as " + "reports/images/" + file_name + ".png")
+
+        #Now make the fonts smaller for when the chart is shown
+        self.plt.title(title, fontsize=16)
+        #self.plt.xlabel(x_axis_title, fontsize=10)
+        self.plt.ylabel(y_axis_title, fontsize=10)
+
+        #self.plt.legend(loc='upper left', fontsize = 8)
+        # Set Legends
+        if self.legend_bottom == True:
+            legend = axes.legend(bbox_to_anchor=(0, -0.2, 1, .102), loc="upper left",
+                                ncol=self.columns, mode="expand", borderaxespad=0,
+                                prop={"family": "Arial", "size":8},
+                                frameon=False);
+        else:
+            legend = axes.legend(loc="upper left",
+                                ncol=1, borderaxespad=1,
+                                prop={"family": "Arial", "size":8},
+                                frameon=True);
+
+
+        # Loop through each thing in the legend to change the text colour
+        for text in legend.get_texts():
+            text.set_color("#6D6D6D")
+
+
+        self.plt.xticks(rotation = 90, fontsize = 8)
+        self.plt.yticks(fontsize = 8)
+
+        self.to_tree = False #Reset this Variable
+        self.to_bar = True #Reset this Variable
+        
+        if (self.to_show == True):
+            self.plt.show() #Show the plot
+
+        self.columns = 14 #Reset this value
+    
+
+    def draw_v_lines(self):
+        '''
+        Draws vertical lines on charts indicating key moments. If any key moments need to be added add them in this method
         getGOVdateSeries() or govAgedDateSeries() should be used with this method and not dataframe["date"] as this will give an error
         '''
         LD1 = self.np.array(self.date(2020,3,23), dtype='datetime64')
-        print(LD1)
         LD1_S = self.np.array(self.date(2020,6,23), dtype='datetime64')
         LD1_SchoolsBack = self.np.array(self.date(2020,6,1), dtype='datetime64')
         FM = self.np.array(self.date(2020,7,24), dtype='datetime64')
@@ -178,7 +390,7 @@ class CovidChart:
         VAC1716 = self.np.array(self.date(2021,8,23), dtype='datetime64')
         BVACBOOST = self.np.array(self.date(2021,9,20), dtype='datetime64')
         try:
-            if (self.showLeg == True):
+            if (self.show_leg == True):
                 
                 self.plt.axvline(x=(LD1), alpha = 0.2, label = '(VLINE 1) Lockdown 1.0 & Schools Closed', color = 'steelblue')
                 self.plt.axvline(x=(LD1_SchoolsBack), alpha = 0.2, color = 'red', label = '(VLINE 2) LD1 Schools Back')
@@ -225,7 +437,7 @@ class CovidChart:
                 self.plt.axvline(x=(LD2_S), alpha = 0.2, color = 'cadetblue')
 
                 #Shade in lockdown 2 region
-                #for i in range((LD2 - self.startDatasetDate).days, (LD2_S - self.startDatasetDate).days):
+                #for i in range((LD2 - self.start_dataset_date).days, (LD2_S - self.start_dataset_date).days):
                 #    self.plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
 
                 self.plt.axvline(x=(VAC), alpha = 0.4, color = 'red')
@@ -238,377 +450,114 @@ class CovidChart:
                 self.plt.axvline(x=(VAC1716), alpha = 0.4, color = 'red')
                 self.plt.axvline(x=(BVACBOOST), alpha = 0.4, color = 'red')
 
-                #self.plt.axvline(x=(TODAY - self.startDatasetDate).days, alpha = 0.4, color = 'red')
+                #self.plt.axvline(x=(TODAY - self.start_dataset_date).days, alpha = 0.4, color = 'red')
 
             #Shade in lockdown regions
             LD1 = self.date(2020,3,23)
             LD1_S = self.date(2020,6,23)
-            startFill = (LD1 - self.startDatasetDate).days 
-            endFill = (LD1_S - self.startDatasetDate).days
-            startDate = self.np.datetime64(self.startDatasetDate) + self.np.timedelta64(startFill,'D')
-            endDate = self.np.datetime64(self.startDatasetDate) + self.np.timedelta64(endFill,'D')
-            self.plt.axvspan(startDate, endDate, facecolor='grey', alpha=0.1)
+            startFill = (LD1 - self.start_dataset_date).days 
+            endFill = (LD1_S - self.start_dataset_date).days
+            start_date = self.np.datetime64(self.start_dataset_date) + self.np.timedelta64(startFill,'D')
+            endDate = self.np.datetime64(self.start_dataset_date) + self.np.timedelta64(endFill,'D')
+            self.plt.axvspan(start_date, endDate, facecolor='grey', alpha=0.1)
 
             LD2 = self.date(2020,11,5)
             LD2_S = self.date(2020,12,2)
-            startFill = (LD2 - self.startDatasetDate).days 
-            endFill = (LD2_S - self.startDatasetDate).days
-            startDate = self.np.datetime64(self.startDatasetDate) + self.np.timedelta64(startFill,'D')
-            endDate = self.np.datetime64(self.startDatasetDate) + self.np.timedelta64(endFill,'D')
-            self.plt.axvspan(startDate, endDate, facecolor='grey', alpha=0.1)
+            startFill = (LD2 - self.start_dataset_date).days 
+            endFill = (LD2_S - self.start_dataset_date).days
+            start_date = self.np.datetime64(self.start_dataset_date) + self.np.timedelta64(startFill,'D')
+            endDate = self.np.datetime64(self.start_dataset_date) + self.np.timedelta64(endFill,'D')
+            self.plt.axvspan(start_date, endDate, facecolor='grey', alpha=0.1)
 
             LD3 = self.date(2021,1,6)
             LD3_S = self.date(2021,7,19)
-            startFill = (LD3 - self.startDatasetDate).days 
-            endFill = (LD3_S - self.startDatasetDate).days
-            startDate = self.np.datetime64(self.startDatasetDate) + self.np.timedelta64(startFill,'D')
-            endDate = self.np.datetime64(self.startDatasetDate) + self.np.timedelta64(endFill,'D')
-            self.plt.axvspan(startDate, endDate, facecolor='grey', alpha=0.1)
+            startFill = (LD3 - self.start_dataset_date).days 
+            endFill = (LD3_S - self.start_dataset_date).days
+            start_date = self.np.datetime64(self.start_dataset_date) + self.np.timedelta64(startFill,'D')
+            endDate = self.np.datetime64(self.start_dataset_date) + self.np.timedelta64(endFill,'D')
+            self.plt.axvspan(start_date, endDate, facecolor='grey', alpha=0.1)
         except:
             print("--CHART CLASS--: Error drawing VLINES, use LoadDatasets.getGOVdateSeries() or govAgedDateSeries() instead of DataFrame['date'], Y axis canot be a dataframe it must be a list of dates.")
 
-    def createTimeStamp(self, imgPath, xPos, yPos, fontSize, toBeWide):
+
+    def create_time_stamp(self, img_path, x_pos, y_pos, fontsize, to_be_wide):
         '''
-        CALLED EXTERNALLY
-        Adds a timestamp to a png image with the website URL
+        Adds a timestamp to the chart with the website URL
+
+        Args:
+            img_path: String Value, image path of where the chart is saved
+            x_pos: Integer Value, start position of the timestamp for the x-axis
+            y_pos: Integer Value, start position of the timestamp for the y-axis
+            fontsize: Integer Value, size of the fonts to be used
+            to_be_wide: Boolean value, is the charts aspect ratio wide or portait - decides if the stamp is to go at the top or bottom of the chart
+
+            .. Note:: image_path is the path to the image including the file_name extension, this will be .png for charts created by this class
         '''
-        img = self.Image.open(imgPath)
+        img = self.Image.open(img_path)
         now = self.datetime.now()
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
 
-        font = self.ImageFont.truetype("arial.ttf", fontSize)
+        font = self.ImageFont.truetype("arial.ttf", fontsize)
         d = self.ImageDraw.Draw(img)
 
-        if (toBeWide == True): #put time stamps at the top
-            d.text((xPos,yPos - 30), "https://www.COVIDreports.uk   Last Updated " + dt_string, fill=("#6D6D6D"), font=font, alpha = 0.7)
-            d.text((xPos,yPos),"GitHub Repo: https://github.com/L33t-dot-UK/COVID-Reports", fill=("#6D6D6D"), font=font, alpha = 0.7)
-            d.text((xPos,yPos + 30),"Data Source: https://coronavirus.data.gov.uk/details/download", fill=("#6D6D6D"), font=font, alpha = 0.7)
+        if (to_be_wide == True): #put time stamps at the top
+            d.text((x_pos,y_pos - 30), "https://www.COVIDreports.uk   Last Updated " + dt_string, fill=("#6D6D6D"), font=font, alpha = 0.7)
+            d.text((x_pos,y_pos),"GitHub Repo: https://github.com/L33t-dot-UK/COVID-Reports", fill=("#6D6D6D"), font=font, alpha = 0.7)
+            d.text((x_pos,y_pos + 30),"Data Source: https://coronavirus.data.gov.uk/details/download", fill=("#6D6D6D"), font=font, alpha = 0.7)
         else: #put the time stamps at the bottom
-            d.text((xPos,yPos - 30), "https://www.COVIDreports.uk   Last Updated " + dt_string, fill=("#6D6D6D"), font=font, alpha = 0.7)
-            d.text((xPos,yPos),"GitHub Repo: https://github.com/L33t-dot-UK/COVID-Reports", fill=("#6D6D6D"), font=font, alpha = 0.7)
-            d.text((xPos - 1400,yPos),"Data Source: https://coronavirus.data.gov.uk/details/download", fill=("#6D6D6D"), font=font, alpha = 0.7)
+            d.text((x_pos,y_pos - 30), "https://www.COVIDreports.uk   Last Updated " + dt_string, fill=("#6D6D6D"), font=font, alpha = 0.7)
+            d.text((x_pos,y_pos),"GitHub Repo: https://github.com/L33t-dot-UK/COVID-Reports", fill=("#6D6D6D"), font=font, alpha = 0.7)
+            d.text((x_pos - 1400,y_pos),"Data Source: https://coronavirus.data.gov.uk/details/download", fill=("#6D6D6D"), font=font, alpha = 0.7)
             
-        img.save(imgPath)
+        img.save(img_path)
+   
 
-    def drawChart(self, xAxisTitle, yAxisTitle, title, fileName, toBeWide):
+    def clear_chart(self):
         '''
-        CALLED EXTERNALLY
-        Draws the chart either on screen if toShow == true (setChartParams) or as a png image saved with the filename variable
-        These graphs use ONS guidelines for formatting
-        '''
-
-        if self.showLeg == True and self.columns == 14:
-            self.columns = 7 #change the number of columns in the legend if were adding the VLINES
-
-        #Add vertical lines
-        if (self.toAdd == True):
-            self.drawVlines() #Draws vertical lines on the graph showing key moments
-            
-        #Format the axis
-        axes = self.plt.gca()
-
-        if (toBeWide == True):
-            self.figure.set_size_inches(56, 20) #dimensions if the graph is to be wide
-        else:
-            self.figure.set_size_inches(28, 20) #dimensions for a non wide graph :)
-
-        self.plt.ylim(ymin=0)
-
-        axes.margins(x=0)
-        axes.margins(y=0)
-        #axes.yaxis.grid(alpha=0.5)
-        axes.tick_params(axis="x",colors="#6D6D6D")
-        axes.tick_params(axis="y", colors="#6D6D6D")
-        axes.margins(x=0)
-
-        axes.spines["right"].set_visible(False)
-        axes.spines["top"].set_visible(False)
-        axes.spines["left"].set_visible(False)
-        axes.spines["bottom"].set_position("zero")
-        axes.set_axisbelow(True)
-
-        # Gridlines
-        axes.grid(b=False, which="both", axis="x", color="white", alpha = 0.0) 
-        axes.grid(b=True, which="both", axis="y", color="#BEBEBE")
-
-        self.plt.title(title, fontname="Arial", size=40, loc="center", color = "#6D6D6D")
-        
-        #self.plt.xlabel(xAxisTitle)
-        self.plt.ylabel(yAxisTitle)
-
-        #format xAxis labels
-        if (self.alterXticks == True):
-            self.ax1.xaxis.set_major_locator(self.ticker.MaxNLocator(75)) #set max number of labels so they dont overlap
-
-        #self.ax1.set_facecolor("whitesmoke") #Change the background colour of the chart
-        self.ax1.set_facecolor("white")
-
-        #self.plt.xlabel(xAxisTitle, fontsize=18,  color = "#6D6D6D")
-        self.plt.ylabel(yAxisTitle, fontsize=18,  color = "#6D6D6D")
-        self.plt.xticks(rotation = 90, fontsize = 16)
-        self.plt.yticks(fontsize = 16)
-
-        if (self.toTree == True or  self.toBar == True):
-            #Do nothing
-            pass
-        elif self.legendBottom == True:
-            #self.plt.legend(loc='upper left', fontsize = 18) #Only draw a legend if its not a treemap or barchart
-            #Set Legends
-            legend = axes.legend(bbox_to_anchor=(0, -0.2, 1, .102), loc="upper left",
-                            ncol=self.columns, mode="expand", borderaxespad=0,
-                            prop={"family": "Arial", "size":16},
-                            frameon=False);
-        elif self.legendBottom == False:
-            legend = axes.legend(loc="upper left",
-                                ncol=1, borderaxespad=1,
-                                prop={"family": "Arial", "size":16},
-                                frameon=True);
-
-        # Loop through each thing in the legend to change the text colour
-        try:
-            for text in legend.get_texts():
-                text.set_color("#6D6D6D")
-        except:
-            pass
-
-        if self.toTree == True:
-            self.plt.axis('off') #Do not draw axis for treemaps
-        else:
-            self.plt.axis('on')
-
-        self.plt.savefig("reports/images/" + fileName + '.png')
-
-        #Add time stamp to the png file
-        if (self.toStamp == True):
-            if (toBeWide == True):
-                self.createTimeStamp("reports/images/" + fileName + '.png', 4300, 200, 24, toBeWide)
-            else:
-                self.createTimeStamp("reports/images/" + fileName + '.png', 1795, 1930, 24, toBeWide)
-
-        print ("--CHART CLASS--: Graph saved as " + "reports/images/" + fileName + ".png")
-
-        #Now make the fonts smaller for when the chart is shown
-        self.plt.title(title, fontsize=16)
-        #self.plt.xlabel(xAxisTitle, fontsize=10)
-        self.plt.ylabel(yAxisTitle, fontsize=10)
-
-        #self.plt.legend(loc='upper left', fontsize = 8)
-        # Set Legends
-        if self.legendBottom == True:
-            legend = axes.legend(bbox_to_anchor=(0, -0.2, 1, .102), loc="upper left",
-                                ncol=self.columns, mode="expand", borderaxespad=0,
-                                prop={"family": "Arial", "size":8},
-                                frameon=False);
-        else:
-            legend = axes.legend(loc="upper left",
-                                ncol=1, borderaxespad=1,
-                                prop={"family": "Arial", "size":8},
-                                frameon=True);
-
-
-        # Loop through each thing in the legend to change the text colour
-        for text in legend.get_texts():
-            text.set_color("#6D6D6D")
-
-
-        self.plt.xticks(rotation = 90, fontsize = 8)
-        self.plt.yticks(fontsize = 8)
-
-        self.toTree = False #Reset this Variable
-        self.toBar = True #Reset this Variable
-        
-        if (self.toShow == True):
-            self.plt.show() #Show the plot
-
-        self.columns = 14 #Reset this value
-
-
-    def addScatterplot(self, xData, yData, colour, label, toDash, dataComplete):
-        '''
-        CALLED EXTERNALLY
-        Adds a scatter plot with line of best fit to a plot, this just adds the data
-        once drawChart is called the plot will be saved and/or displayed on screen
-        '''
-
-        self.BENCH.benchStart()
-
-        #Make sure that the data is a list otherwiae the data could be reversed
-        if isinstance(xData, list):
-            pass
-        else:
-            xData = xData.tolist()
-        #Make sure that the data is a list otherwiae the data could be reversed
-        if isinstance(yData, list):
-            pass
-        else:
-            yData = yData.tolist()
-
-        self.BENCH.benchStart()
-        LOBF_Data = self.averagedValues(yData.copy(), self.averagedTime)
-
-        if (dataComplete == False):
-            #If the data is not complete don't add a line of best fit for the last 7 days
-
-            #Now we will chop the last 4 days worth of data as this data is probably incomplete and 
-            #will make our LOBF look a little funny if we include it.
-            values = [0]*(len(xData) - 7)
-            for ii in range (0 , len(values)):
-                values[ii] = xData[ii]
-
-
-            nData = [0]* (len(LOBF_Data) - 7)
-            for ii in range (0 , len(nData)):
-                nData[ii] = LOBF_Data[ii]
-        else:
-            values = xData
-            nData = LOBF_Data
-
-        if (toDash)==True:
-             self.plt.plot(values, nData, '--', color = colour, alpha = 1, label = label)
-        else:
-            self.plt.plot(values, nData,  color = colour, alpha = 1, label = label) #Line of best fit
-    
-        self.plt.scatter(xData, yData,  color = colour, alpha = 0.2, s =3) #Scatter plot
-        self.BENCH.benchEnd("COVIDCHART addScatterPlot")
-
-    def addBarplot(self, xData, yData, colour, label):
-        '''
-        CALLED EXTERNALLY
-        Adds a bar plot with line of best fit to a plot, this just adds the data
-        once drawChart is called the plot will be saved and/or displayed on screen
-        '''
-
-        self.BENCH.benchStart()
-
-        #Make sure that the data is a list otherwiae the data could be reversed
-        if isinstance(xData, list):
-            pass
-        else:
-            xData = xData.tolist()
-        #Make sure that the data is a list otherwiae the data could be reversed
-        if isinstance(yData, list):
-            pass
-        else:
-            yData = yData.tolist()
-        
-        LOBF_Data = self.averagedValues(yData.copy(), self.averagedTime)
-
-        #Now we will chop the last 4 days worth of data as this data is probably incomplete and 
-        #will make our LOBF look a little funny of we include it. However we will draw the scatter plots for this data.
-        values = [0]*(len(xData) - 7)
-        for ii in range (0 , len(values)):
-            values[ii] = xData[ii]
-
-        nData = [0]* (len(LOBF_Data) - 7)
-        for ii in range (0 , len(nData)):
-            nData[ii] = LOBF_Data[ii]
-
-        self.plt.plot(values, nData,  color = colour, alpha = 1, label = label)
-        self.plt.bar(xData, yData,  color = colour, alpha = 0.5)
-        self.BENCH.benchEnd("COVIDCHART addBarPlot")
-
-    def addBarChart(self, xData, yData, colour):
-        '''
-        CALLED EXTERNALLY
-        Use when creating just bar charts without line of best fits and totals at the top of each bar
-        '''
-
-        self.BENCH.benchStart()
-
-        #Make sure that the data is a list otherwiae the data could be reversed
-        if isinstance(xData, list):
-            pass
-        else:
-            xData = xData.tolist()
-        #Make sure that the data is a list otherwiae the data could be reversed
-        if isinstance(yData, list):
-            pass
-        else:
-            yData = yData.tolist()
-        
-        self.toBar = True
-        self.alterXticks = False
-        for x in range(len(yData)):
-            yData[x] = int(yData[x])
-            label3 = f'{yData[x]:,}'
-            self.plt.annotate(label3, # this is the text
-                        (xData[x],yData[x]), # this is the point to label
-                        textcoords="offset points", # how to position the text
-                        xytext=(0,10), # distance from text to points (x,y)
-                        ha='center', # horizontal alignment can be left, right or center
-                        fontsize='16', color="#6D6D6D") #This size will look off when viewing the interactive graph, but good on the png
-        
-        self.plt.bar(xData, yData,  color = colour, alpha = 0.7)
-        self.BENCH.benchEnd("COVIDCHART addBarChart")
-
-    def addTreeMap(self, data, labels, colours):
-        '''
-        CALLED EXTERNALLY
-        Creates a treeMap diagram with data (array) and labels (array)
-        The data should already be summed when calling this method therefore
-        data should be an array of summed data
-        '''
-
-        self.BENCH.benchStart()
-
-        #Make sure that the data is a list otherwiae the data could be reversed
-        if isinstance(data, list):
-            pass
-        else:
-            data = data.tolist()
-
-        self.toTree = True
-        ageCategoriesLabel = labels
-        totData = 0
-
-        for ii in range(len(data)):
-            totData = totData + data[ii]
-
-        percent = [0]*len(data)
-        for ii in range(len(data)):
-            percent[ii] = (data[ii]/ totData) * 100
-            percent[ii] = str(round(percent[ii],2))
-            ageCategoriesLabel[ii] = ageCategoriesLabel[ii] + " (" + str(percent[ii]) + "%)" 
-
-        self.treeMap.plot(sizes=data, label=ageCategoriesLabel, color=colours, alpha=.8, bar_kwargs=dict(linewidth=0.5, edgecolor="black"),text_kwargs={'fontsize':14})
-        self.BENCH.benchEnd("COVIDCHART addTreeMap")
-
-    def clearChart(self):
-        '''
-        CALLED EXTERNALLY
         Clears the chart saving the original params
+
+        ..Note:: This should be called before creating another chart
         '''
-        #Save the current params so the user dosent need to keep calling setChartParams between charts
-        TMPTOSHOW = self.toShow  
-        TMPSHOWLEG = self.showLeg  
-        TMPTOADD = self.toAdd 
-        TMPTOSTAMP = self.toStamp 
-        TMPAVTIME = self.averagedTime
-        TMPSTARTDATE = self.startDatasetDate
-        TMPLEGBOT = self.legendBottom
+        #Save the current params so the user dosent need to keep calling set_chart_params between charts
+        TMPto_show = self.to_show  
+        TMPshow_leg = self.show_leg  
+        TMPto_add = self.to_add 
+        TMPto_stamp = self.to_stamp 
+        TMPAVTIME = self.averaged_time
+        TMPstart_date = self.start_dataset_date
+        TMPLEGBOT = self.legend_bottom
         TMPCOLS = self.columns
 
         self.__init__() #Clears the chart ready for the next set of data
 
         #Load the saved params
-        self.toShow = TMPTOSHOW 
-        self.showLeg =  TMPSHOWLEG
-        self.toAdd = TMPTOADD
-        self.toStamp = TMPTOSTAMP
-        self.averagedTime = TMPAVTIME
-        self.startDatasetDate = TMPSTARTDATE
-        self.alterXticks = True #always change this back to true
-        self.legendBottom = TMPLEGBOT
+        self.to_show = TMPto_show 
+        self.show_leg =  TMPshow_leg
+        self.to_add = TMPto_add
+        self.to_stamp = TMPto_stamp
+        self.averaged_time = TMPAVTIME
+        self.start_dataset_date = TMPstart_date
+        self.alter_x_ticks = True #always change this back to true
+        self.legend_bottom = TMPLEGBOT
         self.columns = TMPCOLS
 
-    def draw_Scatter_Year_Comp(self, data, toShow, label, toBeWide, yDates, toStamp):
+
+    def draw_Scatter_Year_Comp(self, data, to_show, label, to_be_wide, y_dates, to_stamp):
         '''
         Give this method some data and it will split it into years and plot a 
         year comparison with daily averages
+
+        Args:
+            data: List, data be to plotted on the y-axis
+            to_show: Boolean Value, deicdes if the chart should be shown
+            label: String Value, sets the label for the plots also used in the file_name and title
+            to_be_wide: Boolean Value, sets aspect ratio to either landscape or portrait
+            y_dates: List, list of dates for the y-axis by default I used data/static/dates.csv, this will give you comparison charts starting and ending at March of each year
+            to_stamp: Boolean Value, decides if a time stamp should be added to the chart
         '''
 
-        self.BENCH.benchStart()
-        self.clearChart()
+        self.BENCH.bench_start()
+        self.clear_chart()
 
         numberOfYears = float(len(data) / 365)
         numberOfYears = self.math.ceil(numberOfYears) #round up the number of years
@@ -626,9 +575,9 @@ class CovidChart:
 
                 nDates = [0] * len(plotData)
                 for iv in range (0, len(plotData)):
-                    nDates[iv] = yDates[iv]
+                    nDates[iv] = y_dates[iv]
                 
-                yDates = nDates
+                y_dates = nDates
 
             for iii in range(len(plotData)):
                 plotData[iii] = data[iii + (365 * ii)]
@@ -648,22 +597,147 @@ class CovidChart:
             totals = "{:,}".format(totals)
 
 
-            self.addScatterplot(yDates, plotData, colours[ii], "Year " + str(yNum) + " " + label + " (Total: " + str(totals) + " / Daily Avg: " + str(dailyAvg) + ")", False, False)
+            self.add_scatter_plot(y_dates, plotData, colours[ii], "Year " + str(yNum) + " " + label + " (Total: " + str(totals) + " / Daily Avg: " + str(dailyAvg) + ")", False, False)
 
-            self.setChartParams(toShow, False, False, toStamp)
+            self.set_chart_params(to_show, False, False, to_stamp)
 
-        self.setLegendBottom(False)
-        self.drawChart("Date","Number of People","COVID 19 Data - Yearly Comp (" + label + ")", "yearlyComp"  + label , toBeWide)
-        self.BENCH.benchEnd("COVIDCHART draw_Scatter_Year_Comp")    
+        self.set_legend_bottom(False)
+        self.draw_chart("Date","Number of People","COVID 19 Data - Yearly Comp (" + label + ")", "yearlyComp"  + label , to_be_wide)
+        self.BENCH.bench_end("COVIDCHART draw_Scatter_Year_Comp")    
 
-    def setLegendCols(self, value):
+
+    def _averaged_values(self, n_values, time):
+
+        '''
+        Averages values by the amount time. Used to draw lines of best fit on plots
+        will take n/2 values before and after the datapoint to average values.
+
+        Args:
+            n_values: A list of values to average
+            time: AMount of time to average the values over in days
+        '''
+        self.BENCH.bench_start()
+        pointer = 0
+        tmpVal = 0
+        
+        if(time % 2 != 0): # Not even
+            time = time + 1 # make the number even
+
+        values = n_values
+        newValues = [0] * len(values)
+
+        if len(n_values) > time:
+            #Now average the first half of the selected time frame using n + 1 and n - 1
+            newValues[0] = values[0] #The first value will not be averaged
+            for ii in range(1, int(time / 2)):
+                tmpVal = 0
+                tmpVal = values[ii] + values[ii + 1] + values[ii - 1]
+                newValues[ii] = tmpVal / 3
+
+            #calculate averages for the rest of the values apart from the last n / 2 values
+            for ii in range(int(time / 2) , (len(values) - int(time / 2))):
+                tmpVal = 0
+                #getting values from after the datapoint
+                for iv in range(0, int(time / 2)):
+                    pointer = ii - int(iv)
+                    tmpVal = tmpVal + values[pointer]
+
+                #getting values from before
+                for iv in range(0, int(time / 2)):
+                    pointer = (ii) + int(iv)
+                    tmpVal = tmpVal + values[pointer]
+                tmpVal = tmpVal / time
+                newValues[ii] = tmpVal
+
+            tmpVal = 0
+
+            #Now average the last half of the selected time frame using n + 1 and n - 1
+            #If the data is incomplete or varies too much the LOBF could look a little strange
+            for ii in range(int((len(values) - ((time / 2)))), len(values) - 1):
+                tmpVal = 0
+                tmpVal = values[ii] + values[ii + 1] + values[ii - 1]
+                newValues[ii] = tmpVal / 3
+
+            #Do this so the line doesnt fall off the end of the chart due to nill values
+            if (values[len(values)- 1] == 0):
+                values[len(values)- 1] = values[len(values)- 2]
+
+            newValues[len(values)- 1] = (values[len(values) - 1] + values[len(values) - 2]) / 2
+
+        self.BENCH.bench_end("COVIDCHART averagedValues")
+        return newValues
+    
+
+    def set_LOBF_time(self, time):
+        '''
+        Changes the averaged time in days for LOBF set my the argument time
+
+        Args:
+            time: This is the amount of time in days for averaging the data
+
+        '''
+        self.averaged_time = time
+
+
+    def set_chart_params(self, to_show, show_leg, to_add, to_stamp):
+        '''
+        Use to change the parameters of the COVID chart i.e. to show the chart, to add a time stamp, etc
+        
+        Args:
+            to_show: Boolean Value, decides whether to show the plot in python
+            show_leg:  Boolean Value, decides if the default COVID legend should be displayed with VLINES. You might want to show the VLINES without the legend
+            to_add: Boolean Value,  Boolean Value, decides if the VLINES should be added to the chart
+            to_stamp: Boolean Value, decides if the time stamp should be added to the chart
+        ..Note:: 
+        '''
+        self.to_show = to_show
+        self.show_leg = show_leg
+        self.to_add = to_add
+        self.to_stamp = to_stamp
+
+
+    def set_legend_cols(self, value):
         '''
         Use this to change how many columns we have in the legend
+
+        Args:
+            value: Integer Value, this will be the number of columns in the legend when its at the botton of the chart
         '''
         self.columns = value
-    
-    def setLegendBottom(self, value):
+
+
+    def set_legend_bottom(self, value):
         '''
         Use this if you wnat to change the position of the legend
+
+        Args,
+            value: Boolean Value, if set to True the legend will be at the bottom of the chart otherwise it will be at the top left of the chart
         '''
-        self.legendBottom = value
+        self.legend_bottom = value
+
+
+    def set_max_y_value(self, value):
+        '''
+        sets the maximum Y valve
+
+        Args:
+            value: Integer Value, sets the maxmum value for the Y-axis
+        '''
+        self.plt.ylim(ymax = value)
+
+
+    def reset_max_y_value(self):
+        '''
+        Resets ylimit if it was explicitly set
+        '''
+        self.plt.autoscale()
+
+
+    def set_start_date(self, start_date):
+        '''
+        Sets the start date for the graph to be used if you want to show VLINES when starting from a different date to the default one
+
+        Args,
+            start_date, Date Value, used to set a different start date when to_add == True (set_chart_params). By default the start date is 20nd March 2020. This can be changed if required 
+        '''
+        self.start_dataset_date = start_date

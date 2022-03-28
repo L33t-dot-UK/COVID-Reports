@@ -4,22 +4,31 @@ class readHospitalData():
 
     https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-hospital-activity/
 
-    This version of the class will allow you to get regonal total data from any worksheet 
-    the excel files must in be date order where the first excel file should be the earliest
+    This version of the class will allow you to get regonal data from any worksheet. 
+    
+    .. Note:  The excel files must in be date order where the first excel file should be the earliest
+
     '''
+
     import pandas as pd
     import os
+
 
     def __init__(self):
         pass
 
-    def readinTotals(self, excel_file, ws):
+
+    def read_in_totals(self, excel_file, ws):
         '''
-        This will read the Hospitals worksheet from 
+        This will read the selected owrksheet form a given excel file.
+        Then turn the top of the worksheet into a dataframe, this only reads the totals from each worksheet for ENGLAND and the english regions, it does not read in data for each trust.
 
-        https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-hospital-activity/
+        Args:
+            excel_file: String Value, location of the excel file to be used.
+            es: String Value, worksheet name within the excel file to read.
 
-        and turn the top of the worksheet into a dataframe, this only reads the totals from each worksheet for ENGLAND and the regions
+        Returns:
+            A dataframe with all data from the totals part of any given worksheet.
 
         '''
         master_df = self.pd.read_excel(excel_file, sheet_name=ws, engine='openpyxl')
@@ -62,46 +71,62 @@ class readHospitalData():
 
         return totals_df.copy()
 
-    def readinAllTotals(self, directory):
+
+    def read_in_all_totals(self, directory):
         '''
         This will read in totals from all worksheets, takes around 7 seconds for each worksheet
         it will also merge files from the directory so ensure you just have your hospital data in
         there!
+
+        Args:
+            directory: String Value, the directory that contains hospital data.
+
+        Returns:
+            A dataframe that contains totals data from all files within the directory and for all worksheets. This function will merge the excel files.
+
+        .. Note:: This method is very slow and can take up to 7 seconds per worksheet.
         '''
 
         #iterate through the directory
-        excelFiles = self.os.listdir(directory)
+        excel_files = self.os.listdir(directory)
 
-        for ii in range(len(excelFiles)): #for each excel file
-            print("Processing file " + excelFiles[ii])
-            dataLocation = self.os.path.join(directory, excelFiles[ii]) #create the path to the excel file
-            excel_file = self.pd.ExcelFile(dataLocation, engine='openpyxl') #open the excel file
-            sheetNames = excel_file.sheet_names #get a list of sheet names
+        for ii in range(len(excel_files)): #for each excel file
+            print("Processing file " + excel_files[ii])
+            data_location = self.os.path.join(directory, excel_files[ii]) #create the path to the excel file
+            excel_file = self.pd.ExcelFile(data_location, engine='openpyxl') #open the excel file
+            sheet_names = excel_file.sheet_names #get a list of sheet names
 
-            df = [0] * len(sheetNames)
-            for iii in range(len(sheetNames)):
-                print("Processing worksheet " + sheetNames[iii])
-                df[iii] = self.readinTotals(excel_file, sheetNames[iii])
+            df = [0] * len(sheet_names)
+            for iii in range(len(sheet_names)):
+                print("Processing worksheet " + sheet_names[iii])
+                df[iii] = self.read_in_totals(excel_file, sheet_names[iii])
 
-        return df, sheetNames #return an array of dataframes and the sheet names
+        return df, sheet_names #return an array of dataframes and the sheet names
 
-    def joinTotalsDataSets(self, directory, ws):
+
+    def join_totals_datasets(self, directory, ws):
         '''
         This will scan the directory open each excel file and
-        join the dataframes for totals for a specific worksheet
+        join the dataframes for totals for a specific worksheet.
+
+        This methods similar to the above one however it will onlt merge data for the selected worksheet.
+
+        Args:
+            directory: String Value, this is the directory where the hospital data is.
+            ws: String Value, this is the worksheet that you want to read.
         '''
         #iterate through the directory
-        excelFiles = self.os.listdir(directory)
+        excel_files = self.os.listdir(directory)
 
-        excel_file = [0] * len(excelFiles)
-        for ii in range(len(excelFiles)): #load each excel file
-            print("Processing file " + excelFiles[ii])
-            dataLocation = self.os.path.join(directory, excelFiles[ii]) #create the path to the excel file
-            excel_file[ii] = self.pd.ExcelFile(dataLocation, engine='openpyxl') #open the excel file
+        excel_file = [0] * len(excel_files)
+        for ii in range(len(excel_files)): #load each excel file
+            print("Processing file " + excel_files[ii])
+            data_location = self.os.path.join(directory, excel_files[ii]) #create the path to the excel file
+            excel_file[ii] = self.pd.ExcelFile(data_location, engine='openpyxl') #open the excel file
 
-        df = [0] * len(excelFiles)
-        for ii in range(len(excelFiles)): #Read the worksheet from each excel file
-            df[ii] = self.readinTotals(excel_file[ii], ws)
+        df = [0] * len(excel_files)
+        for ii in range(len(excel_files)): #Read the worksheet from each excel file
+            df[ii] = self.read_in_totals(excel_file[ii], ws)
 
         if (ws == "MV Beds Occupied Covid-19") or (ws == "MV Beds Occupied") or (ws == "Total HospAdm From Care Nursing") or (ws == "Reported Admissions & Diagnoses"):
             df[0].drop(df[0].tail(1).index,inplace=True) # drop last n rows, these worksheets contain extra number of rows

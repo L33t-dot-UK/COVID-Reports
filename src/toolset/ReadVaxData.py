@@ -1,29 +1,38 @@
 class readVaxData:
     '''
-    This class is used to read vaccination data from vaxData.csv
+    This class is used to read vaccination data from vax_data.csv
     for this we will use dataframes similar to how we dealt with hospital data
     '''
     import ast
     import numpy as np
     import pandas as pd
 
-    def __init__(self, NATION):
+    def __init__(self, nation):
 
-        self.nation = NATION
-        self.unpacked = self.unpackData() #loads and unpacks vaccination data
-        self.vaxAgeGroups = ['12_15', '16_17', '18_24','25_29', '30_34', '35_39', '40_44', '45_49', '50_54', '55_59', '60_64', '65_69', '70_74', '75_79', '80_84', '85_89', '90+']
-        self.vaxAgeGroupsString = ['12 to 15', '16 to 17', '18 to 24','25 to 29', '30 to 34', '35 to 39', '40 to 44', '45 to 49', '50 to 54', '55 to 59', '60 to 64', 
+        self.nation = nation
+        self.unpacked = self.unpack_data() #loads and unpacks vaccination data
+        self.vax_age_groups = ['12_15', '16_17', '18_24','25_29', '30_34', '35_39', '40_44', '45_49', '50_54', '55_59', '60_64', '65_69', '70_74', '75_79', '80_84', '85_89', '90+']
+        self.vax_age_groups_string = ['12 to 15', '16 to 17', '18 to 24','25 to 29', '30 to 34', '35 to 39', '40 to 44', '45 to 49', '50 to 54', '55 to 59', '60 to 64', 
                                         '65 to 69', '70 to 74', '75 to 79', '80 to 84', '85 to 89', '90+']
 
-    def getVaxData(self):
-        vax_df = self.pd.read_csv("data/autoimport/vaxData" + self.nation + ".csv")
+    def get_vax_data(self):
+        '''
+        Loads the data into a dataframe
+
+        Returns:
+            Vaccination dataframe in the nested list format
+        '''
+        vax_df = self.pd.read_csv("data/autoimport/vax_data" + self.nation + ".csv")
         return vax_df
     
-    def unpackData(self):
+    def unpack_data(self):
         '''
-        unpacks the vaccination data
+        unpacks the vaccination data as each day is in a nested list
+
+        Returns:
+            The full unpacked dataframe 
         '''
-        df = self.getVaxData()
+        df = self.get_vax_data()
 
         #Full DF
         new_df = self.pd.DataFrame(df[["date", "vaccinationsAgeDemographics"]])
@@ -52,21 +61,34 @@ class readVaxData:
 
         return fullUnPacked_df 
 
-    def getVaxAgedData(self, ageGroup):
+    def get_vax_aged_data(self, age_group):
         '''
-        returns vaccination data for a given age group as a dataframe
+        returns vaccination data for a given age group as a dataframe. This makes it easier to navigate the dataframe
+
+        Args:
+            age_group: Integer Value, these age groups can be seen at the start of this class under self.vax_age_groups
+
+        Returns:
+            A dataframe with vaccinaiton data for the selected age group
         '''
-        df = self.unpacked[self.unpacked['age'] == ageGroup]
+        df = self.unpacked[self.unpacked['age'] == age_group]
         return df
     
-    def getPackedData(self):
+    def get_packed_data(self):
         '''
-        Returns all vaccinaiton data
+        Returns all vaccinaiton data in the nested list format
         '''
         return self.unpacked
 
-    def getVaxAgeGroups(self):
-        return self.vaxAgeGroups.copy()
+    def get_vax_age_groups(self):
+        '''
+        Returns the age groups as they are in the dataframe
+        '''
+        
+        return self.vax_age_groups.copy()
 
-    def getVaxAgeGroupsString(self):
-        return self.vaxAgeGroupsString.copy()
+    def get_vax_age_groups_string(self):
+        '''
+        Returns the age groups for use in a graph or report
+        '''
+        return self.vax_age_groups_string.copy()
