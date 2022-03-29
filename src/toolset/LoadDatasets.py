@@ -1,16 +1,6 @@
-#[COMPLETED V1.0.0]
-
-
-#NEED TO ADD DATA FRAME FUNCTIONALITY
-
-# AMEND THIS ONE LAST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 class LoadDataSets:
     '''
-
-    COPYRIGHT DAVID BRADSHAW, L33T.UK AND COVIDREPORTS.UK, CREDIT MUST BE GIVEN IF THIS CODE IS USED
-
-    This class will load datasets from the CSV file, clean the datasets
+    This class will load datasets from the data CSV files, clean the datasets
     and make them accessable through callable functions.
 
     This class will offer the dataset up in two formats; 
@@ -22,14 +12,7 @@ class LoadDataSets:
     dataframes before. I offer it up in dataframes for data scientists and to allow for easier analysis/incoroporation 
     into computer models.
 
-    Example;
-
-        govDataSet = LoadDataSets(true, "England") #Object Creation
-        hospitalCases = govDataSet.getHospitalCases() #returns a list of hospital cases
-        dateSeries = govDataSet.getGOVdateSeries() #Returns a list of dates for the Y axis on graphs
-        
-    CLASS COMPLETE AND DOCUMENTED
-    VERSION 1.0.0 (OCT 21)
+    For usage examples view the examples scripts in the root folder.
     '''
     import pandas as pd
     import numpy as np
@@ -41,8 +24,13 @@ class LoadDataSets:
 
     def __init__(self, toLoad, nation):
         '''
-        EXTERNAL FUNCTION CALLED WHEN THE OBJECT IS CREATED
-        Sets up various variables used in the function contained in this class
+        Sets up various variables used in the function contained in this class.
+
+        Args:
+            toLoad: Boolean Value, this tells the clas whether it should load the dataset, when set to false you can use this class to access the population data, colours and age groups.
+            nations: String Value, this is the nation that your dataset is for.
+
+        .. Note:: Age profiled data is only available for England.
         '''
 
         self.nation = nation
@@ -104,57 +92,68 @@ class LoadDataSets:
         self.fullDataFrameAgeDeaths = self.pd.DataFrame()
 
         if (toLoad == True):
-            self.LoadDataFromFile() #Populate variables in the class
+            self._load_data_from_file() #Populate variables in the class
 
-    def unpackAgedData(self, dataToUnpack):
+    def _unpack_aged_data(self, data_to_unpack):
         '''
-        INTERNAL FUNCTION - do not call
         Takes the aged data and unpacks it so we can use it in the graphs
         At various stages the government has reordered this data, if this happens
         this is the function that will be changed to make sure that the data is in
         the correct order for our graphs
+
+        Args:
+            data_to_unpack, Nested List, this will reorder the aged data and unnest the list
+        
+        Returns:
+            List of unpacked rearranged data
         '''
 
         self.BENCH.bench_start()
 
         #Unpack the Data
-        for ii in range(len(dataToUnpack)):
-            dataToUnpack[ii] = eval(dataToUnpack[ii]) #convert the array from an array of strings to a dicitonary list
+        for ii in range(len(data_to_unpack)):
+            data_to_unpack[ii] = eval(data_to_unpack[ii]) #convert the list from a list of strings to a dicitonary list
 
-        TMPunPackedData = [0]*len(dataToUnpack)
-        for ii in range(len(dataToUnpack)):
-            TMPunPackedData[ii] = dataToUnpack[ii].copy()
+        TMPunPackedData = [0]*len(data_to_unpack)
+        for ii in range(len(data_to_unpack)):
+            TMPunPackedData[ii] = data_to_unpack[ii].copy()
 
-        #Re-Order the array so we can use loops when creating aged profiled graphs
-        for ii in range(0, len(dataToUnpack)):
-            dataToUnpack[ii][1] = TMPunPackedData[ii][2]
-            dataToUnpack[ii][2] = TMPunPackedData[ii][3]
-            dataToUnpack[ii][3] = TMPunPackedData[ii][4]
-            dataToUnpack[ii][4] = TMPunPackedData[ii][5]
-            dataToUnpack[ii][5] = TMPunPackedData[ii][6]
-            dataToUnpack[ii][6] = TMPunPackedData[ii][7]
-            dataToUnpack[ii][7] = TMPunPackedData[ii][8]
-            dataToUnpack[ii][8] = TMPunPackedData[ii][9]
-            dataToUnpack[ii][9] = TMPunPackedData[ii][10]
-            dataToUnpack[ii][10] = TMPunPackedData[ii][11]
-            dataToUnpack[ii][11] = TMPunPackedData[ii][12]
-            dataToUnpack[ii][12] = TMPunPackedData[ii][14]
-            dataToUnpack[ii][13] = TMPunPackedData[ii][15]
-            dataToUnpack[ii][14] = TMPunPackedData[ii][16]
-            dataToUnpack[ii][15] = TMPunPackedData[ii][17]
-            dataToUnpack[ii][16] = TMPunPackedData[ii][18]
-            dataToUnpack[ii][17] = TMPunPackedData[ii][19]
-            dataToUnpack[ii][18] = TMPunPackedData[ii][20] #Unassigned
-            dataToUnpack[ii][19] = TMPunPackedData[ii][1]  #00-59
-            dataToUnpack[ii][20] = TMPunPackedData[ii][13] #60+
+        #Re-Order the list so we can use loops when creating aged profiled graphs
+        for ii in range(0, len(data_to_unpack)):
+            data_to_unpack[ii][1] = TMPunPackedData[ii][2]
+            data_to_unpack[ii][2] = TMPunPackedData[ii][3]
+            data_to_unpack[ii][3] = TMPunPackedData[ii][4]
+            data_to_unpack[ii][4] = TMPunPackedData[ii][5]
+            data_to_unpack[ii][5] = TMPunPackedData[ii][6]
+            data_to_unpack[ii][6] = TMPunPackedData[ii][7]
+            data_to_unpack[ii][7] = TMPunPackedData[ii][8]
+            data_to_unpack[ii][8] = TMPunPackedData[ii][9]
+            data_to_unpack[ii][9] = TMPunPackedData[ii][10]
+            data_to_unpack[ii][10] = TMPunPackedData[ii][11]
+            data_to_unpack[ii][11] = TMPunPackedData[ii][12]
+            data_to_unpack[ii][12] = TMPunPackedData[ii][14]
+            data_to_unpack[ii][13] = TMPunPackedData[ii][15]
+            data_to_unpack[ii][14] = TMPunPackedData[ii][16]
+            data_to_unpack[ii][15] = TMPunPackedData[ii][17]
+            data_to_unpack[ii][16] = TMPunPackedData[ii][18]
+            data_to_unpack[ii][17] = TMPunPackedData[ii][19]
+            data_to_unpack[ii][18] = TMPunPackedData[ii][20] #Unassigned
+            data_to_unpack[ii][19] = TMPunPackedData[ii][1]  #00-59
+            data_to_unpack[ii][20] = TMPunPackedData[ii][13] #60+
 
         print("--LOAD DATA SETS CLASS--: Aged data unpacked")
         self.BENCH.bench_end("LOADDATASETS UnpackingAgedData")
-        return dataToUnpack
-        
+        return data_to_unpack
+
     def unpack_data(self, field):
         '''
         unpacks the aged data in to a dataframe
+
+        Args:
+            field, String Value, this is the column name in the dataframe that you want to access. Values for this can be either newCasesBySpecimenDateAgeDemographics or newDeaths28DaysByDeathDateAgeDemographics
+
+        Returns:
+            Aged data in a dataframe that can be accessed using dataframe functions, for either cases or deaths using the above column names as the field
         '''
         df = self.pd.read_csv('data/autoimport/dataAge.csv') #load the aged dataset from the CSV file
         df.drop(df.tail(32).index,inplace=True) #Remove the first days_to_sub rows, for time series chart drop the first 32 rows 32 the data starts on the 02/03/20
@@ -185,10 +184,11 @@ class LoadDataSets:
 
         return fullUnPacked_df 
 
-    def LoadDataFromFile(self):
+    def _load_data_from_file(self):
         '''
-        INTERNAL FUNCTION - called once the object has been created in the __init__ method
-        Loads data from the CSV file into the variables
+        Loads data from the CSV file into lists that can be accessed via this class through helper methods. This will be called automatically when the object is created if toLoad == True
+
+        .. Note:: This is only called is toLoad == True when creating the LoadDatasets object.
         '''
         print("--LOAD DATA SETS CLASS--: Loading data from CSV files")
         self.BENCH.bench_start()
@@ -215,7 +215,7 @@ class LoadDataSets:
             print("--LOAD DATA SETS CLASS--: Error Loading CSV Files; See Below For Details")
             print("--LOAD DATA SETS CLASS--: " + E)
         
-        #Now the files are loaded into memory we need to process the dataframe and assign it to some arrays
+        #Now the files are loaded into memory we need to process the dataframe and assign it to some lists
         try:
             '''
             ----------------------------- Data from data.csv -----------------------------
@@ -244,7 +244,7 @@ class LoadDataSets:
 
             self.GOVdateSeries = self.GOVdataset.iloc[0:,0].values
             
-            #Now lets flip the array so index 0 will be the oldest value
+            #Now lets flip the list so index 0 will be the oldest value
             self.hospitalCases = self.hospitalCases[::-1]
             self.newAdmssions = self.newAdmssions[::-1]
             self.newCases = self.newCases[::-1]
@@ -285,9 +285,9 @@ class LoadDataSets:
             self.agedGOVdateSeries = self.agedGOVdateSeries[::-1]#Reorder the data
 
             print("--LOAD DATA SETS CLASS--: Reordering Values From dataAge.csv")
-            #We need to reorder these values and thats what unpackAgedData does
-            self.caseDataByAge = self.unpackAgedData(self.caseDataByAge)
-            self.deathDataByAge = self.unpackAgedData(self.deathDataByAge)
+            #We need to reorder these values and thats what _unpack_aged_data does
+            self.caseDataByAge = self._unpack_aged_data(self.caseDataByAge)
+            self.deathDataByAge = self._unpack_aged_data(self.deathDataByAge)
 
             print("--LOAD DATA SETS CLASS--: The object is ready to use, please use getter methods to access data from this object.")
 
@@ -305,12 +305,13 @@ class LoadDataSets:
     
     '''
     ----------------------------- All getter functions are below -----------------------------
-    These functions will return a copy of the array so it can be changed without changing the
+    .. Note:: These functions will return a copy of the list so it can be changed without changing the
     data within the object. This is important if the object is used to create multiple graphs
     where the data is manipulated in some way. By calling the getter methods you will always
     get the unmanipulated data. If you access the variables directly through assignment, data
     in the object will change when manipulated causing issues if the same object is used for
-    multiple graphs
+    multiple graphs. Always use these getter methods to access the data contained within this
+    class.
     ------------------------------------------------------------------------------------------
     '''
 
@@ -320,167 +321,176 @@ class LoadDataSets:
     ----------------------------------------------------
     '''
     
-    def getFullDataFrame(self):
+
+    def get_full_data_frame(self):
         '''
         Returns the full dataframe from the CSV file data.csv
         '''
         return self.fullDataFrame.copy() 
     
-    def getAgedDataFrames(self):
+
+    def get_aged_data_frames(self):
         '''
         Returns full dataframes for aged cases and aged deaths
         '''
         return self.fullDataFrameAgeCases.copy(), self.fullDataFrameAgeDeaths.copy()
 
-    def getAgedDataCases(self, age_group):
+
+    def get_aged_data_cases(self, age_group):
         '''
         returns aged case data for a given age group as a dataframe
         '''
         df = self.fullDataFrameAgeCases[self.fullDataFrameAgeCases['age'] == age_group]
         return df["cases"].copy()
 
-    def getAgedDataDeaths(self, age_group):
+
+    def get_aged_data_deaths(self, age_group):
         '''
         returns aged death data for a given age group as a dataframe
         '''
         df = self.fullDataFrameAgeDeaths[self.fullDataFrameAgeDeaths['age'] == age_group]
         return df["deaths"].copy()
 
-    def getPopulationNumberArray(self):
+
+    def get_population_number_list(self):
         '''
-        Returns the population array giving populaiton figures for each age group
+        Returns the population list giving populaiton figures for each age group
         '''
         return self.population.copy()
     
-    def getline_colourArray(self):
+
+    def get_line_colour_list(self):
         '''
         Returns line colours for graphs making all graphs look the same, used for age profiled graphs
         '''
         return self.line_colour.copy()
     
-    def getAgeCatStringArray(self):
+
+    def get_age_cat_string_list(self):
         '''
         Returns age strings for each age categories used to label graphs
         '''
         return self.ageCategoriesString.copy()
 
-    def getHospitalCases(self):
+
+    def get_hospital_cases(self):
         '''
-        Returns an array with all detailing total people in hospital with COVID
+        Returns an list with all detailing total people in hospital with COVID
         '''
         return self.hospitalCases
 
-    def getnewAdmssions(self):
+
+    def get_new_admssions(self):
         '''
-        Returns an array with all hospital admissions
+        Returns an list with all hospital admissions
         '''
         return self.newAdmssions.copy()
     
-    def getNewCases(self):
+
+    def get_new_cases(self):
         '''
-        Returns an array detailing all new COVID cases found by PCR and LFD
+        Returns an list detailing all new COVID cases found by PCR and LFD
         '''
         return self.newCases.copy()
     
-    def getNewDeaths(self):
+
+    def get_new_deaths(self):
         '''
-        Returns an array with daily COVID deaths; these are deaths by death date and could be out of date for up to a week
+        Returns an list with daily COVID deaths; these are deaths by death date and could be out of date for up to a week
         '''
         return self.newDeaths.copy()
     
-    def getPillarTwoTests(self):
+
+    def get_pillar_two_tests(self):
         '''
         Returns all pillar 2 tests that have been conducted
         '''
         return self.pillarTwoTests.copy()
     
-    def getDeathsByReportDate(self):
+
+    def get_deaths_by_report_date(self):
         '''
         Returns all deaths by reported date
         '''
         return self.deathsByReportDate.copy()
     
-    def getNewPillarOneTestsByPublishDate(self):
+
+    def get_new_pillar_one_tests_by_publish_date(self):
         '''
         Returns all pillar 1 tests
         '''
         return self.newPillarOneTestsByPublishDate.copy()
     
-    def getPositivePCRtests(self):
+
+    def get_positive_PCR_tests(self):
         '''
         Returns all positive PCR tests
         '''
         return self.positivePCRtests.copy()
     
-    def getPositiveLFDconfirmedByPCR(self):
+
+    def get_positive_LFD_confirmed_by_PCR(self):
         '''
         Returns all positive LFD confirmed by PCR
         '''
         return self.positiveLFDconfirmedByPCR.copy()
     
-    def getNewLFDCases(self):
+
+    def get_new_LFD_cases(self):
         '''
         retuturns all positive LFD tests
         '''
         return self.newLFDCases.copy() 
 
-    def getNewPCRTests(self):
+
+    def get_new_PCR_tests(self):
         '''
         Returns all PCR test conducted
         '''
         return self.newPCRTests.copy()
 
-    def getNewLFDTests(self):
+
+    def get_new_LFD_tests(self):
         '''
         Returns all LFD tests conducted
         '''
         return self.newLFDTests.copy()
 
-    def getCumSecondDose(self):
+
+    def get_cum_second_dose(self):
         '''
         Returns the amount of 2nd doses administered
         '''
         return self.cumSecondDose.copy()
     
-    def getnewCasesByReportDate(self):
+
+    def get_new_cases_by_report_date(self):
         '''
         Return new cases by report date
         '''
         return self.newCasesByReportDate
 
-    def getGOVdateSeries(self):
+
+    def get_gov_date_Series(self):
         '''
         Returns a date arra to be used for the xAxis on charts
+
+        .. Note:: Use this when creating time series graphs that use non-age profiled data.
         '''
-        #return self.GOVdateSeries
         return self.np.array(self.GOVdateSeries, dtype='datetime64')
 
 
-    def getAgedGOVdateSeries(self):
-        '''
-        Returns a date array to be used for the xAxis on charts when using age separated data
-        '''
-        #return self.agedGOVdateSeries.copy()
-        return self.np.array(self.agedGOVdateSeries, dtype='datetime64')
-    
-    def getAgedGOVdateSeriesNPDTG(self):
-        '''
-        Returns a list of numpy datetime64 dates
-        use these dates instead of the list if you need to plot misaligned data
-        '''
-        
-        return self.np.array(self.agedGOVdateSeries.copy(), dtype='datetime64')
-
-    def getYearDatesDataSet(self):
+    def get_year_dates_dataset(self):
         '''
         QUERY
         '''
         #return self.yearDatesDataSet.copy()
         return self.np.array(self.yearDatesDataSet.copy(), dtype='datetime64')
 
-    def getYearDates(self):
+
+    def get_year_dates(self):
         '''
-        Returns dates in a year for use with the year comparasons and requres the CSV file dates.csv
+        Returns dates in a year for use with the year comparrisons and requres the CSV file dates.csv
         '''
         return self.yearDates.copy()
         #return self.np.array(self.yearDates.copy(), dtype='datetime64')
@@ -490,22 +500,46 @@ class LoadDataSets:
     GETTER METHODS FOR THE AGED DATASET FROM DATAAGE.CSV
     ----------------------------------------------------
     '''
-    def getDeathDataByAgeAll(self):
+
+
+    def get_aged_gov_date_series(self):
+        '''
+        Returns a date list to be used for the xAxis on charts when using age separated data
+
+        .. Note:: Use this when creating time series graphs that use age profiled data
+        '''
+
+        #return self.agedGOVdateSeries.copy()
+        return self.np.array(self.agedGOVdateSeries, dtype='datetime64')
+    
+
+    def get_aged_gov_date_seriesNPDTG(self):
+        '''
+        Returns a list of numpy datetime64 dates
+        use these dates instead of the list if you need to plot misaligned data
+        '''
+
+        return self.np.array(self.agedGOVdateSeries.copy(), dtype='datetime64')
+
+
+    def get_death_data_by_age_all(self):
         return self.deathDataByAge
         
-    def getDeathDataByAge(self, dayOfYear, age_group):
+
+    def get_death_data_by_age(self, dayOfYear, age_group):
         '''
         This will return the number of deaths for a given day and a given age group
         Age groups go from 0 to 18 and days go from 0 to len(n)
         '''
         return self.deathDataByAge[dayOfYear][age_group]['deaths']
 
-    def getRawDeathData(self):
+    def get_raw_death_data(self):
         return self.deathDataByAge
  
-    def getAgedDeathData(self, age_group):
+
+    def get_aged_death_data(self, age_group):
         '''
-        Returns an array of death values ready to plot, age groups from 0-18
+        Returns an list of death values ready to plot, age groups from 0-18
         '''
         returnedData = [0]*len(self.deathDataByAge)
         for ii in range(0, len(self.deathDataByAge)):
@@ -513,16 +547,17 @@ class LoadDataSets:
         return returnedData.copy()
 
 
-    def getCaseDataByAge(self, dayOfYear, age_group):
+    def get_case_data_by_age(self, dayOfYear, age_group):
         '''
         This will return the number of cases for a given day and a given age group
         Age groups go from 0 to 18 and days go from 0 to len(n)
         '''
         return self.caseDataByAge[dayOfYear][age_group]['cases']
 
-    def getAgedCaseData(self, age_group):
+
+    def get_aged_case_data(self, age_group):
         '''
-        Returns an array of case values ready to plot, age groups from 0-18
+        Returns an list of case values ready to plot, age groups from 0-18
         '''
         returnedData = [0]*len(self.caseDataByAge)
         for ii in range(0, len(self.caseDataByAge)):
@@ -530,13 +565,14 @@ class LoadDataSets:
         return returnedData.copy()
     
 
-    def getage_groups(self, age_group):
+    def get_age_groups(self, age_group):
         '''
         Returns a given age group for a givn age_group index, age groups from 0-18
         '''
         return self.caseDataByAge[0][age_group]['age']
 
-    def getage_groupsLiteral(self):
+
+    def get_age_groups_literal(self):
         '''
         Returns a list of age groups used in the aged data dataframe
         '''

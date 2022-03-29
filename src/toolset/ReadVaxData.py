@@ -61,6 +61,7 @@ class readVaxData:
 
         return fullUnPacked_df 
 
+
     def get_vax_aged_data(self, age_group):
         '''
         returns vaccination data for a given age group as a dataframe. This makes it easier to navigate the dataframe
@@ -73,6 +74,7 @@ class readVaxData:
         '''
         df = self.unpacked[self.unpacked['age'] == age_group]
         return df
+
     
     def get_packed_data(self):
         '''
@@ -80,12 +82,13 @@ class readVaxData:
         '''
         return self.unpacked
 
+
     def get_vax_age_groups(self):
         '''
         Returns the age groups as they are in the dataframe
         '''
-        
         return self.vax_age_groups.copy()
+
 
     def get_vax_age_groups_string(self):
         '''

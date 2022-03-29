@@ -34,10 +34,10 @@ nation = "England" #If this is set to anything else Age profiled data will alway
 pullData = getData(nation) #get the latest data
 govData = govDataClass(True, nation) #this object stores all downloaded data and loads it into memory when the argument is set to true
 
-nonAgeDates = govData.getGOVdateSeries() #Gets xAxis dataset
-ageDates = govData.getAgedGOVdateSeries() #Gets xAxis dataset for graphs that split data by age groups
+nonAgeDates = govData.get_gov_date_Series() #Gets xAxis dataset
+ageDates = govData.get_aged_gov_date_series() #Gets xAxis dataset for graphs that split data by age groups
 
-data = govData.getDeathsByReportDate() #Gets a dataset
+data = govData.get_deaths_by_report_date() #Gets a dataset
 
 chart = CovidChart() #This will be the chart object that we will use
 
@@ -55,16 +55,16 @@ def page_01_Overview():
     '''
     ------------------------ DRAW THE OVERVIEW CHART ------------------------
     '''
-    data = govData.getNewCases() #Gets new cases
+    data = govData.get_new_cases() #Gets new cases
     chart.add_scatter_plot(nonAgeDates, data, "orange", "New COVID-19 Cases ", False, False)
 
-    data = govData.getHospitalCases() #Gets new deaths
+    data = govData.get_hospital_cases() #Gets new deaths
     chart.add_scatter_plot(nonAgeDates, data, "indigo", "People in Hospital with COVID-19", False, True)
 
-    data = govData.getnewAdmssions() #Gets new hospital admissions
+    data = govData.get_new_admssions() #Gets new hospital admissions
     chart.add_scatter_plot(nonAgeDates, data, "darkslategrey", "New COVID-19 Hospital Admissions", False, False)
 
-    data = govData.getNewDeaths() #Gets new deaths
+    data = govData.get_new_deaths() #Gets new deaths
     chart.add_bar_plot(nonAgeDates, data, "red", "New COVID-19 Deaths")
 
     chart.draw_chart("Date", "Number of People", "COVID-19 Data - Hospital Cases, Hosptial Admissions, Cases and Deaths  (" + nation + ")" , "overview", True)
@@ -74,10 +74,10 @@ def page_01_Overview():
     '''
     chart.clear_chart() #first clear old data from the chart
 
-    data = govData.getNewDeaths() #Gets new deaths by death date
+    data = govData.get_new_deaths() #Gets new deaths by death date
     chart.add_bar_plot(nonAgeDates, data, "red", "Death by Death Date")
 
-    data = govData.getDeathsByReportDate() #Gets new deaths
+    data = govData.get_deaths_by_report_date() #Gets new deaths
     chart.add_bar_plot(nonAgeDates, data, "blue", "Death by Reported Date")
 
     chart.draw_chart("Date", "Number of People", "COVID 19 Data - Death Reported Date vs Death Date (" + nation + ")" , "deathsAndDeaths", True) #create the chart
@@ -108,7 +108,7 @@ def draw_Age_Deaths_Bar_Under_vs_Over(limit, firstAgeRange, secondAgeRange, titl
 
     totalDeathsAllAges = 0
     for ii in range(0, 19):
-        data = govData.getAgedDeathData(ii) #Gets new Deaths
+        data = govData.get_aged_death_data(ii) #Gets new Deaths
         totalDeaths[ii] = np.sum(data) #sum up deaths in each age group
         totalDeathsAllAges = totalDeathsAllAges + totalDeaths[ii]
 
@@ -165,10 +165,10 @@ def page_02_Cases_Deaths(L_Limit, h_Limit):
     totData = [0]* 19
 
     for ii in range(L_Limit, h_Limit):
-        data = govData.getAgedCaseData(ii) #Gets new cases
+        data = govData.get_aged_case_data(ii) #Gets new cases
         totData[ii] = np.sum(data) #sum up cases in each age group
         totData[ii] = f'{totData[ii]:,}' #add a comma to make the numbers readable
-        chart.add_scatter_plot(ageDates, data, govData.getline_colourArray()[ii], govData.getAgeCatStringArray()[ii] + " (" + str(totData[ii]) + ")", False, True)
+        chart.add_scatter_plot(ageDates, data, govData.get_line_colour_list()[ii], govData.get_age_cat_string_list()[ii] + " (" + str(totData[ii]) + ")", False, True)
         
 
     file_name = "ageCases_" + str(L_Limit) + "_" + str(h_Limit)
@@ -181,10 +181,10 @@ def page_02_Cases_Deaths(L_Limit, h_Limit):
     totData = [0]* 19
 
     for ii in range(L_Limit, h_Limit):
-        data = govData.getAgedCaseData(ii) #Gets new cases
+        data = govData.get_aged_case_data(ii) #Gets new cases
         totData[ii] = np.sum(data) #sum up cases in each age group
 
-    chart.add_bar_chart(govData.getAgeCatStringArray(), totData, "teal")
+    chart.add_bar_chart(govData.get_age_cat_string_list(), totData, "teal")
     chart.draw_chart("Age Categories", "Number of People", "COVID 19 Data - Age Profile of Cases (" + nation + ")", "BarCases", False) #create the chart 
         
     #------------------------ GRAPH 3: TREE MAP SHOWING CASES BY AGE ------------------------
@@ -192,9 +192,9 @@ def page_02_Cases_Deaths(L_Limit, h_Limit):
     chart.set_chart_params(False,False,False,True) #Change params we dont want the VLINE legend
     summedData = [0]* 19
     for ii in range(L_Limit, h_Limit):
-        summedData[ii] = np.sum(govData.getAgedCaseData(ii))
+        summedData[ii] = np.sum(govData.get_aged_case_data(ii))
 
-    chart.add_treemap(summedData, govData.getAgeCatStringArray(), govData.getline_colourArray())
+    chart.add_treemap(summedData, govData.get_age_cat_string_list(), govData.get_line_colour_list())
     chart.draw_chart("", "", "COVID 19 Data - Positive Cases by Age in " + nation, "TreemapCases", False) #create the chart
     
     #------------------------ GRAPH 4: DEATHS BY AGE ------------------------
@@ -204,10 +204,10 @@ def page_02_Cases_Deaths(L_Limit, h_Limit):
     totData = [0]* 19
 
     for ii in range(L_Limit, h_Limit):
-        data = govData.getAgedDeathData(ii) #Gets new cases
+        data = govData.get_aged_death_data(ii) #Gets new cases
         totData[ii] = np.sum(data) #sum up cases in each age group
         totData[ii] = f'{totData[ii]:,}' #add a comma to make the numbers readable
-        chart.add_scatter_plot(ageDates, data, govData.getline_colourArray()[ii], govData.getAgeCatStringArray()[ii] + " (" + str(totData[ii]) + ")", False, True)
+        chart.add_scatter_plot(ageDates, data, govData.get_line_colour_list()[ii], govData.get_age_cat_string_list()[ii] + " (" + str(totData[ii]) + ")", False, True)
         
     file_name = "ageDeaths_" + str(L_Limit) + "_" + str(h_Limit)
     chart.draw_chart("Date", "Number of People", "COVID 19 Data - Daily Deaths by Age in " + nation, file_name, True) #create the chart
@@ -219,10 +219,10 @@ def page_02_Cases_Deaths(L_Limit, h_Limit):
     totData = [0]* 19
 
     for ii in range(L_Limit, h_Limit):
-        data = govData.getAgedDeathData(ii) #Gets new cases
+        data = govData.get_aged_death_data(ii) #Gets new cases
         totData[ii] = np.sum(data) #sum up cases in each age group
 
-    chart.add_bar_chart(govData.getAgeCatStringArray(), totData, "teal")
+    chart.add_bar_chart(govData.get_age_cat_string_list(), totData, "teal")
     chart.draw_chart("Age Categories", "Number of People", "COVID 19 Data - Age Profile of Deaths (" + nation + ")", "BarDeaths", False) #create the chart 
 
     #------------------------ GRAPH 6: TREEMAP OF DEATHS ------------------------
@@ -240,15 +240,15 @@ def page_02_Cases_Deaths(L_Limit, h_Limit):
     ageCats[1] = "25 to 49"
     colours[1] = 'gray'
     for ii in range(0, 5): #All under 24
-        summedData[0] = summedData[0] + np.sum(govData.getAgedDeathData(ii))
+        summedData[0] = summedData[0] + np.sum(govData.get_aged_death_data(ii))
 
     for ii in range(5, 10): #All under 50's
-        summedData[1] = summedData[1] + np.sum(govData.getAgedDeathData(ii))
+        summedData[1] = summedData[1] + np.sum(govData.get_aged_death_data(ii))
 
     for ii in range(10,19):
-        ageCats[ii - 8] = govData.getAgeCatStringArray()[ii]
-        colours[ii - 8] = govData.getline_colourArray()[ii]
-        summedData[ii - 8] = np.sum(govData.getAgedDeathData(ii))
+        ageCats[ii - 8] = govData.get_age_cat_string_list()[ii]
+        colours[ii - 8] = govData.get_line_colour_list()[ii]
+        summedData[ii - 8] = np.sum(govData.get_aged_death_data(ii))
 
     chart.add_treemap(summedData, ageCats, colours)
     chart.draw_chart("", "", "COVID 19 Data - Deaths by Age in " + nation, "TreemapDeaths", False) #create the chart
@@ -266,11 +266,11 @@ def page_02_Cases_Deaths(L_Limit, h_Limit):
     chart.clear_chart()
 
     for ii in range(L_Limit, h_Limit):
-        data = govData.getAgedCaseData(ii) #Gets new cases
+        data = govData.get_aged_case_data(ii) #Gets new cases
         permillionData = [0]*len(data)
         permillionData = funcs.calc_time_series_per_million(data, ii)
 
-        chart.add_scatter_plot(ageDates, permillionData, govData.getline_colourArray()[ii], govData.getAgeCatStringArray()[ii], False, True)
+        chart.add_scatter_plot(ageDates, permillionData, govData.get_line_colour_list()[ii], govData.get_age_cat_string_list()[ii], False, True)
 
     file_name = "ageCasesPerCapita" + "0" + "_" + "19"
     chart.draw_chart("Dates", "Cases Per Million", "COVID 19 Data - Daily Cases Per Million by Age in " + nation, file_name, True)
@@ -280,11 +280,11 @@ def page_02_Cases_Deaths(L_Limit, h_Limit):
     chart.clear_chart()
 
     for ii in range(L_Limit,h_Limit):
-        data = govData.getAgedDeathData(ii) #Gets new cases
+        data = govData.get_aged_death_data(ii) #Gets new cases
         permillionData = [0]*len(data)
         permillionData = funcs.calc_time_series_per_million(data, ii)
 
-        chart.add_scatter_plot(ageDates, permillionData, govData.getline_colourArray()[ii], govData.getAgeCatStringArray()[ii], False, True)
+        chart.add_scatter_plot(ageDates, permillionData, govData.get_line_colour_list()[ii], govData.get_age_cat_string_list()[ii], False, True)
 
     file_name = "ageDeathsPerCapita" + "0" + "_" + "19"
     chart.draw_chart("Dates", "Deaths Per Million", "COVID 19 Data - Daily Deaths Per Million by Age in " + nation, file_name, True)
@@ -295,10 +295,10 @@ def page_02_Cases_Deaths(L_Limit, h_Limit):
 
     permillionData = [0]* 19
     for ii in range(L_Limit,h_Limit):
-        data = govData.getAgedCaseData(ii) #Gets new cases
+        data = govData.get_aged_case_data(ii) #Gets new cases
         permillionData[ii] = funcs.calc_total_per_million(data, ii)
     
-    chart.add_bar_chart(govData.getAgeCatStringArray(), permillionData,  "teal")
+    chart.add_bar_chart(govData.get_age_cat_string_list(), permillionData,  "teal")
 
     file_name = "age_Bar_Cases_per_Cap"
     chart.draw_chart("Age Categories", "Cases Per Million", "COVID 19 Data - Age Profile of Total Cases Per Million (" + nation + ")", file_name, False)
@@ -308,10 +308,10 @@ def page_02_Cases_Deaths(L_Limit, h_Limit):
 
     permillionData = [0]* 19
     for ii in range(L_Limit,h_Limit):
-        data = govData.getAgedDeathData(ii) #Gets new cases
+        data = govData.get_aged_death_data(ii) #Gets new cases
         permillionData[ii] = funcs.calc_total_per_million(data, ii)
 
-    chart.add_bar_chart(govData.getAgeCatStringArray(), permillionData,  "teal")
+    chart.add_bar_chart(govData.get_age_cat_string_list(), permillionData,  "teal")
     file_name = "age_Bar_Deaths_per_Cap"
     chart.draw_chart("Age Categories", "Deaths Per Million", "COVID 19 Data - Age Profile of Total Deaths Per Million (" + nation + ")", file_name, False)
 
@@ -331,13 +331,13 @@ def page_03_Dashboard():
     CFR = [0] * 19
 
     for ii in range(19):
-        totalCases[ii] = sum(govData.getAgedCaseData(ii))
-        totalDeaths[ii] = sum(govData.getAgedDeathData(ii))
+        totalCases[ii] = sum(govData.get_aged_case_data(ii))
+        totalDeaths[ii] = sum(govData.get_aged_death_data(ii))
 
     CFR = funcs.calc_ratio_as_percentage(totalDeaths , totalCases)
 
     rowLabel = ['EMPTY', 'Cases', 'Deaths', 'CFR']
-    dashData = [govData.getAgeCatStringArray(), totalCases, totalDeaths, CFR] #This is the data for the first table
+    dashData = [govData.get_age_cat_string_list(), totalCases, totalDeaths, CFR] #This is the data for the first table
 
     dash.create_table(215, 50, 15, 20, dashData,'whitesmoke', 'pink', rowLabel, True, 'reports/images/totals.png', 40 ,True, "Total Cases and Deaths (All Time)")
     
@@ -346,8 +346,8 @@ def page_03_Dashboard():
     deaths = [0] * 19
 
     for ii in range(19):
-        tmpCases = govData.getAgedCaseData(ii)
-        tmpDeaths = govData.getAgedDeathData(ii)
+        tmpCases = govData.get_aged_case_data(ii)
+        tmpDeaths = govData.get_aged_death_data(ii)
 
         cases[ii] = funcs.get_last_records(90, tmpCases)
         deaths[ii] = funcs.get_last_records(90, tmpDeaths)
@@ -384,7 +384,7 @@ def page_03_Dashboard():
 
     CFR = funcs.calc_ratio_as_percentage(totalDeaths , totalCases)
     
-    dashData = [govData.getAgeCatStringArray(), totalCases, totalDeaths, CFR] #This is the data for the first table
+    dashData = [govData.get_age_cat_string_list(), totalCases, totalDeaths, CFR] #This is the data for the first table
 
     dash.create_table(215, 525, 20, 20, dashData,'whitesmoke', 'pink', rowLabel, True, 'reports/images/totals.png', 40 ,True, "Total Cases and Deaths (First 45 Days)")
     
@@ -398,7 +398,7 @@ def page_03_Dashboard():
 
     CFR = funcs.calc_ratio_as_percentage(totalDeaths , totalCases)
     
-    dashData = [govData.getAgeCatStringArray(), totalCases, totalDeaths, CFR] #This is the data for the first table
+    dashData = [govData.get_age_cat_string_list(), totalCases, totalDeaths, CFR] #This is the data for the first table
 
     dash.create_table(215, 1000, 20, 20, dashData,'whitesmoke', 'pink', rowLabel, True, 'reports/images/totals.png', 40 ,True, "Total Cases and Deaths (Last 45 Days)")
     
@@ -408,17 +408,17 @@ def page_03_Dashboard():
     #Now create the graphs for the dashboard
     chart.clear_chart() #Clear the chart
 
-    dates = funcs.get_last_records(90, govData.getGOVdateSeries())
+    dates = funcs.get_last_records(90, govData.get_gov_date_Series())
 
     #Cases and Hospitalisations (Last 90 Days)
-    newCases = funcs.get_last_records(90, govData.getNewCases())
-    peopleinHos = funcs.get_last_records(90, govData.getHospitalCases())
-    hosAdmins = funcs.get_last_records(90, govData.getnewAdmssions())
+    newCases = funcs.get_last_records(90, govData.get_new_cases())
+    peopleinHos = funcs.get_last_records(90, govData.get_hospital_cases())
+    hosAdmins = funcs.get_last_records(90, govData.get_new_admssions())
 
     peopleinHos = funcs.scale_data(peopleinHos, 5)
     hosAdmins = funcs.scale_data(hosAdmins, 10)
 
-    CasesByReportDate = funcs.get_last_records(90, govData.getnewCasesByReportDate())
+    CasesByReportDate = funcs.get_last_records(90, govData.get_new_cases_by_report_date())
 
     chart.set_chart_params(False, False, False, False)
     chart.add_bar_plot(dates, CasesByReportDate, 'orange', 'Daily Cases (By Reported Date)')
@@ -428,8 +428,8 @@ def page_03_Dashboard():
 
     #Total Daily Deaths (Last 90 Days)
     chart.clear_chart() #Clear the chart
-    totalDeathsLast90 = funcs.get_last_records(90, govData.getNewDeaths())
-    totalDeathsRepLast90 = funcs.get_last_records(90, govData.getDeathsByReportDate())
+    totalDeathsLast90 = funcs.get_last_records(90, govData.get_new_deaths())
+    totalDeathsRepLast90 = funcs.get_last_records(90, govData.get_deaths_by_report_date())
     chart.add_bar_plot(dates, totalDeathsLast90, 'red', 'Deaths by Death Date')
     #chart.add_scatter_plot(dates, totalDeathsRepLast90, 'pink', 'Deaths by Reported Date', False)
     chart.set_chart_params(False, False, False, False)
@@ -438,10 +438,10 @@ def page_03_Dashboard():
     #Cases by Age Group
     chart.clear_chart() #Clear the chart
 
-    ageDate = funcs.get_last_records(90, govData.getAgedGOVdateSeries())
+    ageDate = funcs.get_last_records(90, govData.get_aged_gov_date_series())
 
     for ii in range(0, 19):
-        chart.add_scatter_plot(ageDate, cases[ii], govData.getline_colourArray()[ii], govData.getAgeCatStringArray()[ii], False, True)
+        chart.add_scatter_plot(ageDate, cases[ii], govData.get_line_colour_list()[ii], govData.get_age_cat_string_list()[ii], False, True)
         
     chart.draw_chart('Date', 'Number of Cases', 'Total Daily Cases by Age Groups (Last 90 Days)', 'Dashboard_Cases_Age0_19', False)
 
@@ -449,7 +449,7 @@ def page_03_Dashboard():
     chart.clear_chart() #Clear the chart
 
     for ii in range(0, 19):
-        chart.add_scatter_plot(ageDate, deaths[ii], govData.getline_colourArray()[ii], govData.getAgeCatStringArray()[ii], False, True)
+        chart.add_scatter_plot(ageDate, deaths[ii], govData.get_line_colour_list()[ii], govData.get_age_cat_string_list()[ii], False, True)
         
     chart.draw_chart('Date', 'Number of Deaths', 'Total Daily Deaths by Age Groups (Last 90 Days)', 'Dashboard_Deaths_Age0_19', False)
 
@@ -457,7 +457,7 @@ def page_03_Dashboard():
     chart.clear_chart() #Clear the chart
 
     for ii in range(0, 10):
-        chart.add_scatter_plot(ageDate, deaths[ii], govData.getline_colourArray()[ii], govData.getAgeCatStringArray()[ii], False, True)
+        chart.add_scatter_plot(ageDate, deaths[ii], govData.get_line_colour_list()[ii], govData.get_age_cat_string_list()[ii], False, True)
         
     chart.draw_chart('Date', 'Number of Deaths', 'Total Daily Deaths by Age Groups for Under 50s (Last 90 Days)', 'Dashboard_Deaths_Age0_10', False)
 
@@ -465,7 +465,7 @@ def page_03_Dashboard():
     chart.clear_chart() #Clear the chart
 
     for ii in range(10, 19):
-        chart.add_scatter_plot(ageDate, deaths[ii], govData.getline_colourArray()[ii], govData.getAgeCatStringArray()[ii], False, True)
+        chart.add_scatter_plot(ageDate, deaths[ii], govData.get_line_colour_list()[ii], govData.get_age_cat_string_list()[ii], False, True)
         
     chart.draw_chart('Date', 'Number of Deaths', 'Total Daily Deaths by Age Groups for Over 50s (Last 90 Days)', 'Dashboard_Deaths_Age10_19', False)
 
@@ -473,9 +473,9 @@ def page_03_Dashboard():
     chart.clear_chart() #Clear the chart
     
     for ii in range(14, 19):
-        chart.add_scatter_plot(ageDate, cases[ii], govData.getline_colourArray()[ii], govData.getAgeCatStringArray()[ii], False, True)
+        chart.add_scatter_plot(ageDate, cases[ii], govData.get_line_colour_list()[ii], govData.get_age_cat_string_list()[ii], False, True)
 
-    chart.add_scatter_plot(ageDate, cases[ii], govData.getline_colourArray()[ii], govData.getAgeCatStringArray()[ii], False, True)
+    chart.add_scatter_plot(ageDate, cases[ii], govData.get_line_colour_list()[ii], govData.get_age_cat_string_list()[ii], False, True)
 
     chart.draw_chart('Date', 'Number of Cases', 'Total Daily Cases in the Extremely Vulnerable Groups 70+ (Last 90 Days)', 'Dashboard_Cases_Age14_19', True)
 
@@ -492,54 +492,54 @@ def page_03_Dashboard():
 
 def page_04_Testing():
 
-    dates = govData.getGOVdateSeries()
+    dates = govData.get_gov_date_Series()
 
     chart.set_chart_params(False, True, True, True)
 
     #Positivity Rate
     chart.clear_chart()
-    chart.add_scatter_plot(dates, funcs.calc_ratio_as_int(govData.getPositivePCRtests(), govData.getNewPCRTests()), 'steelblue', 'Positivity Rate PCR', False, False)
+    chart.add_scatter_plot(dates, funcs.calc_ratio_as_int(govData.get_positive_PCR_tests(), govData.get_new_PCR_tests()), 'steelblue', 'Positivity Rate PCR', False, False)
 
-    chart.add_scatter_plot(dates, funcs.calc_ratio_as_int(funcs.add_datasets(govData.getNewLFDCases(), govData.getPositiveLFDconfirmedByPCR()), govData.getNewLFDTests()), 'darkolivegreen', 'Positivity Rate LFT''s', False, False)
-    chart.add_scatter_plot(dates, funcs.calc_ratio_as_int(govData.getNewCases(), funcs.add_datasets(govData.getPillarTwoTests(), govData.getNewPillarOneTestsByPublishDate())), 'brown', 'Positivity Rate LFT & PCR', False, False)
+    chart.add_scatter_plot(dates, funcs.calc_ratio_as_int(funcs.add_datasets(govData.get_new_LFD_cases(), govData.get_positive_LFD_confirmed_by_PCR()), govData.get_new_LFD_tests()), 'darkolivegreen', 'Positivity Rate LFT''s', False, False)
+    chart.add_scatter_plot(dates, funcs.calc_ratio_as_int(govData.get_new_cases(), funcs.add_datasets(govData.get_pillar_two_tests(), govData.get_new_pillar_one_tests_by_publish_date())), 'brown', 'Positivity Rate LFT & PCR', False, False)
 
     chart.draw_chart("Date","Percentage of positive tests","COVID 19 Data - Positivity  Rate  " + nation, "positivityRate", True) 
 
     #COVID 19 Data - Cases Found Using PCR and LFT's
     chart.clear_chart()
 
-    chart.add_scatter_plot(dates, govData.getPositiveLFDconfirmedByPCR(), 'orangered', 'Cases found by LFT With Conf PCR', False, False)
-    chart.add_scatter_plot(dates, govData.getPositivePCRtests(), 'seagreen', 'Cases found by PCR Only', False, False)
-    chart.add_scatter_plot(dates, govData.getNewLFDCases(),  'black', 'Cases Found by LFT Only', False, False)
+    chart.add_scatter_plot(dates, govData.get_positive_LFD_confirmed_by_PCR(), 'orangered', 'Cases found by LFT With Conf PCR', False, False)
+    chart.add_scatter_plot(dates, govData.get_positive_PCR_tests(), 'seagreen', 'Cases found by PCR Only', False, False)
+    chart.add_scatter_plot(dates, govData.get_new_LFD_cases(),  'black', 'Cases Found by LFT Only', False, False)
     chart.draw_chart("Date","Number of Cases","COVID 19 Data - Cases Found Using PCR and LFT's  " + nation, "casesPCRLFT", True) 
 
     #COVID 19 Data - Positivity  Rate, Cases and Deaths
     chart.clear_chart()
 
-    chart.add_scatter_plot(dates, funcs.scale_data(govData.getNewCases(), 0.001), 'orange', 'C19 Cases in Thousands', False, False)
-    chart.add_scatter_plot(dates, funcs.scale_data(govData.getNewDeaths(), 0.01), 'red', 'C19 Deaths in Hundreds', False, False)
-    chart.add_bar_plot(dates, funcs.scale_data(govData.getNewDeaths(), 0.01), 'red', 'C19 Deaths in Hundreds')
+    chart.add_scatter_plot(dates, funcs.scale_data(govData.get_new_cases(), 0.001), 'orange', 'C19 Cases in Thousands', False, False)
+    chart.add_scatter_plot(dates, funcs.scale_data(govData.get_new_deaths(), 0.01), 'red', 'C19 Deaths in Hundreds', False, False)
+    chart.add_bar_plot(dates, funcs.scale_data(govData.get_new_deaths(), 0.01), 'red', 'C19 Deaths in Hundreds')
 
-    chart.add_scatter_plot(dates, funcs.calc_ratio_as_int(govData.getNewCases(), funcs.add_datasets(govData.getPillarTwoTests(), govData.getNewPillarOneTestsByPublishDate())), 'brown', 'Positivity Rate LFT & PCR', False, False)
+    chart.add_scatter_plot(dates, funcs.calc_ratio_as_int(govData.get_new_cases(), funcs.add_datasets(govData.get_pillar_two_tests(), govData.get_new_pillar_one_tests_by_publish_date())), 'brown', 'Positivity Rate LFT & PCR', False, False)
     chart.draw_chart("Date","Percentage of Positive Tests, Number of Cases and Deaths (Scaled)","COVID 19 Data - Positivity  Rate, Cases and Deaths  " + nation, "pRateCasesDeaths", True) 
 
     #COVID 19 Data - Tests Conducted Pillar 1 and 2
     chart.clear_chart()
 
-    chart.add_bar_plot(dates, govData.getNewLFDTests(), 'violet', 'Total LFTs Conducted')
+    chart.add_bar_plot(dates, govData.get_new_LFD_tests(), 'violet', 'Total LFTs Conducted')
 
-    chart.add_scatter_plot(dates,govData.getNewLFDTests(), 'violet', 'Pillar 1 & 2 Tests LFT Only', False, False)
-    chart.add_scatter_plot(dates, govData.getNewPCRTests(), 'darkslategray', 'Pillar 1 & 2 Tests PCR Only', False, False)
-    chart.add_scatter_plot(dates, govData.getNewPillarOneTestsByPublishDate(), 'chocolate', 'Pillar 1 Tests PCR', False, False)
+    chart.add_scatter_plot(dates,govData.get_new_LFD_tests(), 'violet', 'Pillar 1 & 2 Tests LFT Only', False, False)
+    chart.add_scatter_plot(dates, govData.get_new_PCR_tests(), 'darkslategray', 'Pillar 1 & 2 Tests PCR Only', False, False)
+    chart.add_scatter_plot(dates, govData.get_new_pillar_one_tests_by_publish_date(), 'chocolate', 'Pillar 1 Tests PCR', False, False)
     chart.draw_chart("Date","Number of Tests","COVID 19 Data - Tests Conducted Pillar 1 and 2  " + nation, "testsConducted", True) 
  
 def page_05_Lockdown():
     chart.clear_chart()
     chart.set_chart_params(False, True, True, True)
-    dates = govData.getGOVdateSeries()
+    dates = govData.get_gov_date_Series()
 
-    growthRateGraph(dates, govData.getNewCases(), 'darkcyan', 'Growth Rate of Cases', 100000)
-    chart.add_scatter_plot(dates, govData.getNewCases(), 'orange', 'New Cases', False, False )
+    growthRateGraph(dates, govData.get_new_cases(), 'darkcyan', 'Growth Rate of Cases', 100000)
+    chart.add_scatter_plot(dates, govData.get_new_cases(), 'orange', 'New Cases', False, False )
 
     chart.draw_chart("Date","Number of People","COVID 19 Data - Cases Daily Growth Rate " + nation, "gRateCases", True) 
 
@@ -547,16 +547,16 @@ def draw_Scatter_Aged_Death_Grouped():
     chart.clear_chart()
 
     data, dataStr = funcs.add_aged_data("deaths",0,6, govData)
-    chart.add_scatter_plot(govData.getAgedGOVdateSeries(), data, govData.getline_colourArray()[3], "Age Group:  0 - 29  (" + dataStr + ")", False, False)
+    chart.add_scatter_plot(govData.get_aged_gov_date_series(), data, govData.get_line_colour_list()[3], "Age Group:  0 - 29  (" + dataStr + ")", False, False)
 
     data, dataStr = funcs.add_aged_data("deaths",6,10, govData)
-    chart.add_scatter_plot(govData.getAgedGOVdateSeries(), data, govData.getline_colourArray()[7], "Age Group:  30 - 49  (" + dataStr + ")", False, False)
+    chart.add_scatter_plot(govData.get_aged_gov_date_series(), data, govData.get_line_colour_list()[7], "Age Group:  30 - 49  (" + dataStr + ")", False, False)
 
     data, dataStr = funcs.add_aged_data("deaths",10,14, govData)
-    chart.add_scatter_plot(govData.getAgedGOVdateSeries(), data, govData.getline_colourArray()[12], "Age Group: 50 - 69  (" + dataStr + ")", False, False)
+    chart.add_scatter_plot(govData.get_aged_gov_date_series(), data, govData.get_line_colour_list()[12], "Age Group: 50 - 69  (" + dataStr + ")", False, False)
 
     data, dataStr = funcs.add_aged_data("deaths",14,19, govData)
-    chart.add_scatter_plot(govData.getAgedGOVdateSeries(), data, govData.getline_colourArray()[16], "Age Group: 70+  (" + dataStr + ")", False, False)
+    chart.add_scatter_plot(govData.get_aged_gov_date_series(), data, govData.get_line_colour_list()[16], "Age Group: 70+  (" + dataStr + ")", False, False)
 
     chart.draw_chart("Date", "Number of People", "COVID 19 Data - Daily Deaths by Age in England by Age Group", 'age_groupDeaths', True)
 
@@ -564,26 +564,26 @@ def draw_Scatter_Aged_Cases_Grouped():
     chart.clear_chart()
 
     data, dataStr = funcs.add_aged_data("cases",0,6, govData)
-    chart.add_scatter_plot(govData.getAgedGOVdateSeries(), data, govData.getline_colourArray()[3], "Age Group:  0 - 29  (" + dataStr + ")", False, False)
+    chart.add_scatter_plot(govData.get_aged_gov_date_series(), data, govData.get_line_colour_list()[3], "Age Group:  0 - 29  (" + dataStr + ")", False, False)
 
     data, dataStr = funcs.add_aged_data("cases",6,10, govData)
-    chart.add_scatter_plot(govData.getAgedGOVdateSeries(), data, govData.getline_colourArray()[7], "Age Group:  30 - 49  (" + dataStr + ")", False, False)
+    chart.add_scatter_plot(govData.get_aged_gov_date_series(), data, govData.get_line_colour_list()[7], "Age Group:  30 - 49  (" + dataStr + ")", False, False)
 
     data, dataStr = funcs.add_aged_data("cases",10,14, govData)
-    chart.add_scatter_plot(govData.getAgedGOVdateSeries(), data, govData.getline_colourArray()[12], "Age Group: 50 - 69  (" + dataStr + ")", False, False)
+    chart.add_scatter_plot(govData.get_aged_gov_date_series(), data, govData.get_line_colour_list()[12], "Age Group: 50 - 69  (" + dataStr + ")", False, False)
 
     data, dataStr = funcs.add_aged_data("cases",14,19, govData)
-    chart.add_scatter_plot(govData.getAgedGOVdateSeries(), data, govData.getline_colourArray()[16], "Age Group: 70+  (" + dataStr + ")", False, False)
+    chart.add_scatter_plot(govData.get_aged_gov_date_series(), data, govData.get_line_colour_list()[16], "Age Group: 70+  (" + dataStr + ")", False, False)
 
     chart.draw_chart("Date", "Number of People", "COVID 19 Data - Daily Cases by Age in England by Age Group", 'age_groupCases', True)
 
 def page_06_Vaccinations():
     dash = DASH()
 
-    chart.draw_Scatter_Year_Comp(govData.getNewCases(), False, 'Cases', False, govData.getYearDates(), False)
-    chart.draw_Scatter_Year_Comp(govData.getNewDeaths(), False, 'Deaths', False, govData.getYearDates(), False)
-    chart.draw_Scatter_Year_Comp(govData.getnewAdmssions(), False, 'Hospital_Admissions', False, govData.getYearDates(), False)
-    chart.draw_Scatter_Year_Comp(govData.getHospitalCases(), False, 'Hospital_Cases', False, govData.getYearDates(), False)
+    chart.draw_Scatter_Year_Comp(govData.get_new_cases(), False, 'Cases', False, govData.get_year_dates(), False)
+    chart.draw_Scatter_Year_Comp(govData.get_new_deaths(), False, 'Deaths', False, govData.get_year_dates(), False)
+    chart.draw_Scatter_Year_Comp(govData.get_new_admssions(), False, 'Hospital_Admissions', False, govData.get_year_dates(), False)
+    chart.draw_Scatter_Year_Comp(govData.get_hospital_cases(), False, 'Hospital_Cases', False, govData.get_year_dates(), False)
 
     #Now put the above images side by side
     img = ['reports/images/yearlyCompCases.png', 'reports/images/yearlyCompDeaths.png', 'reports/images/yearlyCompHospital_Admissions.png', 'reports/images/yearlyCompHospital_Cases.png']
@@ -600,20 +600,20 @@ def page_06_Vaccinations():
     #WIP
     
     for ii in range(0, 19): #Draw a year comp for each age group
-        label = "CFR " + govData.getAgeCatStringArray()[ii]  
-        data = funcs.Calc_CFR(18, govData.getAgedDeathData(ii), govData.getAgedCaseData(ii))
-        chart.draw_Scatter_Year_Comp(data, False, label, True, govData.getYearDates(), False)
+        label = "CFR " + govData.get_age_cat_string_list()[ii]  
+        data = funcs.Calc_CFR(18, govData.get_aged_death_data(ii), govData.get_aged_case_data(ii))
+        chart.draw_Scatter_Year_Comp(data, False, label, True, govData.get_year_dates(), False)
     
 
     #WIP
     
     for ii in range(0, 19): #Draw a year comp for each age group
-        label = "Cases " + govData.getAgeCatStringArray()[ii]  
-        chart.draw_Scatter_Year_Comp(govData.getAgedCaseData(ii), False, label, False, govData.getYearDates(), False)
-        label = "Deaths " + govData.getAgeCatStringArray()[ii]  
-        chart.draw_Scatter_Year_Comp(govData.getAgedDeathData(ii), False, label, False, govData.getYearDates(), False)
+        label = "Cases " + govData.get_age_cat_string_list()[ii]  
+        chart.draw_Scatter_Year_Comp(govData.get_aged_case_data(ii), False, label, False, govData.get_year_dates(), False)
+        label = "Deaths " + govData.get_age_cat_string_list()[ii]  
+        chart.draw_Scatter_Year_Comp(govData.get_aged_death_data(ii), False, label, False, govData.get_year_dates(), False)
 
-        img = ['reports/images/yearlyCompCases ' + govData.getAgeCatStringArray()[ii]  + '.png', 'reports/images/yearlyCompDeaths ' + govData.getAgeCatStringArray()[ii]  + '.png']
+        img = ['reports/images/yearlyCompCases ' + govData.get_age_cat_string_list()[ii]  + '.png', 'reports/images/yearlyCompDeaths ' + govData.get_age_cat_string_list()[ii]  + '.png']
         dash.create_dashboard('', img, 'XXXyearCompVax' + str(ii))    #This will put the images side by side
     
     #
@@ -633,7 +633,7 @@ def page_06_Vaccinations():
     for ii in range(0, len(vData.get_vax_age_groups())):
         df = vData.get_vax_aged_data(vData.get_vax_age_groups()[ii])
         ratio_df = funcs.calc_ratio_as_int(df["cumPeopleVaccinatedFirstDoseByVaccinationDate"].tolist(), df["VaccineRegisterPopulationByVaccinationDate"].tolist())
-        chart.add_scatter_plot(df["date"].tolist(), ratio_df, govData.getline_colourArray()[ii], vData.get_vax_age_groups()[ii] + " (" + str(int(ratio_df[numberofRecords])) + "%)", False, True)
+        chart.add_scatter_plot(df["date"].tolist(), ratio_df, govData.get_line_colour_list()[ii], vData.get_vax_age_groups()[ii] + " (" + str(int(ratio_df[numberofRecords])) + "%)", False, True)
 
     
     chart.draw_chart("Date", "Percentage of People Vaccinated in Each Age Group", "COVID-19: 1st Dose Administered by Age (Cumulative)", "VAX_1Dose", False)
@@ -641,7 +641,7 @@ def page_06_Vaccinations():
     for ii in range(0, len(vData.get_vax_age_groups())):
         df = vData.get_vax_aged_data(vData.get_vax_age_groups()[ii])
         ratio_df = funcs.calc_ratio_as_int(df["cumPeopleVaccinatedSecondDoseByVaccinationDate"].tolist(), df["VaccineRegisterPopulationByVaccinationDate"].tolist())
-        chart.add_scatter_plot(df["date"].tolist(), ratio_df, govData.getline_colourArray()[ii], vData.get_vax_age_groups()[ii] + " (" + str(int(ratio_df[numberofRecords])) + "%)", False, True)
+        chart.add_scatter_plot(df["date"].tolist(), ratio_df, govData.get_line_colour_list()[ii], vData.get_vax_age_groups()[ii] + " (" + str(int(ratio_df[numberofRecords])) + "%)", False, True)
 
     chart.draw_chart("Date", "Percentage of People Vaccinated in Each Age Group", "COVID-19: 2nd Dose Administered by Age (Cumulative)", "VAX_2Dose", False)
 
@@ -649,7 +649,7 @@ def page_06_Vaccinations():
     for ii in range(0, len(vData.get_vax_age_groups())):
         df = vData.get_vax_aged_data(vData.get_vax_age_groups()[ii])
         ratio_df = funcs.calc_ratio_as_int(df["cumPeopleVaccinatedThirdInjectionByVaccinationDate"].tolist(), df["VaccineRegisterPopulationByVaccinationDate"].tolist())
-        chart.add_scatter_plot(df["date"].tolist(), ratio_df, govData.getline_colourArray()[ii], vData.get_vax_age_groups()[ii] + " (" + str(int(ratio_df[numberofRecords])) + "%)", False, True)
+        chart.add_scatter_plot(df["date"].tolist(), ratio_df, govData.get_line_colour_list()[ii], vData.get_vax_age_groups()[ii] + " (" + str(int(ratio_df[numberofRecords])) + "%)", False, True)
 
     chart.draw_chart("Date", "Percentage of People Vaccinated in Each Age Group", "COVID-19: 3rd Dose Administered by Age (Cumulative)", "VAX_3dose", False)
 
@@ -658,11 +658,11 @@ def page_06_Vaccinations():
     for ii in range(0, len(vData.get_vax_age_groups())):
         df = vData.get_vax_aged_data(vData.get_vax_age_groups()[ii])
         ratio_df = funcs.calc_ratio_as_int(df["cumPeopleVaccinatedFirstDoseByVaccinationDate"].tolist(), df["VaccineRegisterPopulationByVaccinationDate"].tolist())
-        chart.add_scatter_plot(df["date"].tolist(), ratio_df, govData.getline_colourArray()[ii], "", False, True)
+        chart.add_scatter_plot(df["date"].tolist(), ratio_df, govData.get_line_colour_list()[ii], "", False, True)
         ratio_df = funcs.calc_ratio_as_int(df["cumPeopleVaccinatedSecondDoseByVaccinationDate"].tolist(), df["VaccineRegisterPopulationByVaccinationDate"].tolist())
-        chart.add_scatter_plot(df["date"].tolist(), ratio_df, govData.getline_colourArray()[ii], "", True, True)
+        chart.add_scatter_plot(df["date"].tolist(), ratio_df, govData.get_line_colour_list()[ii], "", True, True)
         ratio_df = funcs.calc_ratio_as_int(df["cumPeopleVaccinatedThirdInjectionByVaccinationDate"].tolist(), df["VaccineRegisterPopulationByVaccinationDate"].tolist())
-        chart.add_scatter_plot(df["date"].tolist(), ratio_df, govData.getline_colourArray()[ii], "", False, True)
+        chart.add_scatter_plot(df["date"].tolist(), ratio_df, govData.get_line_colour_list()[ii], "", False, True)
 
     chart.draw_chart("Date", "Percentage of People Vaccinated in Each Age Group", "COVID-19: All Doses Administered by Age", "VAX_ALLdose", True)
 
@@ -693,7 +693,7 @@ def page_06_Vaccinations():
     chart.add_scatter_plot(date_list, complete_total_df["totalFirstJab"], "firebrick", "Daily 1st Doses", False, True)
     chart.add_scatter_plot(date_list, complete_total_df["totalSecondJab"], "darkgoldenrod", "Daily 2nd Doses", False, True)
     chart.add_scatter_plot(date_list, complete_total_df["totalThirdJab"], "darkgreen", "Daily 3rd Doses", False, True)
-    chart.add_scatter_plot(govData.getGOVdateSeries(), funcs.scale_data(govData.getNewCases(), 5), "orange", "Daily Cases (Scaled Up by 5)", True, False)
+    chart.add_scatter_plot(govData.get_gov_date_Series(), funcs.scale_data(govData.get_new_cases(), 5), "orange", "Daily Cases (Scaled Up by 5)", True, False)
     chart.draw_chart("Date", "Number of People", "COVID-19: Daily Vaccinations Administered and Cases (Scaled)", "VAX_DailyDosesCases", True)
 
     #CUMULATIVE total uptake
@@ -780,30 +780,30 @@ def calcAgedCFR(lag, yLimit):
     cases, casesStr = funcs.add_aged_data('cases', 0, 6, govData)
 
     data = funcs.Calc_CFR(lag, deaths, cases)
-    dates = funcs.get_first_records((len(data)) , govData.getAgedGOVdateSeries())
+    dates = funcs.get_first_records((len(data)) , govData.get_aged_gov_date_series())
     
-    CFRChart.add_scatter_plot(dates, data, govData.getline_colourArray()[3], 'Age Range: 0 - 29', False, True)
+    CFRChart.add_scatter_plot(dates, data, govData.get_line_colour_list()[3], 'Age Range: 0 - 29', False, True)
 
     deaths, deathsStr = funcs.add_aged_data('deaths', 6, 10, govData)
     cases, casesStr = funcs.add_aged_data('cases', 6, 10, govData)
 
     data = funcs.Calc_CFR(lag, deaths, cases)
-    dates = funcs.get_first_records((len(data)) , govData.getAgedGOVdateSeries())
-    chart.add_scatter_plot(dates, data, govData.getline_colourArray()[7], 'Age Range: 30 - 49', False, True)
+    dates = funcs.get_first_records((len(data)) , govData.get_aged_gov_date_series())
+    chart.add_scatter_plot(dates, data, govData.get_line_colour_list()[7], 'Age Range: 30 - 49', False, True)
 
     deaths, deathsStr = funcs.add_aged_data('deaths', 10, 14, govData)
     cases, casesStr = funcs.add_aged_data('cases', 10, 14, govData)
 
     data = funcs.Calc_CFR(lag, deaths, cases)
-    dates = funcs.get_first_records((len(data)) , govData.getAgedGOVdateSeries())
-    chart.add_scatter_plot(dates, data, govData.getline_colourArray()[12], 'Age Range: 50 - 69', False, True)
+    dates = funcs.get_first_records((len(data)) , govData.get_aged_gov_date_series())
+    chart.add_scatter_plot(dates, data, govData.get_line_colour_list()[12], 'Age Range: 50 - 69', False, True)
 
     deaths, deathsStr = funcs.add_aged_data('deaths', 14, 19, govData)
     cases, casesStr = funcs.add_aged_data('cases', 14, 19, govData)
 
     data = funcs.Calc_CFR(lag, deaths, cases)
-    dates = funcs.get_first_records((len(data)) , govData.getAgedGOVdateSeries())
-    CFRChart.add_scatter_plot(dates, data, govData.getline_colourArray()[16], 'Age Range: 70+', False, True)
+    dates = funcs.get_first_records((len(data)) , govData.get_aged_gov_date_series())
+    CFRChart.add_scatter_plot(dates, data, govData.get_line_colour_list()[16], 'Age Range: 70+', False, True)
 
     CFRChart.set_max_y_value(yLimit)
     CFRChart.set_chart_params(False, False, True, True)
@@ -813,28 +813,28 @@ def Dashboard_2():
     chart.set_chart_params(False, False, False, False)
     chart.clear_chart()
     days = 14 #14
-    chart.add_bar_chart(funcs.get_last_records(days, govData.getGOVdateSeries()), funcs.get_last_records(days, govData.getnewCasesByReportDate()), 'orange')
+    chart.add_bar_chart(funcs.get_last_records(days, govData.get_gov_date_Series()), funcs.get_last_records(days, govData.get_new_cases_by_report_date()), 'orange')
     chart.draw_chart('Date', 'Cases', 'COVID 19 Data - Cases by Reported Date, Previous ' + str(days) + ' Days', 'test', False)
 
     chart.clear_chart()
-    chart.add_bar_chart(funcs.get_last_records(days, govData.getGOVdateSeries()), funcs.get_last_records(days, govData.getHospitalCases()), 'indigo')
-    chart.add_bar_chart(funcs.get_last_records(days, govData.getGOVdateSeries()), funcs.get_last_records(days, govData.getnewAdmssions()), 'darkslategrey')
+    chart.add_bar_chart(funcs.get_last_records(days, govData.get_gov_date_Series()), funcs.get_last_records(days, govData.get_hospital_cases()), 'indigo')
+    chart.add_bar_chart(funcs.get_last_records(days, govData.get_gov_date_Series()), funcs.get_last_records(days, govData.get_new_admssions()), 'darkslategrey')
 
     chart.draw_chart('Date', 'Cases', 'COVID 19 Data - Hospital Cases & Admissions, Previous ' + str(days) + ' Days', 'testp', False)
 
     chart.clear_chart()
     days = 45 #Should be 45
 
-    cases = funcs.get_last_records(days, govData.getNewCases())
-    deaths = funcs.get_last_records(days, govData.getNewDeaths())
+    cases = funcs.get_last_records(days, govData.get_new_cases())
+    deaths = funcs.get_last_records(days, govData.get_new_deaths())
 
-    chart.add_bar_chart(funcs.get_last_records(days, govData.getGOVdateSeries()), cases, 'orange')
-    chart.add_bar_chart(funcs.get_last_records(days, govData.getGOVdateSeries()), deaths, 'red')
+    chart.add_bar_chart(funcs.get_last_records(days, govData.get_gov_date_Series()), cases, 'orange')
+    chart.add_bar_chart(funcs.get_last_records(days, govData.get_gov_date_Series()), deaths, 'red')
 
-    cases = funcs.get_last_records(5, govData.getNewCases())
-    deaths = funcs.get_last_records(5, govData.getNewDeaths())
-    chart.add_bar_chart(funcs.get_last_records(5, govData.getGOVdateSeries()), cases, 'grey')
-    chart.add_bar_chart(funcs.get_last_records(5, govData.getGOVdateSeries()), deaths, 'black')
+    cases = funcs.get_last_records(5, govData.get_new_cases())
+    deaths = funcs.get_last_records(5, govData.get_new_deaths())
+    chart.add_bar_chart(funcs.get_last_records(5, govData.get_gov_date_Series()), cases, 'grey')
+    chart.add_bar_chart(funcs.get_last_records(5, govData.get_gov_date_Series()), deaths, 'black')
     chart.draw_chart('Date', 'Cases/Deaths', 'COVID 19 Data - Cases & Deaths by Specimen Date Previous ' + str(days) + ' Days (Last 5 Days Will be Incomplete)', 'testSpec', True)
 
     chart.clear_chart()
@@ -843,8 +843,8 @@ def Dashboard_2():
 
     agedDeaths, deathsStr = funcs.add_aged_data('deaths', 14, 19, govData)
     agedDeaths = funcs.get_last_records(days, agedDeaths)
-    chart.add_bar_chart(funcs.get_last_records(days, govData.getAgedGOVdateSeries()), agedCases, 'orange')
-    chart.add_bar_chart(funcs.get_last_records(days, govData.getAgedGOVdateSeries()), agedDeaths, 'red')
+    chart.add_bar_chart(funcs.get_last_records(days, govData.get_aged_gov_date_series()), agedCases, 'orange')
+    chart.add_bar_chart(funcs.get_last_records(days, govData.get_aged_gov_date_series()), agedDeaths, 'red')
     chart.draw_chart('Date', 'Cases/Deaths', 'COVID 19 Data - Cases & Deaths in the Extremely Vulnerable 70+ Age Groups, Previous ' + str(days) + ' Days', 'testd', True)
 
     chart.clear_chart()
@@ -853,8 +853,8 @@ def Dashboard_2():
 
     agedDeaths, deathsStr = funcs.add_aged_data('deaths', 10, 14,govData)
     agedDeaths = funcs.get_last_records(days, agedDeaths)
-    chart.add_bar_chart(funcs.get_last_records(days, govData.getAgedGOVdateSeries()), agedCases, 'orange')
-    chart.add_bar_chart(funcs.get_last_records(days, govData.getAgedGOVdateSeries()), agedDeaths, 'red')
+    chart.add_bar_chart(funcs.get_last_records(days, govData.get_aged_gov_date_series()), agedCases, 'orange')
+    chart.add_bar_chart(funcs.get_last_records(days, govData.get_aged_gov_date_series()), agedDeaths, 'red')
     chart.draw_chart('Date', 'Cases/Deaths', 'COVID 19 Data - Cases & Deaths in the 50 - 69 Age Groups, Previous ' + str(days) + ' Days', 'teste', True)
 
     chart.clear_chart()
@@ -863,18 +863,18 @@ def Dashboard_2():
 
     agedDeaths, deathsStr = funcs.add_aged_data('deaths', 0, 10, govData)
     agedDeaths = funcs.get_last_records(days, agedDeaths)
-    chart.add_bar_chart(funcs.get_last_records(days, govData.getAgedGOVdateSeries()), agedCases, 'orange')
-    chart.add_bar_chart(funcs.get_last_records(days, govData.getAgedGOVdateSeries()), agedDeaths, 'red')
+    chart.add_bar_chart(funcs.get_last_records(days, govData.get_aged_gov_date_series()), agedCases, 'orange')
+    chart.add_bar_chart(funcs.get_last_records(days, govData.get_aged_gov_date_series()), agedDeaths, 'red')
     chart.draw_chart('Date', 'Cases/Deaths', 'COVID 19 Data - Cases & Deaths in the under 50s Age Groups, Previous ' + str(days) + ' Days', 'testf', True)
 
     days = 14 #14
     chart.clear_chart()
-    chart.add_bar_chart(funcs.get_last_records(days, govData.getGOVdateSeries()), funcs.get_last_records(days, govData.getDeathsByReportDate()), 'pink')
+    chart.add_bar_chart(funcs.get_last_records(days, govData.get_gov_date_Series()), funcs.get_last_records(days, govData.get_deaths_by_report_date()), 'pink')
     chart.draw_chart('Date', 'Deaths', 'COVID 19 Data - Deaths by Report Date, Previous ' + str(days) + ' Days', 'testb', False)
 
     chart.clear_chart()
-    chart.add_bar_chart(funcs.get_last_records(days, govData.getGOVdateSeries()), funcs.get_last_records(days, govData.getNewDeaths()), 'red')
-    chart.add_bar_chart(funcs.get_last_records(10, govData.getGOVdateSeries()), funcs.get_last_records(10, govData.getNewDeaths()), 'grey')
+    chart.add_bar_chart(funcs.get_last_records(days, govData.get_gov_date_Series()), funcs.get_last_records(days, govData.get_new_deaths()), 'red')
+    chart.add_bar_chart(funcs.get_last_records(10, govData.get_gov_date_Series()), funcs.get_last_records(10, govData.get_new_deaths()), 'grey')
     chart.draw_chart('Date', 'Deaths', 'COVID 19 Data - Deaths by Death Date (Incomplete Data), Previous ' + str(days) + ' Days', 'testc', False)
 
     img = ['reports/images/test.png', 'reports/images/testp.png', 'reports/images/testb.png', 'reports/images/testc.png', 'reports/images/testSpec.png','reports/images/testf.png', 'reports/images/teste.png', 'reports/images/testd.png']
@@ -912,10 +912,10 @@ chart.clear_chart()
 totData = [0]* 19
 
 for ii in range(0, 5):
-    data = govData.getAgedDeathData(ii) #Gets new cases
+    data = govData.get_aged_death_data(ii) #Gets new cases
     totData[ii] = np.sum(data) #sum up cases in each age group
     totData[ii] = f'{totData[ii]:,}' #add a comma to make the numbers readable
-    chart.add_scatter_plot(ageDates, data, govData.getline_colourArray()[ii], govData.getAgeCatStringArray()[ii] + " (" + str(totData[ii]) + ")", False, True)
+    chart.add_scatter_plot(ageDates, data, govData.get_line_colour_list()[ii], govData.get_age_cat_string_list()[ii] + " (" + str(totData[ii]) + ")", False, True)
     
 file_name = "ageDeaths_" + str(0) + "_" + str(5)
 chart.draw_chart("Date", "Number of People", "COVID 19 Data - Daily Deaths by Age in " + nation, file_name, True) #create the chart

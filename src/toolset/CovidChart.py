@@ -188,9 +188,9 @@ class CovidChart:
 
     def add_treemap(self, data, labels, colours):
         '''
-        Creates a treeMap diagram with data (array) and labels (array)
+        Creates a treeMap diagram with data (list) and labels (list)
         The data should already be summed when calling this method therefore
-        data should be an array of summed data
+        data should be an list of summed data
 
         Args:
             data: List or DataFrame, data for the treemap. This data should not be timeseries, see the example in example.py
@@ -367,7 +367,7 @@ class CovidChart:
     def draw_v_lines(self):
         '''
         Draws vertical lines on charts indicating key moments. If any key moments need to be added add them in this method
-        getGOVdateSeries() or govAgedDateSeries() should be used with this method and not dataframe["date"] as this will give an error
+        get_gov_date_Series() or govAgedDateSeries() should be used with this method and not dataframe["date"] as this will give an error
         '''
         LD1 = self.np.array(self.date(2020,3,23), dtype='datetime64')
         LD1_S = self.np.array(self.date(2020,6,23), dtype='datetime64')
@@ -477,7 +477,7 @@ class CovidChart:
             endDate = self.np.datetime64(self.start_dataset_date) + self.np.timedelta64(endFill,'D')
             self.plt.axvspan(start_date, endDate, facecolor='grey', alpha=0.1)
         except:
-            print("--CHART CLASS--: Error drawing VLINES, use LoadDatasets.getGOVdateSeries() or govAgedDateSeries() instead of DataFrame['date'], Y axis canot be a dataframe it must be a list of dates.")
+            print("--CHART CLASS--: Error drawing VLINES, use LoadDatasets.get_gov_date_Series() or govAgedDateSeries() instead of DataFrame['date'], Y axis canot be a dataframe it must be a list of dates.")
 
 
     def create_time_stamp(self, img_path, x_pos, y_pos, fontsize, to_be_wide):
@@ -570,7 +570,7 @@ class CovidChart:
             #We will cycle through the years splitting the data as necessary
             if ((len(data) - ((ii + 1) * 365)) > 0): #Multiple years so dimension this for 1 year
                 plotData = [0] * 365
-            else: #Less than 1 year so dimension the array for what ever is left
+            else: #Less than 1 year so dimension the list for what ever is left
                 plotData = [0] * (len(data) - (365 * (ii)))
 
                 nDates = [0] * len(plotData)

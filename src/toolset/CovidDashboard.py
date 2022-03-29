@@ -151,7 +151,7 @@ class Dashboard:
 
         chart = self.chartBENCH()
         chart.create_time_stamp("reports/images/" + file_name + ".png",  xPos, yPos, 20, False)
-        print("Dashboard Saved as reports/images/" + file_name + ".png")
+        print("--DASHBOARD CLASS -- Dashboard Saved as reports/images/" + file_name + ".png")
    
 
     def create_table(self, x_start, y_start, x_padding, y_padding, data, fill_colour, line_colour, label, to_total, image_path, fontsize, title_row, table_title):

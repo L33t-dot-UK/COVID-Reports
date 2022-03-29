@@ -26,20 +26,20 @@ chartz = chart()
 #test = pd.DataFrame(agedGOVdataset["newCasesBySpecimenDateAgeDemographics"])
 #print(test.head())
 
-df1, df2 = loadData.getAgedDataFrames()
+df1, df2 = loadData.get_aged_data_frames()
 
-ageCats = loadData.getage_groupsLiteral()
-colours = loadData.getline_colourArray()
-
-for ii in range (0, len(ageCats)):
-    print(str(ageCats[ii]) + ": " + str(loadData.getAgedDataDeaths(ageCats[ii]).mean()))
-    chartz.add_scatter_plot(loadData.getAgedGOVdateSeries(), loadData.getAgedDataDeaths(ageCats[ii]), colours[ii], ageCats[ii], False, False)
+ageCats = loadData.get_age_groups_literal()
+colours = loadData.get_line_colour_list()
 
 for ii in range (0, len(ageCats)):
-    print(str(ageCats[ii]) + ": " + str(loadData.getAgedDataCases(ageCats[ii]).mean()))
+    print(str(ageCats[ii]) + ": " + str(loadData.get_aged_data_deaths(ageCats[ii]).mean()))
+    chartz.add_scatter_plot(loadData.get_aged_gov_date_series(), loadData.get_aged_data_deaths(ageCats[ii]), colours[ii], ageCats[ii], False, False)
+
+for ii in range (0, len(ageCats)):
+    print(str(ageCats[ii]) + ": " + str(loadData.get_aged_data_cases(ageCats[ii]).mean()))
 
 chartz.set_chart_params(True,False,False,True)
-#chartz.add_scatter_plot(loadData.getAgedGOVdateSeries(), loadData.getAgedDataDeaths("90+"), "red", "", False, False)
+#chartz.add_scatter_plot(loadData.get_aged_gov_date_series(), loadData.get_aged_data_deaths("90+"), "red", "", False, False)
 chartz.draw_chart("", "", "", "test", True)
 '''
 
@@ -55,5 +55,10 @@ data = [title_row,[20156,22514,30145],[0,1,2],['0%','0%','0%']]
 
 chart.create_table(500, 200, 15, 15, data, "white", "black", label, False, "reports/images/testTable.png", 30, True, "Just a test table")
 
+from toolset.LoadDatasets import LoadDataSets as dataset
 
+ds = dataset(True,"England")
 
+df = ds.unpack_data("newCasesBySpecimenDateAgeDemographics")
+
+print(df.info())

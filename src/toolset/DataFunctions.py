@@ -27,7 +27,7 @@ class Functions:
         Returns:
             A single integer value that will be the amount per million for the selected age group
         '''
-        population = self.dataSetLoader.getPopulationNumberArray() #Load population data
+        population = self.dataSetLoader.get_population_number_list() #Load population data
 
         perMillionData = self.np.sum(data) / float(population[age_group])
         perMillionData = perMillionData * 1000000
@@ -38,8 +38,8 @@ class Functions:
 
     def calc_time_series_per_million(self, data, age_group):
         '''
-        Pass in an array of data and this will calculate the per million for that time series array
-        the data array should just be a list of time series numbers. You also need toLoad pass in
+        Pass in an list of data and this will calculate the per million for that time series list
+        the data list should just be a list of time series numbers. You also need toLoad pass in
         the age group 0 toLoad 18.
 
         Args:
@@ -49,7 +49,7 @@ class Functions:
         Returns:
             A time series list with per million amounts for the selected age group
         '''
-        population = self.dataSetLoader.getPopulationNumberArray() #Load populaiton data
+        population = self.dataSetLoader.get_population_number_list() #Load populaiton data
 
         perMillionData = [0] * len(data)
         for ii in range(len(data)):
@@ -62,7 +62,7 @@ class Functions:
     def get_last_records(self, days_to_sub, data):
         '''
         Will return n amount of last records, so for instance if you want the last 90 days of cases
-        you would pass the arguments 90 and govData.getNewCases()
+        you would pass the arguments 90 and govData.get_new_cases()
 
         Args:
             days_to_sub: Integer Value, amount of days to return from the end of the dataset
@@ -235,13 +235,13 @@ class Functions:
             h_Limit: Integer Value, this is the upper age limit 0 - 18
             govData: toolset.LoadDataSets object, this is the LoadDataSets object thats passed to this class.
         '''
-        aggData = [0] * len(govData.getAgedGOVdateSeries())
+        aggData = [0] * len(govData.get_aged_gov_date_series())
 
         for ii in range(L_Limit, h_Limit):
             if cat == 'deaths':
-                data = govData.getAgedDeathData(ii)
+                data = govData.get_aged_death_data(ii)
             elif cat == 'cases':
-                data = govData.getAgedCaseData(ii)
+                data = govData.get_aged_case_data(ii)
 
             aggData = self.add_datasets(aggData, data)
 

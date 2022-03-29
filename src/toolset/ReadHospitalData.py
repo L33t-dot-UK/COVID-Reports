@@ -66,8 +66,6 @@ class readHospitalData():
         totals_df = self.pd.DataFrame(values_dict)
         totals_df = totals_df.drop(index=2)
         totals_df = totals_df.set_index('Dates')
-    
-        print(totals_df.isna().sum())
 
         return totals_df.copy()
 
@@ -91,17 +89,17 @@ class readHospitalData():
         excel_files = self.os.listdir(directory)
 
         for ii in range(len(excel_files)): #for each excel file
-            print("Processing file " + excel_files[ii])
+            print("-- READ HOSPITAL DATA -- Processing file " + excel_files[ii])
             data_location = self.os.path.join(directory, excel_files[ii]) #create the path to the excel file
             excel_file = self.pd.ExcelFile(data_location, engine='openpyxl') #open the excel file
             sheet_names = excel_file.sheet_names #get a list of sheet names
 
             df = [0] * len(sheet_names)
             for iii in range(len(sheet_names)):
-                print("Processing worksheet " + sheet_names[iii])
+                print("-- READ HOSPITAL DATA -- Processing worksheet " + sheet_names[iii])
                 df[iii] = self.read_in_totals(excel_file, sheet_names[iii])
 
-        return df, sheet_names #return an array of dataframes and the sheet names
+        return df, sheet_names #return an list of dataframes and the sheet names
 
 
     def join_totals_datasets(self, directory, ws):
@@ -120,7 +118,7 @@ class readHospitalData():
 
         excel_file = [0] * len(excel_files)
         for ii in range(len(excel_files)): #load each excel file
-            print("Processing file " + excel_files[ii])
+            print("-- READ HOSPITAL DATA -- Processing file " + excel_files[ii])
             data_location = self.os.path.join(directory, excel_files[ii]) #create the path to the excel file
             excel_file[ii] = self.pd.ExcelFile(data_location, engine='openpyxl') #open the excel file
 
@@ -134,4 +132,4 @@ class readHospitalData():
         #now merge the dataframes
         final_df = self.pd.concat(df)
 
-        return final_df #return an array of dataframes and the sheet names
+        return final_df #return an list of dataframes and the sheet names

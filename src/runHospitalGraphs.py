@@ -10,7 +10,7 @@ nation = "England"
 govData = govData(True, nation)
 chart = COVIDCHART()
 
-population = govData.getPopulationNumberArray()
+population = govData.get_population_number_list()
 
 adjustedPop = [0] * 5
 
@@ -183,14 +183,14 @@ def drawC19Abs():
 
     df1 = df1.reset_index() #remove dates as the index
     chart.add_bar_plot(df1["Dates"], df1["ENGLAND"], "pink", "COVID-19 NHS Absences")
-    chart.add_scatter_plot(govData.getGOVdateSeries(), govData.getHospitalCases(), "indigo", "People in Hospital with COVID-19", False, False)
+    chart.add_scatter_plot(govData.get_gov_date_Series(), govData.get_hospital_cases(), "indigo", "People in Hospital with COVID-19", False, False)
 
     #df = hospitalData.join_totals_datasets("data/hospitalData", "Diagnoses Total")
     #df1 = hospitalData.join_totals_datasets("data/hospitalData", "Admissions Total")
     #df["ENGLAND"] = df["ENGLAND"] + df1["ENGLAND"]
     #addEnglandToChart(df, "indigo", "Daily Hospital Cases", True)
 
-    chart.add_scatter_plot(govData.getGOVdateSeries(), govData.getNewCases(), "orange", "COVID-19 Cases", False, False)
+    chart.add_scatter_plot(govData.get_gov_date_Series(), govData.get_new_cases(), "orange", "COVID-19 Cases", False, False)
     chart.draw_chart("Date", "Staff Absences", "COVID-19: C19 Related NHS Staff Absenses (England)", "HOSDATA_Absences", True)
 
 def drawPopulaitonChart():
