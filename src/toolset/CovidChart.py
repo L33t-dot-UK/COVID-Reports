@@ -223,7 +223,7 @@ class CovidChart:
         self.BENCH.bench_end("COVIDCHART add_treemap")
 
 
-    def draw_chart(self, x_axis_title, y_axis_title, title, file_name, to_be_wide):
+    def draw_chart(self, x_axis_title, y_axis_title, title, file_name, to_be_wide, hos_data=False):
         '''
         Draws the chart either on screen if to_show == true (set_chart_params) or as a png image saved with the file_name variable
         These graphs use ONS guidelines for formatting
@@ -322,9 +322,9 @@ class CovidChart:
         #Add time stamp to the png file
         if (self.to_stamp == True):
             if (to_be_wide == True):
-                self.create_time_stamp("reports/images/" + file_name + '.png', 4300, 200, 24, to_be_wide)
+                self.create_time_stamp("reports/images/" + file_name + '.png', 4300, 200, 24, to_be_wide, hos_data)
             else:
-                self.create_time_stamp("reports/images/" + file_name + '.png', 1795, 1930, 24, to_be_wide)
+                self.create_time_stamp("reports/images/" + file_name + '.png', 1795, 1930, 24, to_be_wide, hos_data)
 
         print ("--CHART CLASS--: Graph saved as " + "reports/images/" + file_name + ".png")
 
@@ -480,7 +480,7 @@ class CovidChart:
             print("--CHART CLASS--: Error drawing VLINES, use LoadDatasets.get_gov_date_Series() or govAgedDateSeries() instead of DataFrame['date'], Y axis canot be a dataframe it must be a list of dates.")
 
 
-    def create_time_stamp(self, img_path, x_pos, y_pos, fontsize, to_be_wide):
+    def create_time_stamp(self, img_path, x_pos, y_pos, fontsize, to_be_wide, hos_data = False):
         '''
         Adds a timestamp to the chart with the website URL
 
@@ -503,11 +503,17 @@ class CovidChart:
         if (to_be_wide == True): #put time stamps at the top
             d.text((x_pos,y_pos - 30), "https://www.COVIDreports.uk   Last Updated " + dt_string, fill=("#6D6D6D"), font=font, alpha = 0.7)
             d.text((x_pos,y_pos),"GitHub Repo: https://github.com/L33t-dot-UK/COVID-Reports", fill=("#6D6D6D"), font=font, alpha = 0.7)
-            d.text((x_pos,y_pos + 30),"Data Source: https://coronavirus.data.gov.uk/details/download", fill=("#6D6D6D"), font=font, alpha = 0.7)
+            if(hos_data):
+                d.text((x_pos,y_pos + 30),"Data Source: https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-hospital-activity/", fill=("#6D6D6D"), font=font, alpha = 0.7)
+            else:
+                d.text((x_pos,y_pos + 30),"Data Source: https://coronavirus.data.gov.uk/details/download", fill=("#6D6D6D"), font=font, alpha = 0.7)
         else: #put the time stamps at the bottom
             d.text((x_pos,y_pos - 30), "https://www.COVIDreports.uk   Last Updated " + dt_string, fill=("#6D6D6D"), font=font, alpha = 0.7)
             d.text((x_pos,y_pos),"GitHub Repo: https://github.com/L33t-dot-UK/COVID-Reports", fill=("#6D6D6D"), font=font, alpha = 0.7)
-            d.text((x_pos - 1400,y_pos),"Data Source: https://coronavirus.data.gov.uk/details/download", fill=("#6D6D6D"), font=font, alpha = 0.7)
+            if (hos_data):
+                d.text((x_pos - 1400,y_pos),"Data Source:  https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-hospital-activity/", fill=("#6D6D6D"), font=font, alpha = 0.7)
+            else:
+                d.text((x_pos - 1400,y_pos),"Data Source: https://coronavirus.data.gov.uk/details/download", fill=("#6D6D6D"), font=font, alpha = 0.7)
             
         img.save(img_path)
    

@@ -4,6 +4,11 @@ from toolset.CovidChart import CovidChart as COVIDCHART
 from toolset.ReadHospitalData import readHospitalData as HOSPITALDATA
 from toolset.LoadDatasets import LoadDataSets as govData
 
+import warnings
+warnings.simplefilter(action='ignore', category=UserWarning) #surpress various warnings for charts if you want to see the warnings comment these lines
+warnings.simplefilter(action='ignore', category=FutureWarning) #surpress various warnings to do with dataframes if you want to see the warnings comment these lines
+
+
 hospitalData = HOSPITALDATA()
 
 nation = "England"
@@ -67,7 +72,7 @@ def drawBedsvsBeds():
     df1 = hospitalData.join_totals_datasets("data/hospitalData", "Covid Absences")
     addEnglandToChart(df1, "indigo", "COVID19 NHS Staff Absences", True)
 
-    chart.draw_chart("Date", "Percentage of Beds Used / Total Beds Occupied (Scaled, in thousands)", "COVID-19: Number of Occupied Beds Used by COVID Patients (England)", "HOSDATA_PercentBedsUsed", True)
+    chart.draw_chart("Date", "Percentage of Beds Used / Total Beds Occupied (Scaled, in thousands)", "COVID-19: Number of Occupied Beds Used by COVID Patients (England)", "HOSDATA_PercentBedsUsed", True, hos_data = True)
 
 def drawMechBeds():
 
@@ -90,7 +95,7 @@ def drawMechBeds():
 
     chart.add_scatter_plot(df2["Dates"].tolist(), bedCapArr, 'grey', 'Estimated Critcal Care Bed Capacity', True, False) 
 
-    chart.draw_chart("Date", "Percentage of MV Beds Used / Total MV Beds Occupied (Scaled, in Hundreds)", "COVID-19: Number of Occupied Mechanical Ventalation Beds Used by COVID Patients (England)", "HOSDATA_MechBeds", True)
+    chart.draw_chart("Date", "Percentage of MV Beds Used / Total MV Beds Occupied (Scaled, in Hundreds)", "COVID-19: Number of Occupied Mechanical Ventalation Beds Used by COVID Patients (England)", "HOSDATA_MechBeds", True, hos_data = True)
 
 def drawAdsDiagsActual():
 
@@ -102,7 +107,7 @@ def drawAdsDiagsActual():
     addEnglandToChart(df2, "purple", "Daily Hospital Diagnoses (People Tested in Hospital with +ve PCR)", False)
     addEnglandToChart(df1, "darkgoldenrod", "Daily Hospital Admissions (People going in to Hospital with +ve PCR)", False)
 
-    chart.draw_chart("Date", "Beds Used", "COVID-19: Daily Hospital Admissions and Diagnoses (England)", "HOSDATA_AdsDiagnoses", True)
+    chart.draw_chart("Date", "Beds Used", "COVID-19: Daily Hospital Admissions and Diagnoses (England)", "HOSDATA_AdsDiagnoses", True, hos_data = True)
 
 def drawAdsDiagsPerCap():
     #------------------------ HOSPITAL ADMISSIONS PER CAP ------------------------
@@ -139,7 +144,7 @@ def drawAdsDiagsPerCap():
     df["ENGLAND"] = df["ENGLAND"] + df1["ENGLAND"]
     addEnglandToChart(calcPerMillion(4, df), "red", "Age Group: 85+", False)
 
-    chart.draw_chart("Date", "Beds Used Per Capita (Per 1,000,000 People)", "COVID-19: Daily Hospital Admissions (Diagnoses + Admissions) Per Capita (England)", "HOSDATA_AdmissionsByAge", True)
+    chart.draw_chart("Date", "Beds Used Per Capita (Per 1,000,000 People)", "COVID-19: Daily Hospital Admissions (Diagnoses + Admissions) Per Capita (England)", "HOSDATA_AdmissionsByAge", True, hos_data = True)
 
 def drawAdsDiags():
 
@@ -172,7 +177,7 @@ def drawAdsDiags():
     addEnglandToChart(df, "red", "Age Group: 85+", False)
 
 
-    chart.draw_chart("Date", "Beds Used", "COVID-19: Daily Hospital Admissions (Diagnoses + Admissions) Actual (England)", "HOSDATA_AdmissionsByAgeActual", True)
+    chart.draw_chart("Date", "Beds Used", "COVID-19: Daily Hospital Admissions (Diagnoses + Admissions) Actual (England)", "HOSDATA_AdmissionsByAgeActual", True, hos_data = True)
 
 
 def drawC19Abs():
@@ -191,7 +196,7 @@ def drawC19Abs():
     #addEnglandToChart(df, "indigo", "Daily Hospital Cases", True)
 
     chart.add_scatter_plot(govData.get_gov_date_Series(), govData.get_new_cases(), "orange", "COVID-19 Cases", False, False)
-    chart.draw_chart("Date", "Staff Absences", "COVID-19: C19 Related NHS Staff Absenses (England)", "HOSDATA_Absences", True)
+    chart.draw_chart("Date", "Staff Absences", "COVID-19: C19 Related NHS Staff Absenses (England)", "HOSDATA_Absences", True, hos_data = True)
 
 def drawPopulaitonChart():
 
@@ -199,7 +204,7 @@ def drawPopulaitonChart():
     nChart.clear_chart()
 
     nChart.add_bar_chart(["0 - 5","6 - 17","18 - 64","65 - 84", "85+"], adjustedPop, "teal")
-    nChart.draw_chart("Age Group", "Number of Poeple", "Number of People in Each Age Group - ONS Population Estimates (England)", "HOSDATA_age_groups", False)
+    nChart.draw_chart("Age Group", "Number of Poeple", "Number of People in Each Age Group - ONS Population Estimates (England)", "HOSDATA_AgeGroups", False, hos_data = True)
 
 def drawRecovery():
     chart.clear_chart()
@@ -239,7 +244,7 @@ def drawRecovery():
     df1["ENGLAND"] = df["ENGLAND"] - df2["ENGLAND"]
     addEnglandToChart(df, "red", "Age Group: 85+", True)
 
-    chart.draw_chart("Date", "Number of People", "COVID-19: Gross Number of People Admitted to Hospital ((Admissions + Diagnoses) - Discharges) (England)", "HOSDATA_Recovered", True)
+    chart.draw_chart("Date", "Number of People", "COVID-19: Gross Number of People Admitted to Hospital ((Admissions + Diagnoses) - Discharges) (England)", "HOSDATA_Recovered", True, hos_data = True)
 
 def drawFromNursing():
 
@@ -248,7 +253,7 @@ def drawFromNursing():
     df = hospitalData.join_totals_datasets("data/hospitalData", "Total HospAdm From Care Nursing")
     addEnglandToChart(df, "red", "Total HospAdm From Care Nursing", True)
 
-    chart.draw_chart("Date", "Number of People", "COVID-19: TEST", "HOSDATA_TEST", True)
+    chart.draw_chart("Date", "Number of People", "COVID-19: TEST", "HOSDATA_TEST", True, hos_data = True)
 
 def bedCom():
 
@@ -271,7 +276,7 @@ def bedCom():
     #subset1['Dates'] = subset1['Dates'].dt.strftime('%m-%d')
     #chart.add_scatter_plot(subset1["Dates"], subset1["ENGLAND"], "black", "test 1", False, True)
 
-    chart.draw_chart("Date", "Number of People", "COVID-19: TEST", "HOSDATA_TESTA", True)
+    chart.draw_chart("Date", "Number of People", "COVID-19: TEST", "HOSDATA_TESTA", True, hos_data = True)
 
 
 

@@ -603,15 +603,15 @@ def page_06_Vaccinations():
     
 
     #WIP
-    
+    '''
     for ii in range(0, 19): #Draw a year comp for each age group
         label = "CFR " + govData.get_age_cat_string_list()[ii]  
         data = funcs.Calc_CFR(18, govData.get_aged_death_data(ii), govData.get_aged_case_data(ii))
         chart.draw_Scatter_Year_Comp(data, False, label, True, govData.get_year_dates(), False)
-    
+    '''
 
     #WIP
-    
+    '''
     for ii in range(0, 19): #Draw a year comp for each age group
         label = "Cases " + govData.get_age_cat_string_list()[ii]  
         chart.draw_Scatter_Year_Comp(govData.get_aged_case_data(ii), False, label, False, govData.get_year_dates(), False)
@@ -620,7 +620,7 @@ def page_06_Vaccinations():
 
         img = ['reports/images/yearlyCompCases ' + govData.get_age_cat_string_list()[ii]  + '.png', 'reports/images/yearlyCompDeaths ' + govData.get_age_cat_string_list()[ii]  + '.png']
         dash.create_dashboard('', img, 'XXXyearCompVax' + str(ii))    #This will put the images side by side
-    
+    '''
     #
     #
     #   THE BELOW CODE IS FOR THE VACCInation DASHBOARD
@@ -901,9 +901,6 @@ CFRChart.clear_chart()
 
 calcAgedCFR(18, 40)
 Dashboard_2()
-
-
-
 
 '''
 #WIP FOR WAVE COMP
