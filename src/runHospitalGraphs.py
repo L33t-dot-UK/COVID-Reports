@@ -20,8 +20,8 @@ adjustedPop[2] = sum(population[4:13])
 adjustedPop[3] = sum(population[13:17])
 adjustedPop[4] = sum(population[17:19])
 
-for pop in adjustedPop:
-    print(f'{pop:,}')
+#for pop in adjustedPop:
+#    print(f'{pop:,}')
 
 def addEnglandToChart(df, colour, label, to_dash):
     df = df.reset_index() #remove dates as the index

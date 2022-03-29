@@ -12,6 +12,11 @@
 
 <p>Easy to understand examples can be found in the src folder allowing you to create graphs quickly.</p>
 
+<h2>Virtual Environment</h2>
+
+<p>If you open this repo in Visual Studio Code and press F5 for any of the code files in the src folder you can use the venv to run the scripts. If you do this do not run the scripts through the console otherwise the venv won't find the reports folder. Instead press F5 again to run the selected script.</p>
+
+
 <h2>Graphical User Interface</h2>
 
 <p>I'm currently working on a GUI that will allow users who do not know how to code to use the toolset to produce graphs. Due to my current workload beyond this project this may take some time.</p>

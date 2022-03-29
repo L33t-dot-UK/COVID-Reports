@@ -7,7 +7,7 @@ All charts will be saved in the reports/images folder
 '''
 Import classes from the toolset
 '''
-from ..toolset.LoadDatasets import LoadDataSets as govDataClass
+from toolset.LoadDatasets import LoadDataSets as govDataClass
 from toolset.CovidChart import CovidChart as CovidChart
 from toolset.GetCovidData import GetCOVIDData as getData
 from toolset.ReadHospitalData import readHospitalData as HOSPITALDATA

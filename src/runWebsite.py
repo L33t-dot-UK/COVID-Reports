@@ -15,6 +15,7 @@ toolset.readVaxData only returns data as a dataframe and not lists, for this you
 '''
 
 #Import COVID Data with our COVIDTOOLSET
+from unicodedata import category
 from numpy.core.shape_base import block
 from numpy.lib import function_base
 import pandas as pd
@@ -28,6 +29,10 @@ from toolset.ReadVaxData import readVaxData as vax_data
 from toolset.BenchMark import Benchmark as Benchmark
 
 import numpy as np
+
+import warnings
+warnings.simplefilter(action='ignore', category=UserWarning) #surpress various warnings for charts if you want to see the warnings comment these lines
+warnings.simplefilter(action='ignore', category=FutureWarning) #surpress various warnings to do with dataframes if you want to see the warnings comment these lines
 
 nation = "England" #If this is set to anything else Age profiled data will always be for England as it is not available for the other nations
 
@@ -687,8 +692,6 @@ def page_06_Vaccinations():
         complete_total_df.loc[ii, "totalSecondJab"] = totalValue2
         complete_total_df.loc[ii, "totalThirdJab"] = totalValue3
 
-    print(complete_total_df.sample())
-
     chart.set_chart_params(False, False, True, False)
     chart.add_scatter_plot(date_list, complete_total_df["totalFirstJab"], "firebrick", "Daily 1st Doses", False, True)
     chart.add_scatter_plot(date_list, complete_total_df["totalSecondJab"], "darkgoldenrod", "Daily 2nd Doses", False, True)
@@ -706,8 +709,6 @@ def page_06_Vaccinations():
         complete_total_df.loc[ii, "totalFirstJab"] = totalValue1
         complete_total_df.loc[ii, "totalSecondJab"] = totalValue2
         complete_total_df.loc[ii, "totalThirdJab"] = totalValue3
-
-    print(complete_total_df.sample())
 
     first_Dose = [0] * len(vData.get_vax_age_groups())
     second_Dose = [0] * len(vData.get_vax_age_groups())

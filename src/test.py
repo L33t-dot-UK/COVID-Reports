@@ -43,6 +43,7 @@ chartz.set_chart_params(True,False,False,True)
 chartz.draw_chart("", "", "", "test", True)
 '''
 
+'''
 from toolset.CovidDashboard import Dashboard as chart
 
 chart = chart()
@@ -62,3 +63,13 @@ ds = dataset(True,"England")
 df = ds.unpack_data("newCasesBySpecimenDateAgeDemographics")
 
 print(df.info())
+
+'''
+import os
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+print (ROOT_DIR)
+file = open("benchmark.txt", "w")
+file.write("this is root \n")
+file.close()
+
