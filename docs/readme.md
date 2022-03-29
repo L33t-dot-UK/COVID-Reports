@@ -1,0 +1,2 @@
+<h1>Docs Folder</h1>
+<p>This where Sphonx generated html pages will reside once I get the system working properly. My aim is to have some easy to understand documentation explaining how to use the toolset.</p>

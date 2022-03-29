@@ -1,0 +1,2 @@
+<h1>Data Folder</h1>
+<p>This folder contains all the data used for the charts. autoimport folder is where data is stored that is downloaded using the API. hospitalData folder contains hospital data that is manually downloaded from the NHS statistical servce and the static folder contains data that is used for graph production, do not delete this folder.</p>

@@ -1,6 +1,6 @@
 <h1> COVID Reports Toolset </h1>
 
-<p>This toolset was designed to create the charts found at http://www.COVIDreports.uk. It takes data from the government dashboard using version 1 of their API, cleans and processes it ready for use within Python</p>
+<p>This toolset was designed to create charts found at http://www.COVIDreports.uk. It takes data from the government dashboard using version 1 of their API, cleans and processes it ready for use within Python</p>
 
 <p>Depending on how you want to use the data you can get it in list form or as dataframes apart from vaccine and hospital data that can only be returned as a dataframe.</p>
 
