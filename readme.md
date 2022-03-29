@@ -10,7 +10,7 @@
 
 <p>All code can be found in the src folder and the complete toolset can be found in /src/toolset. data used for the graphs can be found in the data folder.</p>
 
-<p>Easy to understand examples can be found in the examples folder allowing you to create graphs quickly.</p>
+<p>Easy to understand examples can be found in the src folder allowing you to create graphs quickly.</p>
 
 <h2>Graphical User Interface</h2>
 
