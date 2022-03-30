@@ -23,7 +23,5 @@
 
 <p>I'm currently working on a GUI that will allow users who do not know how to code to use the toolset to produce graphs. Due to my current workload beyond this project this may take some time.</p>
 
-<p>The /docs/sphinx folder contains somme sphinx setup files that will be used later on for documentation purposes, this is still a WIP, fo now you will have to use the comments in the code and the examples to understand how to use the code</p>
-
 <p>Happy Coding</p>
 
