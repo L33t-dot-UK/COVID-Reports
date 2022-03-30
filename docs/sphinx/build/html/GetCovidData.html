@@ -1,115 +1,308 @@
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>GetCovidData Class &mdash; COVID Reports ToolSet 1.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    <script src="_static/js/theme.js"></script>
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>GetCovidData Class &#8212; COVID Reports ToolSet 1.0.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="LoadDatasets Class" href="LoadDatasets.html" />
-    <link rel="prev" title="DataFunctions Class" href="DataFunctions.html" /> 
-</head>
+    <link rel="prev" title="Example Code Snippets" href="docs_Example.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> COVID Reports ToolSet
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">toolset</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="BenchMark.html">BenchMark Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CovidChart.html">CovidChart Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CovidDashboard.html">CovidDashboard Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="DataFunctions.html">DataFunctions Class</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">GetCovidData Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LoadDatasets.html">LoadDatasets Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ReadHospitalData.html">ReadHospitalData Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ReadVaxData.html">ReadVaxData Class</a></li>
-</ul>
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="index.html">
+<p class="title">COVID Reports ToolSet</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="modules.html">
+  COVID Reports Python Toolset
+ </a>
 </li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="docs_GettingStarted.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="docs_Example.html">
+   Example Code Snippets
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   GetCovidData Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="LoadDatasets.html">
+   LoadDatasets Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ReadHospitalData.html">
+   ReadHospitalData Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ReadVaxData.html">
+   ReadVaxData Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="CovidChart.html">
+   CovidChart Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="CovidDashboard.html">
+   CovidDashboard Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="DataFunctions.html">
+   DataFunctions Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="BenchMark.html">
+   BenchMark Class
+  </a>
+ </li>
 </ul>
 
-        </div>
-      </div>
-    </nav>
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">COVID Reports ToolSet</a>
-      </nav>
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="modules.html">toolset</a> &raquo;</li>
-      <li>GetCovidData Class</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/GetCovidData.rst.txt" rel="nofollow"> View page source</a>
-      </li>
-  </ul>
-  <hr/>
+<nav id="bd-toc-nav">
+    
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <section id="module-GetCovidData">
+<span id="getcoviddata-class"></span><h1>GetCovidData Class<a class="headerlink" href="#module-GetCovidData" title="Permalink to this headline">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="GetCovidData.GetCOVIDData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">GetCovidData.</span></span><span class="sig-name descname"><span class="pre">GetCOVIDData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#GetCovidData.GetCOVIDData" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class will download 3 CSV files from the UK Governments COVID API. These files will be saved in /data/autoimport and loaded in memory by the LoadDatasets class</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="GetCovidData.GetCOVIDData.pullData">
+<span class="sig-name descname"><span class="pre">pullData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#GetCovidData.GetCOVIDData.pullData" title="Permalink to this definition">#</a></dt>
+<dd><p>This method is called when the GetCovidData object is created.</p>
+<p>Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">GetCovidData</span> <span class="kn">import</span> <span class="n">GetCOVIDData</span> <span class="k">as</span> <span class="n">datapull</span>
+<span class="n">pulldata</span> <span class="o">=</span> <span class="n">dataPull</span><span class="p">(</span><span class="s2">&quot;England&quot;</span><span class="p">)</span>
+</pre></div>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <section id="getcoviddata-class">
-<h1>GetCovidData Class<a class="headerlink" href="#getcoviddata-class" title="Permalink to this headline"></a></h1>
+<p>It downloads covid data using the UK Governments COVID-19 API Version 1. You can add more fields to this class in order to get different datasets. The current datasets that are downloaded can be view below.</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">date</div>
+<div class="line">areaName</div>
+<div class="line">areaCode</div>
+<div class="line">hospitalCases</div>
+<div class="line">newAdmissions</div>
+<div class="line">newCasesBySpecimenDate</div>
+<div class="line">newDeaths28DaysByDeathDate</div>
+<div class="line">newPillarTwoTestsByPublishDate</div>
+<div class="line">newDeaths28DaysByPublishDate</div>
+<div class="line">newPillarOneTestsByPublishDate</div>
+<div class="line">newCasesLFDConfirmedPCRBySpecimenDate</div>
+<div class="line">newCasesPCROnlyBySpecimenDate</div>
+<div class="line">newPCRTestsByPublishDate</div>
+<div class="line">newLFDTests</div>
+<div class="line">newCasesLFDOnlyBySpecimenDate</div>
+<div class="line">cumPeopleVaccinatedSecondDoseByPublishDate</div>
+<div class="line">newCasesByPublishDate  </div>
+</div>
+<div class="line-block">
+<div class="line">newCasesBySpecimenDateAgeDemographics</div>
+<div class="line">newDeaths28DaysByDeathDateAgeDemographics</div>
+</div>
+<div class="line-block">
+<div class="line">vaccinationsAgeDemographics</div>
+</div>
+</div></blockquote>
+<p>To view datasets that can be added go to <a class="reference external" href="https://coronavirus.data.gov.uk/details/download">https://coronavirus.data.gov.uk/details/download</a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Age profiled data for Scotland, Wales and NI is not available. If you select one of these nations the age profiled data will not be downloaded. You will only download non-age specific data saved in data.csv</p>
+</div>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">nation</dt>
+<dd class="field-odd"><p>String Value, can be “England”, “Scotland” or “Wales”</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="DataFunctions.html" class="btn btn-neutral float-left" title="DataFunctions Class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="LoadDatasets.html" class="btn btn-neutral float-right" title="LoadDatasets Class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2022, David Bradshaw.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="docs_Example.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Example Code Snippets</p>
         </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class='right-next' id="next-link" href="LoadDatasets.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">LoadDatasets Class</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
 
-</body>
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2022, David Bradshaw.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
 </html>

@@ -3,32 +3,39 @@ class LoadDataSets:
     This class will load datasets from the data CSV files, clean the datasets
     and make them accessable through callable functions.
 
-    This class will offer the dataset up in two formats; 
+    This class will offer the datasets up in two formats; 
 
         1. As a list
         2. In a dataframe
 
-    The reason why I convert the data into a list is to make it accessable to non data scientists who haven't worked with
+    Data is converted into a list is to make it accessable to non data scientists who haven't worked with
     dataframes before. I offer it up in dataframes for data scientists and to allow for easier analysis/incoroporation 
     into computer models.
 
-    For usage examples view the examples scripts in the root folder.
+    For usage examples view the examples scripts in the root folder of the github repo.
     '''
+
+    
+    import sys
+    sys.path.append('./src/toolset')
+
     import pandas as pd
     import numpy as np
-    from .BenchMark import Benchmark as Benchmark
+    from BenchMark import Benchmark as Benchmark
     import ast
 
     BENCH = Benchmark()
-    BENCH.set_bench(False) #Bechmark output will be printed if this is set to true
 
-    def __init__(self, toLoad, nation):
+    BENCH.set_bench(False) #Bechmark output will be printed if this is set to true
+    
+
+    def __init__(self, to_load, nation):
         '''
         Sets up various variables used in the function contained in this class.
 
         Args:
-            toLoad: Boolean Value, this tells the clas whether it should load the dataset, when set to false you can use this class to access the population data, colours and age groups.
-            nations: String Value, this is the nation that your dataset is for.
+            :to_load: Boolean Value, this tells the clas whether it should load the dataset, when set to false you can use this class to access the population data, colours and age groups.
+            :nations: String Value, this is the nation that your dataset is for.
 
         .. Note:: Age profiled data is only available for England.
         '''
@@ -91,7 +98,7 @@ class LoadDataSets:
         self.fullDataFrameAgeCases = self.pd.DataFrame()
         self.fullDataFrameAgeDeaths = self.pd.DataFrame()
 
-        if (toLoad == True):
+        if (to_load == True):
             self._load_data_from_file() #Populate variables in the class
 
     def _unpack_aged_data(self, data_to_unpack):
@@ -99,13 +106,13 @@ class LoadDataSets:
         Takes the aged data and unpacks it so we can use it in the graphs
         At various stages the government has reordered this data, if this happens
         this is the function that will be changed to make sure that the data is in
-        the correct order for our graphs
+        the correct order for our graphs.
 
         Args:
-            data_to_unpack, Nested List, this will reorder the aged data and unnest the list
+            :data_to_unpack, Nested List, this will reorder the aged data and unnest the list.
         
         Returns:
-            List of unpacked rearranged data
+            List of unpacked rearranged data.
         '''
 
         self.BENCH.bench_start()
@@ -147,13 +154,13 @@ class LoadDataSets:
 
     def unpack_data(self, field):
         '''
-        unpacks the aged data in to a dataframe
+        Unpacks the aged data in to a dataframe.
 
         Args:
-            field, String Value, this is the column name in the dataframe that you want to access. Values for this can be either newCasesBySpecimenDateAgeDemographics or newDeaths28DaysByDeathDateAgeDemographics
+            :field: String Value, this is the column name in the dataframe that you want to access. Values for this can be either newCasesBySpecimenDateAgeDemographics or newDeaths28DaysByDeathDateAgeDemographics.
 
         Returns:
-            Aged data in a dataframe that can be accessed using dataframe functions, for either cases or deaths using the above column names as the field
+            Aged data in a dataframe that can be accessed using dataframe functions, for either cases or deaths using the above column names as the field.
         '''
         df = self.pd.read_csv('data/autoimport/dataAge.csv') #load the aged dataset from the CSV file
         df.drop(df.tail(32).index,inplace=True) #Remove the first days_to_sub rows, for time series chart drop the first 32 rows 32 the data starts on the 02/03/20
@@ -186,9 +193,9 @@ class LoadDataSets:
 
     def _load_data_from_file(self):
         '''
-        Loads data from the CSV file into lists that can be accessed via this class through helper methods. This will be called automatically when the object is created if toLoad == True
+        Loads data from the CSV file into lists that can be accessed via this class through helper methods. This will be called automatically when the object is created if to_load == True
 
-        .. Note:: This is only called is toLoad == True when creating the LoadDatasets object.
+        .. Note:: This is only called is to_load == True when creating the LoadDatasets object. If you want to create a LoadDatasets object to access static variable such as population or line_colour you can set to_load to False
         '''
         print("--LOAD DATA SETS CLASS--: Loading data from CSV files")
         self.BENCH.bench_start()
@@ -324,21 +331,35 @@ class LoadDataSets:
 
     def get_full_data_frame(self):
         '''
-        Returns the full dataframe from the CSV file data.csv
+        Returns the full dataframe from the non-age profiled csv file.
+
+        Returns:
+            Dataframe representing the csv file data + nation.csv e.g. dataEngland.csv, this data is not age profiled.
         '''
         return self.fullDataFrame.copy() 
     
 
     def get_aged_data_frames(self):
         '''
-        Returns full dataframes for aged cases and aged deaths
+        Returns full dataframes for aged cases and aged deaths.
+
+        Returns:
+            Dataframe representing the csv file dataAge.csv for cases and age deaths.
         '''
         return self.fullDataFrameAgeCases.copy(), self.fullDataFrameAgeDeaths.copy()
 
 
     def get_aged_data_cases(self, age_group):
         '''
-        returns aged case data for a given age group as a dataframe
+        returns aged case data for a given age group as a dataframe.
+        
+        Args:
+            :age_group: Integer Value, This will be from 0 to 18 and increases in 5 year increments.
+
+            .. Note:: To calculate the age group divide the target age by 5 and round down
+
+        Returns:
+            Dataframe representing the csv file dataAge.csv for cases.
         '''
         df = self.fullDataFrameAgeCases[self.fullDataFrameAgeCases['age'] == age_group]
         return df["cases"].copy()
@@ -346,7 +367,15 @@ class LoadDataSets:
 
     def get_aged_data_deaths(self, age_group):
         '''
-        returns aged death data for a given age group as a dataframe
+        returns aged death data for a given age group as a dataframe.
+
+        Args:
+            :age_group: Integer Value, This will be from 0 to 18 and increases in 5 year increments.
+
+            .. Note:: To calculate the age group divide the target age by 5 and round down
+
+        Returns:
+            Dataframe representing the csv file dataAge.csv for age deaths.
         '''
         df = self.fullDataFrameAgeDeaths[self.fullDataFrameAgeDeaths['age'] == age_group]
         return df["deaths"].copy()
@@ -355,20 +384,29 @@ class LoadDataSets:
     def get_population_number_list(self):
         '''
         Returns the population list giving populaiton figures for each age group
+
+        Returns:
+            List of population figures from the ONS for each age group, i.e. populaiton[0] will be for 0_4 year olds, population[4] will be for 15_19 year olds, etc.
         '''
         return self.population.copy()
     
 
     def get_line_colour_list(self):
         '''
-        Returns line colours for graphs making all graphs look the same, used for age profiled graphs
+        Returns line colours for graphs making all graphs look the same, used for age profiled graphs.
+
+        Returns:
+            List of colours used the age profiled graphs. If you want different colours change the line_colour list.
         '''
         return self.line_colour.copy()
     
 
     def get_age_cat_string_list(self):
         '''
-        Returns age strings for each age categories used to label graphs
+        Returns age strings for each age categories used to label graphs.
+
+        Returns:
+            List of strings used for age profiled charts, these are the string descriptions of each age groups used in the legends of charts.
         '''
         return self.ageCategoriesString.copy()
 
@@ -376,83 +414,119 @@ class LoadDataSets:
     def get_hospital_cases(self):
         '''
         Returns an list with all detailing total people in hospital with COVID
+
+        Returns:
+            List of hospital cases for all age groups, hospital cases are people in hosiptal with a positive COVID test. These are not necessarily people being treated for COVID. This data is not released. 
         '''
         return self.hospitalCases
 
 
     def get_new_admssions(self):
         '''
-        Returns an list with all hospital admissions
+        Returns an list with all hospital admissions.
+
+        Returns:
+            List of hosiptal admissions, these are people going into hospital per day. The hospital data accessed through the ReadHospitalData class splits these admissions into admissions and diagnoses.
         '''
         return self.newAdmssions.copy()
     
 
     def get_new_cases(self):
         '''
-        Returns an list detailing all new COVID cases found by PCR and LFD
+        Returns an list detailing all new COVID cases found by PCR and LFD.
+
+        Returns:
+            List of new COVID cases found by PCR and LFD by specimen date.
         '''
         return self.newCases.copy()
     
 
     def get_new_deaths(self):
         '''
-        Returns an list with daily COVID deaths; these are deaths by death date and could be out of date for up to a week
+        Returns an list with daily COVID deaths; these are deaths by death date and could be out of date for up to a week.
+
+        Returns:
+            List of deaths from people with COVID. These are deaths by death date and not reported date.
         '''
         return self.newDeaths.copy()
     
 
     def get_pillar_two_tests(self):
         '''
-        Returns all pillar 2 tests that have been conducted
+        Returns all pillar 2 tests that have been conducted.
+
+        Returns:
+            List of how many pillar 2 tests have been conducted per day.
         '''
         return self.pillarTwoTests.copy()
     
 
     def get_deaths_by_report_date(self):
         '''
-        Returns all deaths by reported date
+        Returns all deaths by reported date.
+
+        Returns:
+            List of daily deaths by reported date.
         '''
         return self.deathsByReportDate.copy()
     
 
     def get_new_pillar_one_tests_by_publish_date(self):
         '''
-        Returns all pillar 1 tests
+        Returns all pillar 1 tests.
+
+        Returns:
+            List of how many pillar one tests have been conducted per day.
         '''
         return self.newPillarOneTestsByPublishDate.copy()
     
 
     def get_positive_PCR_tests(self):
         '''
-        Returns all positive PCR tests
+        Returns all positive PCR tests.
+
+        Returns:
+            List of positive PCR tests per day.
         '''
         return self.positivePCRtests.copy()
     
 
     def get_positive_LFD_confirmed_by_PCR(self):
         '''
-        Returns all positive LFD confirmed by PCR
+        Returns all positive LFD confirmed by PCR.
+
+        Returns:
+            List of positive LFD tests that have been confirmed by PCR.
         '''
         return self.positiveLFDconfirmedByPCR.copy()
     
 
     def get_new_LFD_cases(self):
         '''
-        retuturns all positive LFD tests
+        Retuturns all positive LFD tests.
+
+        Returns:
+            List of cases found by LFD tests.
         '''
         return self.newLFDCases.copy() 
 
 
     def get_new_PCR_tests(self):
         '''
-        Returns all PCR test conducted
+        Returns all PCR test conducted.
+
+        Returns:
+            List of how many PCR test have been conducted.
         '''
         return self.newPCRTests.copy()
 
 
     def get_new_LFD_tests(self):
         '''
-        Returns all LFD tests conducted
+        Returns all LFD tests conducted.
+
+        Returns:
+            List of how many LFD tests have been conducted.
         '''
         return self.newLFDTests.copy()
 
@@ -460,38 +534,43 @@ class LoadDataSets:
     def get_cum_second_dose(self):
         '''
         Returns the amount of 2nd doses administered
+
+        Returns:
+            List of second vaccine doses administered.
         '''
         return self.cumSecondDose.copy()
     
 
     def get_new_cases_by_report_date(self):
         '''
-        Return new cases by report date
+        Return new cases by report date.
+
+        Returns:
+            List of new cases by reported date for both PCR and LFD.
         '''
         return self.newCasesByReportDate
 
 
     def get_gov_date_Series(self):
         '''
-        Returns a date arra to be used for the xAxis on charts
+        Returns a date arra to be used for the xAxis on charts.
+
+        Returns:
+            list of dates to be used with non age profiled graphs.
 
         .. Note:: Use this when creating time series graphs that use non-age profiled data.
         '''
         return self.np.array(self.GOVdateSeries, dtype='datetime64')
 
 
-    def get_year_dates_dataset(self):
-        '''
-        QUERY
-        '''
-        #return self.yearDatesDataSet.copy()
-        return self.np.array(self.yearDatesDataSet.copy(), dtype='datetime64')
-
-
     def get_year_dates(self):
         '''
-        Returns dates in a year for use with the year comparrisons and requres the CSV file dates.csv
+        Returns dates in a year for use with the year comparrisons and requres the CSV file dates.csv.
+
+        Returns:
+            list of days in the year, these are used for yearly comparisons.
         '''
+        
         return self.yearDates.copy()
         #return self.np.array(self.yearDates.copy(), dtype='datetime64')
 
@@ -504,42 +583,55 @@ class LoadDataSets:
 
     def get_aged_gov_date_series(self):
         '''
-        Returns a date list to be used for the xAxis on charts when using age separated data
+        Returns a date list to be used for the xAxis on charts when using age separated data.
 
-        .. Note:: Use this when creating time series graphs that use age profiled data
+        Returns:
+            List of dates to be used with age profiled graphs.
+
+        .. Note:: Use this when creating time series graphs that use age profiled data.
         '''
 
         #return self.agedGOVdateSeries.copy()
-        return self.np.array(self.agedGOVdateSeries, dtype='datetime64')
+        return self.np.array(self.agedGOVdateSeries.copy(), dtype='datetime64')
     
 
-    def get_aged_gov_date_seriesNPDTG(self):
-        '''
-        Returns a list of numpy datetime64 dates
-        use these dates instead of the list if you need to plot misaligned data
-        '''
-
-        return self.np.array(self.agedGOVdateSeries.copy(), dtype='datetime64')
-
-
     def get_death_data_by_age_all(self):
+        '''
+        Returns a multidimensional list with all death data by date.
+
+        Returns:
+            List[dayOfYear][age_group][deaths] list of all deaths spilt into age groups.
+        '''
         return self.deathDataByAge
         
 
     def get_death_data_by_age(self, dayOfYear, age_group):
         '''
-        This will return the number of deaths for a given day and a given age group
-        Age groups go from 0 to 18 and days go from 0 to len(n)
+        This will return the number of deaths for a given day and a given age group. Age groups go from 0 to 18 and days go from 0 to len(n).
+
+        Args:
+            :dayOfYear: Integer Value, this will be from 0 to how many days you have in your dataset.
+            :age_group: Integer Value, This will be from 0 to 18 and increases in 5 year increments.
+
+            .. Note:: To calculate the age group divide the target age by 5 and round down.
+
+        Returns:
+            Integer Value of the amount of deaths on a given day for a given age group.
         '''
         return self.deathDataByAge[dayOfYear][age_group]['deaths']
 
-    def get_raw_death_data(self):
-        return self.deathDataByAge
- 
 
     def get_aged_death_data(self, age_group):
         '''
-        Returns an list of death values ready to plot, age groups from 0-18
+        Returns an list of death values ready to plot, age groups from 0-18.
+
+        Args:
+            :age_group: Integer Value, This will be from 0 to 18 and increases in 5 year increments.
+
+            .. Note:: To calculate the age group divide the target age by 5 and round down.
+
+        Returns:
+            List of deaths by death date for the given age group.
         '''
         returnedData = [0]*len(self.deathDataByAge)
         for ii in range(0, len(self.deathDataByAge)):
@@ -549,8 +641,17 @@ class LoadDataSets:
 
     def get_case_data_by_age(self, dayOfYear, age_group):
         '''
-        This will return the number of cases for a given day and a given age group
-        Age groups go from 0 to 18 and days go from 0 to len(n)
+        This will return the number of cases for a given day and a given age group. Age groups go from 0 to 18 and days go from 0 to len(n)
+
+        Args:
+            :dayOfYear: Integer Value, this will be from 0 to how many days you have in your dataset.
+            :age_group: Integer Value, This will be from 0 to 18 and increases in 5 year increments.
+
+        .. Note:: To calculate the age group divide the target age by 5 and round down.
+
+        Returns:
+            Integer Value of the amount of cases on a given day for a given age group.
+
         '''
         return self.caseDataByAge[dayOfYear][age_group]['cases']
 
@@ -558,7 +659,17 @@ class LoadDataSets:
     def get_aged_case_data(self, age_group):
         '''
         Returns an list of case values ready to plot, age groups from 0-18
+
+        Args:
+            :age_group: Integer Value, This will be from 0 to 18 and increases in 5 year increments.
+
+            .. Note:: To calculate the age group divide the target age by 5 and round down.
+
+        Returns:
+            List of cases by specimen date for the given age group.
+
         '''
+
         returnedData = [0]*len(self.caseDataByAge)
         for ii in range(0, len(self.caseDataByAge)):
             returnedData[ii] = self.caseDataByAge[ii][age_group]['cases']
@@ -567,13 +678,31 @@ class LoadDataSets:
 
     def get_age_groups(self, age_group):
         '''
-        Returns a given age group for a givn age_group index, age groups from 0-18
+        Returns a given age group for a given age_group index, age groups from 0-18
+
+        Args:
+            :age_group: Integer Value, This will be from 0 to 18 and increases in 5 year increments.
+        
+        Returns:
+            Integer Value corresponding to the age group that you assigned to age_group. For instance::
+
+                get_age_groups(0)
+            
+            will return 00_04::
+
+                get_age_groups(12)
+
+            will return 60_64
+
         '''
         return self.caseDataByAge[0][age_group]['age']
 
 
     def get_age_groups_literal(self):
         '''
-        Returns a list of age groups used in the aged data dataframe
+        Returns a list of age groups used in the aged data dataframe.
+
+        Returns:
+            List of labels that represent each age group within the dataframe.
         '''
         return self.age_groups

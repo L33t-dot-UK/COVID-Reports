@@ -1,115 +1,683 @@
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LoadDatasets Class &mdash; COVID Reports ToolSet 1.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    <script src="_static/js/theme.js"></script>
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>LoadDatasets Class &#8212; COVID Reports ToolSet 1.0.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="ReadHospitalData Class" href="ReadHospitalData.html" />
-    <link rel="prev" title="GetCovidData Class" href="GetCovidData.html" /> 
-</head>
+    <link rel="prev" title="GetCovidData Class" href="GetCovidData.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> COVID Reports ToolSet
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">toolset</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="BenchMark.html">BenchMark Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CovidChart.html">CovidChart Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CovidDashboard.html">CovidDashboard Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="DataFunctions.html">DataFunctions Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="GetCovidData.html">GetCovidData Class</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">LoadDatasets Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ReadHospitalData.html">ReadHospitalData Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ReadVaxData.html">ReadVaxData Class</a></li>
-</ul>
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="index.html">
+<p class="title">COVID Reports ToolSet</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="modules.html">
+  COVID Reports Python Toolset
+ </a>
 </li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="docs_GettingStarted.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="docs_Example.html">
+   Example Code Snippets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="GetCovidData.html">
+   GetCovidData Class
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   LoadDatasets Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ReadHospitalData.html">
+   ReadHospitalData Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ReadVaxData.html">
+   ReadVaxData Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="CovidChart.html">
+   CovidChart Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="CovidDashboard.html">
+   CovidDashboard Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="DataFunctions.html">
+   DataFunctions Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="BenchMark.html">
+   BenchMark Class
+  </a>
+ </li>
 </ul>
 
-        </div>
-      </div>
-    </nav>
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">COVID Reports ToolSet</a>
-      </nav>
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="modules.html">toolset</a> &raquo;</li>
-      <li>LoadDatasets Class</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/LoadDatasets.rst.txt" rel="nofollow"> View page source</a>
-      </li>
-  </ul>
-  <hr/>
+<nav id="bd-toc-nav">
+    
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <section id="module-LoadDatasets">
+<span id="loaddatasets-class"></span><h1>LoadDatasets Class<a class="headerlink" href="#module-LoadDatasets" title="Permalink to this headline">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">LoadDatasets.</span></span><span class="sig-name descname"><span class="pre">LoadDataSets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">to_load</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class will load datasets from the data CSV files, clean the datasets
+and make them accessable through callable functions.</p>
+<p>This class will offer the datasets up in two formats;</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>As a list</p></li>
+<li><p>In a dataframe</p></li>
+</ol>
+</div></blockquote>
+<p>Data is converted into a list is to make it accessable to non data scientists who haven’t worked with
+dataframes before. I offer it up in dataframes for data scientists and to allow for easier analysis/incoroporation 
+into computer models.</p>
+<p>For usage examples view the examples scripts in the root folder of the github repo.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_age_cat_string_list">
+<span class="sig-name descname"><span class="pre">get_age_cat_string_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_age_cat_string_list" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns age strings for each age categories used to label graphs.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of strings used for age profiled charts, these are the string descriptions of each age groups used in the legends of charts.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_age_groups">
+<span class="sig-name descname"><span class="pre">get_age_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">age_group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_age_groups" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns a given age group for a given age_group index, age groups from 0-18</p>
+<dl>
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">age_group</dt>
+<dd class="field-odd"><p>Integer Value, This will be from 0 to 18 and increases in 5 year increments.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>Integer Value corresponding to the age group that you assigned to age_group. For instance:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">get_age_groups</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
 </div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <section id="loaddatasets-class">
-<h1>LoadDatasets Class<a class="headerlink" href="#loaddatasets-class" title="Permalink to this headline"></a></h1>
+<p>will return 00_04:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">get_age_groups</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>will return 60_64</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_age_groups_literal">
+<span class="sig-name descname"><span class="pre">get_age_groups_literal</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_age_groups_literal" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns a list of age groups used in the aged data dataframe.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of labels that represent each age group within the dataframe.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_aged_case_data">
+<span class="sig-name descname"><span class="pre">get_aged_case_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">age_group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_aged_case_data" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns an list of case values ready to plot, age groups from 0-18</p>
+<dl>
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">age_group</dt>
+<dd class="field-odd"><p>Integer Value, This will be from 0 to 18 and increases in 5 year increments.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To calculate the age group divide the target age by 5 and round down.</p>
+</div>
+</dd>
+<dt>Returns:</dt><dd><p>List of cases by specimen date for the given age group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_aged_data_cases">
+<span class="sig-name descname"><span class="pre">get_aged_data_cases</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">age_group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_aged_data_cases" title="Permalink to this definition">#</a></dt>
+<dd><p>returns aged case data for a given age group as a dataframe.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">age_group</dt>
+<dd class="field-odd"><p>Integer Value, This will be from 0 to 18 and increases in 5 year increments.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To calculate the age group divide the target age by 5 and round down</p>
+</div>
+</dd>
+<dt>Returns:</dt><dd><p>Dataframe representing the csv file dataAge.csv for cases.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_aged_data_deaths">
+<span class="sig-name descname"><span class="pre">get_aged_data_deaths</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">age_group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_aged_data_deaths" title="Permalink to this definition">#</a></dt>
+<dd><p>returns aged death data for a given age group as a dataframe.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">age_group</dt>
+<dd class="field-odd"><p>Integer Value, This will be from 0 to 18 and increases in 5 year increments.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To calculate the age group divide the target age by 5 and round down</p>
+</div>
+</dd>
+<dt>Returns:</dt><dd><p>Dataframe representing the csv file dataAge.csv for age deaths.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_aged_data_frames">
+<span class="sig-name descname"><span class="pre">get_aged_data_frames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_aged_data_frames" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns full dataframes for aged cases and aged deaths.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Dataframe representing the csv file dataAge.csv for cases and age deaths.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_aged_death_data">
+<span class="sig-name descname"><span class="pre">get_aged_death_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">age_group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_aged_death_data" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns an list of death values ready to plot, age groups from 0-18.</p>
+<dl>
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">age_group</dt>
+<dd class="field-odd"><p>Integer Value, This will be from 0 to 18 and increases in 5 year increments.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To calculate the age group divide the target age by 5 and round down.</p>
+</div>
+</dd>
+<dt>Returns:</dt><dd><p>List of deaths by death date for the given age group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_aged_gov_date_series">
+<span class="sig-name descname"><span class="pre">get_aged_gov_date_series</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_aged_gov_date_series" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns a date list to be used for the xAxis on charts when using age separated data.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of dates to be used with age profiled graphs.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Use this when creating time series graphs that use age profiled data.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_case_data_by_age">
+<span class="sig-name descname"><span class="pre">get_case_data_by_age</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dayOfYear</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">age_group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_case_data_by_age" title="Permalink to this definition">#</a></dt>
+<dd><p>This will return the number of cases for a given day and a given age group. Age groups go from 0 to 18 and days go from 0 to len(n)</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">dayOfYear</dt>
+<dd class="field-odd"><p>Integer Value, this will be from 0 to how many days you have in your dataset.</p>
+</dd>
+<dt class="field-even">age_group</dt>
+<dd class="field-even"><p>Integer Value, This will be from 0 to 18 and increases in 5 year increments.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To calculate the age group divide the target age by 5 and round down.</p>
+</div>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Integer Value of the amount of cases on a given day for a given age group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_cum_second_dose">
+<span class="sig-name descname"><span class="pre">get_cum_second_dose</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_cum_second_dose" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the amount of 2nd doses administered</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of second vaccine doses administered.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_death_data_by_age">
+<span class="sig-name descname"><span class="pre">get_death_data_by_age</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dayOfYear</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">age_group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_death_data_by_age" title="Permalink to this definition">#</a></dt>
+<dd><p>This will return the number of deaths for a given day and a given age group. Age groups go from 0 to 18 and days go from 0 to len(n).</p>
+<dl>
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">dayOfYear</dt>
+<dd class="field-odd"><p>Integer Value, this will be from 0 to how many days you have in your dataset.</p>
+</dd>
+<dt class="field-even">age_group</dt>
+<dd class="field-even"><p>Integer Value, This will be from 0 to 18 and increases in 5 year increments.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To calculate the age group divide the target age by 5 and round down.</p>
+</div>
+</dd>
+<dt>Returns:</dt><dd><p>Integer Value of the amount of deaths on a given day for a given age group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_death_data_by_age_all">
+<span class="sig-name descname"><span class="pre">get_death_data_by_age_all</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_death_data_by_age_all" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns a multidimensional list with all death data by date.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List[dayOfYear][age_group][deaths] list of all deaths spilt into age groups.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_deaths_by_report_date">
+<span class="sig-name descname"><span class="pre">get_deaths_by_report_date</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_deaths_by_report_date" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns all deaths by reported date.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of daily deaths by reported date.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_full_data_frame">
+<span class="sig-name descname"><span class="pre">get_full_data_frame</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_full_data_frame" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the full dataframe from the non-age profiled csv file.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Dataframe representing the csv file data + nation.csv e.g. dataEngland.csv, this data is not age profiled.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_gov_date_Series">
+<span class="sig-name descname"><span class="pre">get_gov_date_Series</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_gov_date_Series" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns a date arra to be used for the xAxis on charts.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list of dates to be used with non age profiled graphs.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Use this when creating time series graphs that use non-age profiled data.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_hospital_cases">
+<span class="sig-name descname"><span class="pre">get_hospital_cases</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_hospital_cases" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns an list with all detailing total people in hospital with COVID</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of hospital cases for all age groups, hospital cases are people in hosiptal with a positive COVID test. These are not necessarily people being treated for COVID. This data is not released.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_line_colour_list">
+<span class="sig-name descname"><span class="pre">get_line_colour_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_line_colour_list" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns line colours for graphs making all graphs look the same, used for age profiled graphs.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of colours used the age profiled graphs. If you want different colours change the line_colour list.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_new_LFD_cases">
+<span class="sig-name descname"><span class="pre">get_new_LFD_cases</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_new_LFD_cases" title="Permalink to this definition">#</a></dt>
+<dd><p>Retuturns all positive LFD tests.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of cases found by LFD tests.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_new_LFD_tests">
+<span class="sig-name descname"><span class="pre">get_new_LFD_tests</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_new_LFD_tests" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns all LFD tests conducted.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of how many LFD tests have been conducted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_new_PCR_tests">
+<span class="sig-name descname"><span class="pre">get_new_PCR_tests</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_new_PCR_tests" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns all PCR test conducted.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of how many PCR test have been conducted.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_new_admssions">
+<span class="sig-name descname"><span class="pre">get_new_admssions</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_new_admssions" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns an list with all hospital admissions.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of hosiptal admissions, these are people going into hospital per day. The hospital data accessed through the ReadHospitalData class splits these admissions into admissions and diagnoses.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_new_cases">
+<span class="sig-name descname"><span class="pre">get_new_cases</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_new_cases" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns an list detailing all new COVID cases found by PCR and LFD.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of new COVID cases found by PCR and LFD by specimen date.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_new_cases_by_report_date">
+<span class="sig-name descname"><span class="pre">get_new_cases_by_report_date</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_new_cases_by_report_date" title="Permalink to this definition">#</a></dt>
+<dd><p>Return new cases by report date.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of new cases by reported date for both PCR and LFD.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_new_deaths">
+<span class="sig-name descname"><span class="pre">get_new_deaths</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_new_deaths" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns an list with daily COVID deaths; these are deaths by death date and could be out of date for up to a week.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of deaths from people with COVID. These are deaths by death date and not reported date.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_new_pillar_one_tests_by_publish_date">
+<span class="sig-name descname"><span class="pre">get_new_pillar_one_tests_by_publish_date</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_new_pillar_one_tests_by_publish_date" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns all pillar 1 tests.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of how many pillar one tests have been conducted per day.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_pillar_two_tests">
+<span class="sig-name descname"><span class="pre">get_pillar_two_tests</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_pillar_two_tests" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns all pillar 2 tests that have been conducted.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of how many pillar 2 tests have been conducted per day.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_population_number_list">
+<span class="sig-name descname"><span class="pre">get_population_number_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_population_number_list" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the population list giving populaiton figures for each age group</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of population figures from the ONS for each age group, i.e. populaiton[0] will be for 0_4 year olds, population[4] will be for 15_19 year olds, etc.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_positive_LFD_confirmed_by_PCR">
+<span class="sig-name descname"><span class="pre">get_positive_LFD_confirmed_by_PCR</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_positive_LFD_confirmed_by_PCR" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns all positive LFD confirmed by PCR.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of positive LFD tests that have been confirmed by PCR.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_positive_PCR_tests">
+<span class="sig-name descname"><span class="pre">get_positive_PCR_tests</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_positive_PCR_tests" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns all positive PCR tests.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>List of positive PCR tests per day.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.get_year_dates">
+<span class="sig-name descname"><span class="pre">get_year_dates</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.get_year_dates" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns dates in a year for use with the year comparrisons and requres the CSV file dates.csv.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>list of days in the year, these are used for yearly comparisons.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="LoadDatasets.LoadDataSets.unpack_data">
+<span class="sig-name descname"><span class="pre">unpack_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">field</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#LoadDatasets.LoadDataSets.unpack_data" title="Permalink to this definition">#</a></dt>
+<dd><p>Unpacks the aged data in to a dataframe.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">field</dt>
+<dd class="field-odd"><p>String Value, this is the column name in the dataframe that you want to access. Values for this can be either newCasesBySpecimenDateAgeDemographics or newDeaths28DaysByDeathDateAgeDemographics.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>Aged data in a dataframe that can be accessed using dataframe functions, for either cases or deaths using the above column names as the field.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="GetCovidData.html" class="btn btn-neutral float-left" title="GetCovidData Class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="ReadHospitalData.html" class="btn btn-neutral float-right" title="ReadHospitalData Class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2022, David Bradshaw.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="GetCovidData.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">GetCovidData Class</p>
         </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class='right-next' id="next-link" href="ReadHospitalData.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">ReadHospitalData Class</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
 
-</body>
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2022, David Bradshaw.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
 </html>

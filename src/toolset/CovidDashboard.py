@@ -4,30 +4,37 @@ class Dashboard:
 
     This class can be used to create dashboards from a list of images and to create tables from Lists that can be added to dashbaords or graphs. An example is included below.
     '''
+
+    
+    import sys
+    sys.path.append('./src/toolset')
+
+    
     from PIL import ImageFont, ImageDraw, Image, ImageOps
-    from .CovidChart import CovidChart as chartBENCH
+    from CovidChart import CovidChart as chartBENCH
+    
 
 
     def __init__(self):
         self.globalMaxWidth = 0 #Max width for each column in a table, this ensures that all coluns are the same width
         self.globalHeight = 0
         pass
-
+    
 
     def create_dashboard(self, title, images, file_name):
         '''
-        Takes a list of PNG images and creates a dashboard. Images will be displayed in order
+        Takes a list of PNG images and creates a dashboard. Images will be displayed in order.
 
         Args:
-            title: String Value, this is the title of the dashboard
-            images: List, this will be a list of images to be used for the dashboard
-            file_name: String Value, this is the name of the image file for the dashbaord, do not include the file extension
+            :title: String Value, this is the title of the dashboard.
+            :images: List, this will be a list of images to be used for the dashboard.
+            :file_name: String Value, this is the name of the image file for the dashbaord, do not include the file extension.
 
-        .. Note:: Do not include the file extension for the file_name argument
+        .. Note:: Do not include the file extension for the file_name argument.
 
-        .. Note:: Only give 2 sizes of images to this function all portrait images should be the same size and all landscape images should be the same size
+        .. Note:: Only give 2 sizes of images to this function all portrait images should be the same size and all landscape images should be the same size.
 
-        .. Note:: If you give portrait images they should be in an even number as these are laid side by side
+        .. Note:: If you give portrait images they should be in an even number as these are laid side by side.
         '''
         padding = 10
         titlePadding = 200
@@ -158,40 +165,44 @@ class Dashboard:
         '''
         Create a table and saves to PNG image, this method uses the create_row method in a loop to create tables.
 
-        Args:
-            x_start: Integer Value, start location on the x-axis 
-            y_start: Integer Value, start location on the y-axis
-            x_padding: Integer Value, the amount of padding to have in the x-axis in pixels
-            y_padding: Integer Value, the amount of padding to have in the y-axis in pixels
-            data: List[][], data that will be used in the tables row, this is multidimensional List[row][column]
-            fill_colour: String Value, background colour of the cells
-            line_colour: String Value, Line colour of the table lines
-            label: List, title for each column
-            to_total: Boolean Value, this will be true if the values are to be added and a totals column inserted
-            image_path: String Value, locaiton of the image that the table row will be inserted into, this must already exist
-            fonstsize: Integer Value, size of the fonts to be used when generating the table
-            title_row: List, title of each row, there must be a title for each row and a blank title for the top row if your using title_row
-            table_title: String Value, title of the table
-
         .. Note:: Data is a multidimenstional list data[row][column]
 
-        .. Note:: Please note that len(label) must be equal to the number of rows, this is the title for each row, 
-        
-        .. Note:: If title_row is used then a blank label must be included in the label List i.e label = ['','20 -24', '25 - 29', '30 - 34']
+        Args:
+            :x_start: Integer Value, start location on the x-axis.
+            :y_start: Integer Value, start location on the y-axis.
+            :x_padding: Integer Value, the amount of padding to have in the x-axis in pixels.
+            :y_padding: Integer Value, the amount of padding to have in the y-axis in pixels.
+            :data: List[][], data that will be used in the tables row, this is multidimensional List[row][column].
+            :fill_colour: String Value, background colour of the cells.
+            :line_colour: String Value, Line colour of the table lines.
+            :label: List, title for each column.
+            :to_total: Boolean Value, this will be true if the values are to be added and a totals column inserted.
+            :image_path: String Value, locaiton of the image that the table row will be inserted into, this must already exist.
+            :fonstsize: Integer Value, size of the fonts to be used when generating the table.
+            :title_row: List, title of each row, there must be a title for each row and a blank title for the top row if your using title_row.
+            :table_title: String Value, title of the table.
 
-        .. Note:: If to_total is true then ensure that all data apart from the title header is numeric, for non numeric data set to_total to False
+        .. Note:: Please note that len(label) must be equal to the number of rows, this is the title for each row.
+        
+        .. Note:: If title_row is used then a blank label must be included in the label List i.e label = ['','20 - 24', '25 - 29', '30 - 34'].
+
+        .. Note:: If to_total is true then ensure that all data apart from the title header is numeric, for non numeric data set to_total to False.
 
         Example:
 
-            from toolset.CovidDashboard import Dashboard as chart
+        .. code-block:: python
 
-            chart = chart()
+            from CovidDashboard import Dashboard as dash
 
+            dash = dash()
             label = ['', 'Cases', 'Deaths', 'CFR']
             title_row = ['0-4', '5-9', '10-14']
             data = [title_row,[20156,22514,30145],[0,1,2],['0%','0%','0%']]
 
-            chart.create_table(500, 200, 15, 15, data, "white", "black", label, False, "reports/images/test_Table.png", 30, True, "Just a test table")
+            dash.create_table(500, 200, 15, 15, data, "white", "black", label, 
+                False, "reports/images/test_Table.png", 30, True, "Just a test table")
+
+        This is what the table will look like:
 
             +------------------------+------------+----------+----------+
             |                        |    0-4     |   5-9    |   10-14  |
@@ -249,22 +260,21 @@ class Dashboard:
 
     def create_row(self, x_start, y_start, x_padding, y_padding, data, fill_colour, line_colour, label, to_total, image_path, fontsize):
         '''
-        Creates a row of a table from a list of data
+        Creates a row of a table from a list of data.
 
         Args,
-            x_start: Integer Value, start location on the x-axis 
-            y_start: Integer Value, start location on the y-axis
-            x_padding: Integer Value, the amount of padding to have in the x-axis in pixels
-            y_padding: Integer Value, the amount of padding to have in the y-axis in pixels
-            data: List, data that will be used in the tables row
-            fill_colour: String Value, background colour of the cells
-            line_colour: String Value, Line colour of the table lines
-            label: String Value, title for the row
-            to_total: Boolean Value, this will be true if the values are to be added and a totals column inserted
-            image_path: String Value, locaiton of the image that the table row will be inserted into, this must already exist
-            fonstsize: Integer Value, size of the fonts to be used when generating the table
+            :x_start: Integer Value, start location on the x-axis.
+            :y_start: Integer Value, start location on the y-axis.
+            :x_padding: Integer Value, the amount of padding to have in the x-axis in pixels.
+            :y_padding: Integer Value, the amount of padding to have in the y-axis in pixels.
+            :data: List, data that will be used in the tables row.
+            :fill_colour: String Value, background colour of the cells.
+            :line_colour: String Value, Line colour of the table lines.
+            :label: String Value, title for the row.
+            :to_total: Boolean Value, this will be true if the values are to be added and a totals column inserted.
+            :image_path: String Value, locaiton of the image that the table row will be inserted into, this must already exist.
+            :fonstsize: Integer Value, size of the fonts to be used when generating the table.
         
-        .. Note:: give this funciton one row of data at a time
         '''
         total = 0
 
@@ -331,13 +341,13 @@ class Dashboard:
 
     def create_PNG(self, width, height, file_name, fontsize):
         '''
-        Creates a png file with specified dimensions and pink boarder
+        Creates a png file with specified dimensions and pink boarder.
 
         Args:
-            width: Integer Value, width of the image in pixels
-            height: Integer Value, height of the image in pixels
-            file_name: String Value, the loaction where the file will be saved, do not include file extension or file path just the file_name
-            fontsize: Integer Value, not used at this time
+            :width: Integer Value, width of the image in pixels.
+            :height: Integer Value, height of the image in pixels.
+            :file_name: String Value, the loaction where the file will be saved, do not include file extension or file path just the file_name.
+            :fontsize: Integer Value, not used at this time.
         '''
 
         img = self.Image.new('RGB', (width, height), color = 'white')
@@ -350,14 +360,14 @@ class Dashboard:
 
     def _get_max_widths(self, data, image_path, to_total, x_padding, fontsize):
         '''
-        Used to calulate cell widths when creating tables
+        Used to calulate cell widths when creating tables.
 
         Args:
-            data: List, data that will be used to create the table
-            image_path: String Value, location where the image resides that the table will be inserted into
-            to_total: Boolean Value, this will be true if the values are to be added and a totals column inserted
-            x_padding: Integer Value, the amount of padding to have in the x axis in pixels
-            fontsize: Integer Value, size of the fonts to be used when generating the table
+            :data: List, data that will be used to create the table.
+            :image_path: String Value, location where the image resides that the table will be inserted into.
+            :to_total: Boolean Value, this will be true if the values are to be added and a totals column inserted.
+            :x_padding: Integer Value, the amount of padding to have in the x axis in pixels.
+            :fontsize: Integer Value, size of the fonts to be used when generating the table.
 
         '''
         img = self.Image.open(image_path)

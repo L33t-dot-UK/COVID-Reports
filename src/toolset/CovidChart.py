@@ -1,8 +1,15 @@
 class CovidChart:
     '''
     This class is used to create charts using COVID-19 data.
-    All formatting is carried out by this class with line of best fit added when scatter graphs are created.
+    All formatting is carried out by this class with lines of best fit added for scatter graphs.
+    To change graph formatting amend the method draw_chart()
     '''
+
+    
+    import sys
+    sys.path.append('./src/toolset')
+
+    
     import matplotlib.pyplot as plt
     import matplotlib.dates as mdates
     from datetime import date
@@ -18,11 +25,11 @@ class CovidChart:
     import pandas as pd
     import numpy as np
 
-    from .BenchMark import Benchmark as Benchmark
+    from BenchMark import Benchmark as Benchmark
 
     BENCH = Benchmark() #Used for benchmarking
     BENCH.set_bench(False) #Bechmark output will be printed if this is set to true
-
+    
 
     def __init__(self):
         '''
@@ -55,12 +62,12 @@ class CovidChart:
         once draw_chart is called the plot will be saved and/or displayed on screen
 
         Args:
-            x_data: List or DataFrame, data for the x-axis of your scatter chart
-            y_data: List or DataFrame, data for the y-axis of your chart
-            colour: String Value, color of the plot, can be a word such as "red" or a hex value
-            label: String Value, The label for the plot, this will be used in the legend
-            to_dash: Boolean Value, decides if the plot should have a solid or dashed line of best fit
-            data_complete: Boolean value, if set to true the LOBF will go to the end, if set to False the LOBF will go to (values - (time/2)), set to False if data is incomplete
+            :x_data: List or DataFrame, data for the x-axis of your scatter chart
+            :y_data: List or DataFrame, data for the y-axis of your chart
+            :colour: String Value, color of the plot, can be a word such as "red" or a hex value
+            :label: String Value, The label for the plot, this will be used in the legend
+            :to_dash: Boolean Value, decides if the plot should have a solid or dashed line of best fit
+            :data_complete: Boolean value, if set to true the LOBF will go to the end, if set to False the LOBF will go to (values - (time/2)), set to False if data is incomplete
         '''
 
         self.BENCH.bench_start()
@@ -111,10 +118,10 @@ class CovidChart:
         once draw_chart is called the plot will be saved and/or displayed on screen
 
         Args:
-            x_data: List or DataFrame, data for the x-axis of your bar plot 
-            y_data: List or DataFrame, data for the y-axis of your bar plot
-            colour: String Value, color of the plot, can be a word such as "red" or a hex value
-            label: String Value, The label for the plot, this will be used in the legend
+            :x_data: List or DataFrame, data for the x-axis of your bar plot 
+            :y_data: List or DataFrame, data for the y-axis of your bar plot
+            :colour: String Value, color of the plot, can be a word such as "red" or a hex value
+            :label: String Value, The label for the plot, this will be used in the legend
         '''
 
         self.BENCH.bench_start()
@@ -147,14 +154,17 @@ class CovidChart:
         self.BENCH.bench_end("COVIDCHART add_bar_plot")
 
 
-    def add_bar_chart(self, x_data, y_data, colour):
+    def add_bar_chart(self, x_data, y_data, colour, label="", display_vals = True, to_bar_over = True):
         '''
         Use when creating just bar charts without a line of best fit and totals at the top of each bar
 
         Args:
-            x_data: List or DataFrame, data for the x-axis of your bar plot 
-            y_data: List or DataFrame, data for the y-axis of your bar plot
-            colour: String Value, color of the plot, can be a word such as "red" or a hex value
+            :x_data: List or DataFrame, data for the x-axis of your bar plot 
+            :y_data: List or DataFrame, data for the y-axis of your bar plot
+            :colour: String Value, color of the plot, can be a word such as "red" or a hex value
+            :label: String Value optional, This is the label used for the legend, to_bar_over must be set to False for the legend to be displayed 
+            :display_vals: Boolean Value optional, set to true to display numbers above the bars
+            :to_bar_over: Boolean Value optional, set to true if you don't want a legend, set to false for a legend
         '''
 
         self.BENCH.bench_start()
@@ -170,19 +180,23 @@ class CovidChart:
         else:
             y_data = y_data.tolist()
         
-        self.to_bar = True
-        self.alter_x_ticks = False
-        for x in range(len(y_data)):
-            y_data[x] = int(y_data[x])
-            label3 = f'{y_data[x]:,}'
-            self.plt.annotate(label3, # this is the text
-                        (x_data[x],y_data[x]), # this is the point to label
-                        textcoords="offset points", # how to position the text
-                        xytext=(0,10), # distance from text to points (x,y)
-                        ha='center', # horizontal alignment can be left, right or center
-                        fontsize='16', color="#6D6D6D") #This size will look off when viewing the interactive graph, but good on the png
+        self.to_bar = to_bar_over
+
+        if self.to_bar == True:
+            self.alter_x_ticks = False
         
-        self.plt.bar(x_data, y_data,  color = colour, alpha = 0.7)
+        if display_vals:
+            for x in range(len(y_data)):
+                y_data[x] = int(y_data[x])
+                label3 = f'{y_data[x]:,}'
+                self.plt.annotate(label3, # this is the text
+                            (x_data[x],y_data[x]), # this is the point to label
+                            textcoords="offset points", # how to position the text
+                            xytext=(0,10), # distance from text to points (x,y)
+                            ha='center', # horizontal alignment can be left, right or center
+                            fontsize='16', color="#6D6D6D") #This size will look off when viewing the interactive graph, but good on the png
+        
+        self.plt.bar(x_data, y_data,  color = colour, alpha = 0.7,  label = label)
         self.BENCH.bench_end("COVIDCHART add_bar_chart")
 
 
@@ -193,9 +207,9 @@ class CovidChart:
         data should be an list of summed data
 
         Args:
-            data: List or DataFrame, data for the treemap. This data should not be timeseries, see the example in example.py
-            labels: List or DataFrame, The label for the plot, this will be used in the legend
-            colours: List or DataFrame, color of the plot, can be a word such as "red" or a hex value
+            :data: List or DataFrame, data for the treemap. This data should not be timeseries, see the example in example.py
+            :labels: List or DataFrame, The label for the plot, this will be used in the legend
+            :colours: List or DataFrame, color of the plot, can be a word such as "red" or a hex value
         '''
 
         self.BENCH.bench_start()
@@ -229,13 +243,13 @@ class CovidChart:
         These graphs use ONS guidelines for formatting
 
         Args:
-            x_axis_title: String Value, Title for the x-axis
-            y_axis_title: String Value, Title for the y-axis
-            title: String Value, Title for the chart
-            file_name: String Value, file_name of the chart (DO NOT INCLUDE FILE EXTENSION; this is added by this method)
-            to_be_wide: Boolean value, decides the aspect ratio of the chart, wide or portrait
+            :x_axis_title: String Value, Title for the x-axis
+            :y_axis_title: String Value, Title for the y-axis
+            :title: String Value, Title for the chart
+            :file_name: String Value, file name of the chart (DO NOT INCLUDE FILE EXTENSION; this is added by this method)
+            :to_be_wide: Boolean value, decides the aspect ratio of the chart, wide or portrait
 
-            .. Note:: Do not add the file extension for the file_name argument, this extension will always be .png and is added by this method
+            .. Note:: Do not add the file extension for the file name argument, this extension will always be .png and is added by this method
         '''
 
         if self.show_leg == True and self.columns == 14:
@@ -289,7 +303,7 @@ class CovidChart:
         self.plt.xticks(rotation = 90, fontsize = 16)
         self.plt.yticks(fontsize = 16)
 
-        if (self.to_tree == True or  self.to_bar == True):
+        if (self.to_tree == True or self.to_bar == True):
             #Do nothing
             pass
         elif self.legend_bottom == True:
@@ -485,13 +499,13 @@ class CovidChart:
         Adds a timestamp to the chart with the website URL
 
         Args:
-            img_path: String Value, image path of where the chart is saved
-            x_pos: Integer Value, start position of the timestamp for the x-axis
-            y_pos: Integer Value, start position of the timestamp for the y-axis
-            fontsize: Integer Value, size of the fonts to be used
-            to_be_wide: Boolean value, is the charts aspect ratio wide or portait - decides if the stamp is to go at the top or bottom of the chart
+            :img_path: String Value, image path of where the chart is saved
+            :x_pos: Integer Value, start position of the timestamp for the x-axis
+            :y_pos: Integer Value, start position of the timestamp for the y-axis
+            :fontsize: Integer Value, size of the fonts to be used
+            :to_be_wide: Boolean value, is the charts aspect ratio wide or portait - decides if the stamp is to go at the top or bottom of the chart
 
-            .. Note:: image_path is the path to the image including the file_name extension, this will be .png for charts created by this class
+            .. Note:: image_path is the path to the image including the file name extension, this will be .png for charts created by this class
         '''
         img = self.Image.open(img_path)
         now = self.datetime.now()
@@ -554,12 +568,12 @@ class CovidChart:
         year comparison with daily averages
 
         Args:
-            data: List, data be to plotted on the y-axis
-            to_show: Boolean Value, deicdes if the chart should be shown
-            label: String Value, sets the label for the plots also used in the file_name and title
-            to_be_wide: Boolean Value, sets aspect ratio to either landscape or portrait
-            y_dates: List, list of dates for the y-axis by default I used data/static/dates.csv, this will give you comparison charts starting and ending at March of each year
-            to_stamp: Boolean Value, decides if a time stamp should be added to the chart
+            :data: List, data be to plotted on the y-axis
+            :to_show: Boolean Value, deicdes if the chart should be shown
+            :label: String Value, sets the label for the plots also used in the file name and title
+            :to_be_wide: Boolean Value, sets aspect ratio to either landscape or portrait
+            :y_dates: List, list of dates for the y-axis by default I used data/static/dates.csv, this will give you comparison charts starting and ending at March of each year
+            :to_stamp: Boolean Value, decides if a time stamp should be added to the chart
         '''
 
         self.BENCH.bench_start()
@@ -619,8 +633,8 @@ class CovidChart:
         will take n/2 values before and after the datapoint to average values.
 
         Args:
-            n_values: A list of values to average
-            time: AMount of time to average the values over in days
+            :n_values: A list of values to average
+            :time: AMount of time to average the values over in days
         '''
         self.BENCH.bench_start()
         pointer = 0
@@ -679,7 +693,7 @@ class CovidChart:
         Changes the averaged time in days for LOBF set my the argument time
 
         Args:
-            time: This is the amount of time in days for averaging the data
+            :time: This is the amount of time in days for averaging the data
 
         '''
         self.averaged_time = time
@@ -690,10 +704,10 @@ class CovidChart:
         Use to change the parameters of the COVID chart i.e. to show the chart, to add a time stamp, etc
         
         Args:
-            to_show: Boolean Value, decides whether to show the plot in python
-            show_leg:  Boolean Value, decides if the default COVID legend should be displayed with VLINES. You might want to show the VLINES without the legend
-            to_add: Boolean Value,  Boolean Value, decides if the VLINES should be added to the chart
-            to_stamp: Boolean Value, decides if the time stamp should be added to the chart
+            :to_show: Boolean Value, decides whether to show the plot in python
+            :show_leg:  Boolean Value, decides if the default COVID legend should be displayed with VLINES. You might want to show the VLINES without the legend
+            :to_add: Boolean Value,  Boolean Value, decides if the VLINES should be added to the chart
+            :to_stamp: Boolean Value, decides if the time stamp should be added to the chart
         ..Note:: 
         '''
         self.to_show = to_show
@@ -707,7 +721,7 @@ class CovidChart:
         Use this to change how many columns we have in the legend
 
         Args:
-            value: Integer Value, this will be the number of columns in the legend when its at the botton of the chart
+            :value: Integer Value, this will be the number of columns in the legend when its at the botton of the chart
         '''
         self.columns = value
 
@@ -716,8 +730,8 @@ class CovidChart:
         '''
         Use this if you wnat to change the position of the legend
 
-        Args,
-            value: Boolean Value, if set to True the legend will be at the bottom of the chart otherwise it will be at the top left of the chart
+        Args:
+            :value: Boolean Value, if set to True the legend will be at the bottom of the chart otherwise it will be at the top left of the chart
         '''
         self.legend_bottom = value
 
@@ -727,7 +741,7 @@ class CovidChart:
         sets the maximum Y valve
 
         Args:
-            value: Integer Value, sets the maxmum value for the Y-axis
+            :value: Integer Value, sets the maxmum value for the Y-axis
         '''
         self.plt.ylim(ymax = value)
 
@@ -743,7 +757,7 @@ class CovidChart:
         '''
         Sets the start date for the graph to be used if you want to show VLINES when starting from a different date to the default one
 
-        Args,
-            start_date, Date Value, used to set a different start date when to_add == True (set_chart_params). By default the start date is 20nd March 2020. This can be changed if required 
+        Args:
+            :start_date: Date Value, used to set a different start date when to_add == True (set_chart_params). By default the start date is 20nd March 2020. This can be changed if required 
         '''
         self.start_dataset_date = start_date

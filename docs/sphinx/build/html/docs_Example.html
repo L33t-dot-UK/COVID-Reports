@@ -1,0 +1,455 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Example Code Snippets &#8212; COVID Reports ToolSet 1.0.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="GetCovidData Class" href="GetCovidData.html" />
+    <link rel="prev" title="Getting Started" href="docs_GettingStarted.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="index.html">
+<p class="title">COVID Reports ToolSet</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="modules.html">
+  COVID Reports Python Toolset
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="docs_GettingStarted.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Example Code Snippets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="GetCovidData.html">
+   GetCovidData Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="LoadDatasets.html">
+   LoadDatasets Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ReadHospitalData.html">
+   ReadHospitalData Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ReadVaxData.html">
+   ReadVaxData Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="CovidChart.html">
+   CovidChart Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="CovidDashboard.html">
+   CovidDashboard Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="DataFunctions.html">
+   DataFunctions Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="BenchMark.html">
+   BenchMark Class
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-a-bar-chart">
+   Creating a Bar Chart
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-a-bar-plot">
+   Creating a Bar Plot
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-a-scatter-plot">
+   Creating a Scatter Plot
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#creating-a-treemap">
+   Creating a Treemap
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <section id="module-docs_Example">
+<span id="example-code-snippets"></span><h1>Example Code Snippets<a class="headerlink" href="#module-docs_Example" title="Permalink to this headline">#</a></h1>
+<p>This document will contain some code snippets showing you how to use the COVID toolset. Before these sniipets will work you will need to ensure that
+all dependices are installed and you’ve imported the relevent classes. To see how to do this go to the getting started page of this documentation.</p>
+<p>All code examples can be found in the examples folder for this project and ran by pressing F5 in Visual Studio Code)</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>I recomend that you use the virtual environment found in the venv folder as all depencies are installed ready to use. If you don’t use this and need to install the correct depencies go to the getting started page to see what these are.</p>
+</div>
+<p>Charts can be constructed using either lists or dataframes, for more on this see the LoadDatasets documentation.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>When creating charts ensure that you use the correct y-axis values, for age profiled graphs you should be using get_aged_gov_date_series and for non age profiled graphs you should be using get_gov_date_Series from the LoadDatasets class</p>
+</div>
+<section id="creating-a-bar-chart">
+<span id="header1"></span><h2>Creating a Bar Chart<a class="headerlink" href="#creating-a-bar-chart" title="Permalink to this headline">#</a></h2>
+<p>Bar charts are bar graphs without a line of best fit and they can have the amount of each bar shown at the top of each bar. These are useful when showing data for a short period of time or summed up data.</p>
+<img alt="https://covidreports.l33t.uk/wp-content/uploads/2021/code/images/BarCases.png" src="https://covidreports.l33t.uk/wp-content/uploads/2021/code/images/BarCases.png" />
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">toolset.LoadDatasets</span> <span class="kn">import</span> <span class="n">LoadDataSets</span> <span class="k">as</span> <span class="n">govDataClass</span>
+<span class="kn">from</span> <span class="nn">toolset.CovidChart</span> <span class="kn">import</span> <span class="n">CovidChart</span> <span class="k">as</span> <span class="n">CovidChart</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">chart</span><span class="o">.</span><span class="n">set_chart_params</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span><span class="kc">False</span><span class="p">,</span><span class="kc">False</span><span class="p">,</span><span class="kc">True</span><span class="p">)</span> <span class="c1">#Change params we dont want the VLINE legend</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">clear_chart</span><span class="p">()</span>
+
+<span class="n">totData</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span> <span class="mi">19</span>
+
+<span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">19</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">govData</span><span class="o">.</span><span class="n">get_aged_case_data</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="c1">#Gets new cases</span>
+    <span class="n">totData</span><span class="p">[</span><span class="n">ii</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">data</span><span class="p">)</span> <span class="c1">#sum up cases in each age group</span>
+
+<span class="n">chart</span><span class="o">.</span><span class="n">add_bar_chart</span><span class="p">(</span><span class="n">govData</span><span class="o">.</span><span class="n">get_age_cat_string_list</span><span class="p">(),</span> <span class="n">totData</span><span class="p">,</span> <span class="s2">&quot;teal&quot;</span><span class="p">)</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">draw_chart</span><span class="p">(</span><span class="s2">&quot;Age Categories&quot;</span><span class="p">,</span> <span class="s2">&quot;Number of People&quot;</span><span class="p">,</span> <span class="s2">&quot;COVID 19 Data - </span>
+        <span class="n">Age</span> <span class="n">Profile</span> <span class="n">of</span> <span class="n">Cases</span> <span class="p">(</span><span class="s2">&quot; + nation + &quot;</span><span class="p">)</span><span class="s2">&quot;, &quot;</span><span class="n">BarCases</span><span class="s2">&quot;, False) #create the chart </span>
+</pre></div>
+</div>
+</section>
+<section id="creating-a-bar-plot">
+<h2>Creating a Bar Plot<a class="headerlink" href="#creating-a-bar-plot" title="Permalink to this headline">#</a></h2>
+<p>A bar plot is the same as a bar chart without the amount shown and a linr of best fit added</p>
+<img alt="https://covidreports.l33t.uk/wp-content/uploads/2021/code/images/deathsAndDeaths.png" src="https://covidreports.l33t.uk/wp-content/uploads/2021/code/images/deathsAndDeaths.png" />
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">toolset.LoadDatasets</span> <span class="kn">import</span> <span class="n">LoadDataSets</span> <span class="k">as</span> <span class="n">govDataClass</span>
+<span class="kn">from</span> <span class="nn">toolset.CovidChart</span> <span class="kn">import</span> <span class="n">CovidChart</span> <span class="k">as</span> <span class="n">CovidChart</span>
+
+<span class="c1"># These params will ensure that the chart is not shown, VLINES are added,</span>
+<span class="c1"># a legend is added and time stamp is added.</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">set_chart_params</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span><span class="kc">True</span><span class="p">,</span><span class="kc">True</span><span class="p">,</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">clear_chart</span><span class="p">()</span> <span class="c1">#first clear old data from the chart</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">govData</span><span class="o">.</span><span class="n">get_new_deaths</span><span class="p">()</span> <span class="c1">#Gets new deaths by death date</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">add_bar_plot</span><span class="p">(</span><span class="n">govData</span><span class="o">.</span><span class="n">get_gov_date_Series</span><span class="p">(),</span> <span class="n">data</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;Death by Death Date&quot;</span><span class="p">)</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">govData</span><span class="o">.</span><span class="n">get_deaths_by_report_date</span><span class="p">()</span> <span class="c1">#Gets new deaths</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">add_bar_plot</span><span class="p">(</span><span class="n">govData</span><span class="o">.</span><span class="n">get_gov_date_Series</span><span class="p">(),</span> <span class="n">data</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;Death by Reported Date&quot;</span><span class="p">)</span>
+
+<span class="n">chart</span><span class="o">.</span><span class="n">draw_chart</span><span class="p">(</span><span class="s2">&quot;Date&quot;</span><span class="p">,</span> <span class="s2">&quot;Number of People&quot;</span><span class="p">,</span> <span class="s2">&quot;COVID 19 Data - Death Reported Date vs Death Date </span>
+                            <span class="p">(</span><span class="s2">&quot; + nation + &quot;</span><span class="p">)</span><span class="s2">&quot; , &quot;</span><span class="n">deathsAndDeaths</span><span class="s2">&quot;, True) #create the chart</span>
+</pre></div>
+</div>
+</section>
+<section id="creating-a-scatter-plot">
+<h2>Creating a Scatter Plot<a class="headerlink" href="#creating-a-scatter-plot" title="Permalink to this headline">#</a></h2>
+<p>A scatter plot is a plot with points added and a line of best fit between the point. The points that are plotted are faint and the line of best fit is less faint. The averaging time for the line of best fit can be changed, it’s default value is 7 days.</p>
+<img alt="https://covidreports.l33t.uk/wp-content/uploads/2021/code/images/HOSDATA_AdsDiagnoses.png" src="https://covidreports.l33t.uk/wp-content/uploads/2021/code/images/HOSDATA_AdsDiagnoses.png" />
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">toolset.ReadHospitalData</span> <span class="kn">import</span> <span class="n">readHospitalData</span> <span class="k">as</span> <span class="n">HOSPITALDATA</span>
+<span class="kn">from</span> <span class="nn">toolset.CovidChart</span> <span class="kn">import</span> <span class="n">CovidChart</span> <span class="k">as</span> <span class="n">CovidChart</span>
+
+<span class="c1">#First load the datasets and join them as these are in different excel files</span>
+<span class="n">hospitalData</span> <span class="o">=</span> <span class="n">HOSPITALDATA</span><span class="p">()</span>
+<span class="n">chart</span> <span class="o">=</span> <span class="n">CovidChart</span><span class="p">()</span> <span class="c1"># create the CovidChart object</span>
+
+<span class="k">def</span> <span class="nf">addEnglandToChart</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">colour</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">to_dash</span><span class="p">):</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span> <span class="c1"># remove dates as the index</span>
+    <span class="n">chart</span><span class="o">.</span><span class="n">add_scatter_plot</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;Dates&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;ENGLAND&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span> <span class="n">colour</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">to_dash</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+<span class="n">chart</span><span class="o">.</span><span class="n">clear_chart</span><span class="p">()</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">set_chart_params</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="n">df1</span> <span class="o">=</span> <span class="n">hospitalData</span><span class="o">.</span><span class="n">join_totals_datasets</span><span class="p">(</span><span class="s2">&quot;data/hospitalData&quot;</span><span class="p">,</span> <span class="s2">&quot;Admissions Total&quot;</span><span class="p">)</span>
+<span class="n">df2</span><span class="o">=</span> <span class="n">hospitalData</span><span class="o">.</span><span class="n">join_totals_datasets</span><span class="p">(</span><span class="s2">&quot;data/hospitalData&quot;</span><span class="p">,</span> <span class="s2">&quot;Diagnoses Total&quot;</span><span class="p">)</span>
+
+<span class="n">addEnglandToChart</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="s2">&quot;purple&quot;</span><span class="p">,</span> <span class="s2">&quot;Daily Hospital Diagnoses (People Tested in Hospital with +ve PCR)&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+<span class="n">addEnglandToChart</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span> <span class="s2">&quot;darkgoldenrod&quot;</span><span class="p">,</span> <span class="s2">&quot;Daily Hospital Admissions (People going in to Hospital with +ve PCR)&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+
+<span class="n">chart</span><span class="o">.</span><span class="n">draw_chart</span><span class="p">(</span><span class="s2">&quot;Date&quot;</span><span class="p">,</span> <span class="s2">&quot;Beds Used&quot;</span><span class="p">,</span> <span class="s2">&quot;COVID-19: Daily Hospital Admissions and Diagnoses (England)&quot;</span>
+                                        <span class="p">,</span> <span class="s2">&quot;HOSDATA_AdsDiagnoses&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">,</span> <span class="n">hos_data</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Example using lists:</p>
+<img alt="https://covidreports.l33t.uk/wp-content/uploads/2021/code/images/ageDeathsPerCapita0_19.png" src="https://covidreports.l33t.uk/wp-content/uploads/2021/code/images/ageDeathsPerCapita0_19.png" />
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">toolset.LoadDatasets</span> <span class="kn">import</span> <span class="n">LoadDataSets</span> <span class="k">as</span> <span class="n">govDataClass</span>
+<span class="kn">from</span> <span class="nn">toolset.CovidChart</span> <span class="kn">import</span> <span class="n">CovidChart</span> <span class="k">as</span> <span class="n">CovidChart</span>
+<span class="kn">from</span> <span class="nn">DataFunctions</span> <span class="kn">import</span> <span class="n">Functions</span> <span class="k">as</span> <span class="n">functions</span>
+
+
+<span class="n">chart</span><span class="o">.</span><span class="n">set_chart_params</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span><span class="kc">False</span><span class="p">,</span><span class="kc">True</span><span class="p">,</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">clear_chart</span><span class="p">()</span>
+<span class="n">funcs</span> <span class="o">=</span> <span class="n">functions</span><span class="p">()</span>
+
+<span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">19</span><span class="p">):</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">govData</span><span class="o">.</span><span class="n">get_aged_death_data</span><span class="p">(</span><span class="n">ii</span><span class="p">)</span> <span class="c1">#Gets new cases</span>
+    <span class="n">permillionData</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">permillionData</span> <span class="o">=</span> <span class="n">funcs</span><span class="o">.</span><span class="n">calc_time_series_per_million</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">ii</span><span class="p">)</span>
+
+    <span class="n">chart</span><span class="o">.</span><span class="n">add_scatter_plot</span><span class="p">(</span><span class="n">govData</span><span class="o">.</span><span class="n">get_aged_gov_date_series</span><span class="p">(),</span> <span class="n">permillionData</span><span class="p">,</span> 
+            <span class="n">govData</span><span class="o">.</span><span class="n">get_line_colour_list</span><span class="p">()[</span><span class="n">ii</span><span class="p">],</span> <span class="n">govData</span><span class="o">.</span><span class="n">get_age_cat_string_list</span><span class="p">()[</span><span class="n">ii</span><span class="p">],</span> 
+            <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+<span class="n">file_name</span> <span class="o">=</span> <span class="s2">&quot;ageDeathsPerCapita&quot;</span> <span class="o">+</span> <span class="s2">&quot;0&quot;</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="s2">&quot;19&quot;</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">draw_chart</span><span class="p">(</span><span class="s2">&quot;Dates&quot;</span><span class="p">,</span> <span class="s2">&quot;Deaths Per Million&quot;</span><span class="p">,</span> <span class="s2">&quot;COVID 19 Data - Daily Deaths Per </span>
+                      <span class="n">Million</span> <span class="n">by</span> <span class="n">Age</span> <span class="ow">in</span> <span class="s2">&quot; + nation, file_name, True)</span>
+</pre></div>
+</div>
+</section>
+<section id="creating-a-treemap">
+<h2>Creating a Treemap<a class="headerlink" href="#creating-a-treemap" title="Permalink to this headline">#</a></h2>
+<p>Treemaps are great for displaying data that can be summed up to show new insights that time series graphs don’t show.</p>
+<img alt="https://covidreports.l33t.uk/wp-content/uploads/2021/code/images/TreemapDeaths.png" src="https://covidreports.l33t.uk/wp-content/uploads/2021/code/images/TreemapDeaths.png" />
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">nation</span> <span class="o">=</span> <span class="s2">&quot;England&quot;</span>
+
+<span class="kn">from</span> <span class="nn">toolset.LoadDatasets</span> <span class="kn">import</span> <span class="n">LoadDataSets</span> <span class="k">as</span> <span class="n">govDataClass</span>
+<span class="kn">from</span> <span class="nn">toolset.CovidChart</span> <span class="kn">import</span> <span class="n">CovidChart</span> <span class="k">as</span> <span class="n">CovidChart</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">govData</span> <span class="o">=</span> <span class="n">govDataClass</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">nation</span><span class="p">)</span> <span class="c1"># Create the LoadDatasets object and load csv data into it</span>
+<span class="n">chart</span> <span class="o">=</span> <span class="n">CovidChart</span><span class="p">()</span> <span class="c1"># create the CovidChart object</span>
+
+<span class="n">chart</span><span class="o">.</span><span class="n">clear_chart</span><span class="p">()</span> <span class="c1">#Clear the chart object</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">set_chart_params</span><span class="p">(</span><span class="kc">False</span><span class="p">,</span><span class="kc">False</span><span class="p">,</span><span class="kc">False</span><span class="p">,</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># Change params of the chart</span>
+
+<span class="c1"># We&#39;re taking time series data and summing it up to create the summed data for </span>
+<span class="c1"># the tree map using lists</span>
+<span class="n">summedData</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">11</span>
+<span class="n">ageCats</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">11</span>
+<span class="n">colours</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">11</span>
+
+<span class="c1"># I&#39;m now creating 2 new categories for the under 25 and under 50 age groups</span>
+<span class="n">ageCats</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;&lt; 25 &quot;</span>
+<span class="n">colours</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;whitesmoke&#39;</span>
+<span class="n">ageCats</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;25 to 49&quot;</span>
+<span class="n">colours</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;gray&#39;</span>
+<span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">5</span><span class="p">):</span> <span class="c1"># All under 25</span>
+    <span class="n">summedData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">summedData</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">govData</span><span class="o">.</span><span class="n">get_aged_death_data</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">10</span><span class="p">):</span> <span class="c1"># All under 50&#39;s</span>
+    <span class="n">summedData</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">summedData</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">govData</span><span class="o">.</span><span class="n">get_aged_death_data</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span>
+
+<span class="k">for</span> <span class="n">ii</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">19</span><span class="p">):</span>
+    <span class="n">ageCats</span><span class="p">[</span><span class="n">ii</span> <span class="o">-</span> <span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">govData</span><span class="o">.</span><span class="n">get_age_cat_string_list</span><span class="p">()[</span><span class="n">ii</span><span class="p">]</span>
+    <span class="n">colours</span><span class="p">[</span><span class="n">ii</span> <span class="o">-</span> <span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">govData</span><span class="o">.</span><span class="n">get_line_colour_list</span><span class="p">()[</span><span class="n">ii</span><span class="p">]</span>
+    <span class="n">summedData</span><span class="p">[</span><span class="n">ii</span> <span class="o">-</span> <span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">govData</span><span class="o">.</span><span class="n">get_aged_death_data</span><span class="p">(</span><span class="n">ii</span><span class="p">))</span>
+
+<span class="n">chart</span><span class="o">.</span><span class="n">add_treemap</span><span class="p">(</span><span class="n">summedData</span><span class="p">,</span> <span class="n">ageCats</span><span class="p">,</span> <span class="n">colours</span><span class="p">)</span> <span class="c1">#Add the data to the tree map</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">draw_chart</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;COVID 19 Data - Deaths by Age in &quot;</span> <span class="o">+</span> 
+                        <span class="n">nation</span><span class="p">,</span> <span class="s2">&quot;TreemapDeaths&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span> <span class="c1"># create the chart</span>
+</pre></div>
+</div>
+<p>Another example using dataframes rather than lists:</p>
+<img alt="https://covidreports.l33t.uk/wp-content/uploads/2021/code/images/Example_TreeMap.png" src="https://covidreports.l33t.uk/wp-content/uploads/2021/code/images/Example_TreeMap.png" />
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">toolset.ReadHospitalData</span> <span class="kn">import</span> <span class="n">readHospitalData</span> <span class="k">as</span> <span class="n">HOSPITALDATA</span>
+<span class="kn">from</span> <span class="nn">toolset.CovidChart</span> <span class="kn">import</span> <span class="n">CovidChart</span> <span class="k">as</span> <span class="n">CovidChart</span>
+
+<span class="c1">#First load the datasets and join them as these are in different excel files</span>
+<span class="n">hospitalData</span> <span class="o">=</span> <span class="n">HOSPITALDATA</span><span class="p">()</span>
+<span class="n">chart</span> <span class="o">=</span> <span class="n">CovidChart</span><span class="p">()</span> <span class="c1"># create the CovidChart object</span>
+
+<span class="c1"># Get all data from the admissions Total worksheet</span>
+<span class="n">df1</span> <span class="o">=</span> <span class="n">hospitalData</span><span class="o">.</span><span class="n">join_totals_datasets</span><span class="p">(</span><span class="s2">&quot;data/hospitalData&quot;</span><span class="p">,</span> <span class="s2">&quot;Admissions Total&quot;</span><span class="p">)</span>
+
+<span class="c1"># Get all data from the diagnoses Total worksheet</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">hospitalData</span><span class="o">.</span><span class="n">join_totals_datasets</span><span class="p">(</span><span class="s2">&quot;data/hospitalData&quot;</span><span class="p">,</span> <span class="s2">&quot;Diagnoses Total&quot;</span><span class="p">)</span>
+
+<span class="n">totalAdmission</span> <span class="o">=</span>  <span class="n">df1</span><span class="p">[</span><span class="s2">&quot;ENGLAND&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="c1"># sum up the admisison data</span>
+<span class="n">totalDiag</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[</span><span class="s2">&quot;ENGLAND&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="c1"># sum up the diagnoses data</span>
+
+<span class="c1"># add the above data to a treemap</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">add_treemap</span><span class="p">([</span><span class="n">totalAdmission</span><span class="p">,</span> <span class="n">totalDiag</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;Admissions&quot;</span><span class="p">,</span> <span class="s2">&quot;Diagnoses&quot;</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;red&quot;</span><span class="p">])</span>
+<span class="c1"># draw the treemap and save to file</span>
+<span class="n">chart</span><span class="o">.</span><span class="n">draw_chart</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">,</span><span class="s2">&quot;Hospital Admissions vs Diagnoses&quot;</span><span class="p">,</span> <span class="s2">&quot;Example_TreeMap&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>These examples are here to get you started with the toolset, for complex examples showing how to use all of the toolsets features go to the Python files in the src folder and see how they’re written.</p>
+<p>For support or bugs you can find me at Dave at L33T dot uk</p>
+</section>
+</section>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="docs_GettingStarted.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Getting Started</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="GetCovidData.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">GetCovidData Class</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2022, David Bradshaw.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>

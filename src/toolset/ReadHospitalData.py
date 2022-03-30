@@ -8,11 +8,14 @@ class readHospitalData():
     
     .. Note:  The excel files must in be date order where the first excel file should be the earliest
 
+    .. Warning: This code was hacked together very quickly to test some theories towards the end of 2021. It is slow and takes 7 seconds to load each worksheet. It will be improved in due course.
+
     '''
 
+    
     import pandas as pd
     import os
-
+    
 
     def __init__(self):
         pass
@@ -24,8 +27,8 @@ class readHospitalData():
         Then turn the top of the worksheet into a dataframe, this only reads the totals from each worksheet for ENGLAND and the english regions, it does not read in data for each trust.
 
         Args:
-            excel_file: String Value, location of the excel file to be used.
-            es: String Value, worksheet name within the excel file to read.
+            :excel_file: String Value, location of the excel file to be used.
+            :ws: String Value, worksheet name within the excel file to read.
 
         Returns:
             A dataframe with all data from the totals part of any given worksheet.
@@ -77,7 +80,7 @@ class readHospitalData():
         there!
 
         Args:
-            directory: String Value, the directory that contains hospital data.
+            :directory: String Value, the directory that contains hospital data.
 
         Returns:
             A dataframe that contains totals data from all files within the directory and for all worksheets. This function will merge the excel files.
@@ -110,8 +113,8 @@ class readHospitalData():
         This methods similar to the above one however it will onlt merge data for the selected worksheet.
 
         Args:
-            directory: String Value, this is the directory where the hospital data is.
-            ws: String Value, this is the worksheet that you want to read.
+            :directory: String Value, this is the directory where the hospital data is.
+            :ws: String Value, this is the worksheet that you want to read.
         '''
         #iterate through the directory
         excel_files = self.os.listdir(directory)

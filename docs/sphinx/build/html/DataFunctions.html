@@ -1,115 +1,472 @@
-<!DOCTYPE html>
-<html class="writer-html5" lang="en" >
-<head>
-  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>DataFunctions Class &mdash; COVID Reports ToolSet 1.0.0 documentation</title>
-      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
-  <!--[if lt IE 9]>
-    <script src="_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-        <script src="_static/jquery.js"></script>
-        <script src="_static/underscore.js"></script>
-        <script src="_static/doctools.js"></script>
-    <script src="_static/js/theme.js"></script>
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>DataFunctions Class &#8212; COVID Reports ToolSet 1.0.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="GetCovidData Class" href="GetCovidData.html" />
-    <link rel="prev" title="CovidDashboard Class" href="CovidDashboard.html" /> 
-</head>
+    <link rel="next" title="BenchMark Class" href="BenchMark.html" />
+    <link rel="prev" title="CovidDashboard Class" href="CovidDashboard.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
 
-<body class="wy-body-for-nav"> 
-  <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-            <a href="index.html" class="icon icon-home"> COVID Reports ToolSet
-          </a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
-              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="modules.html">toolset</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="BenchMark.html">BenchMark Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CovidChart.html">CovidChart Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="CovidDashboard.html">CovidDashboard Class</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">DataFunctions Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="GetCovidData.html">GetCovidData Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="LoadDatasets.html">LoadDatasets Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ReadHospitalData.html">ReadHospitalData Class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="ReadVaxData.html">ReadVaxData Class</a></li>
-</ul>
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="index.html">
+<p class="title">COVID Reports ToolSet</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="modules.html">
+  COVID Reports Python Toolset
+ </a>
 </li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="docs_GettingStarted.html">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="docs_Example.html">
+   Example Code Snippets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="GetCovidData.html">
+   GetCovidData Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="LoadDatasets.html">
+   LoadDatasets Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ReadHospitalData.html">
+   ReadHospitalData Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ReadVaxData.html">
+   ReadVaxData Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="CovidChart.html">
+   CovidChart Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="CovidDashboard.html">
+   CovidDashboard Class
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   DataFunctions Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="BenchMark.html">
+   BenchMark Class
+  </a>
+ </li>
 </ul>
 
-        </div>
-      </div>
-    </nav>
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
 
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">COVID Reports ToolSet</a>
-      </nav>
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
 
-      <div class="wy-nav-content">
-        <div class="rst-content">
-          <div role="navigation" aria-label="Page navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="modules.html">toolset</a> &raquo;</li>
-      <li>DataFunctions Class</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/DataFunctions.rst.txt" rel="nofollow"> View page source</a>
-      </li>
-  </ul>
-  <hr/>
-</div>
-          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
-           <div itemprop="articleBody">
-             
-  <section id="datafunctions-class">
-<h1>DataFunctions Class<a class="headerlink" href="#datafunctions-class" title="Permalink to this headline"></a></h1>
+<nav id="bd-toc-nav">
+    
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <section id="module-DataFunctions">
+<span id="datafunctions-class"></span><h1>DataFunctions Class<a class="headerlink" href="#module-DataFunctions" title="Permalink to this headline">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="DataFunctions.Functions">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">DataFunctions.</span></span><span class="sig-name descname"><span class="pre">Functions</span></span><a class="headerlink" href="#DataFunctions.Functions" title="Permalink to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Provides various functions when manipulating COVID data. These functions are mainly to be used with List data and will help you to do certain things. Any functions that will be reused should be put here.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="DataFunctions.Functions.Calc_CFR">
+<span class="sig-name descname"><span class="pre">Calc_CFR</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deaths</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cases</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataFunctions.Functions.Calc_CFR" title="Permalink to this definition">#</a></dt>
+<dd><p>Calculates the CFR with a specified lag in days.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">lag</dt>
+<dd class="field-odd"><p>Integer Value, the amount of lag in days to have between the cases and deaths.</p>
+</dd>
+<dt class="field-even">deaths</dt>
+<dd class="field-even"><p>List, a list of deaths.</p>
+</dd>
+<dt class="field-odd">cases</dt>
+<dd class="field-odd"><p>List, a list of cases.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>A List of values that is the ((deaths + lag) / cases) given as a percentage.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DataFunctions.Functions.add_aged_data">
+<span class="sig-name descname"><span class="pre">add_aged_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cat</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">L_Limit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_Limit</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">govData</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataFunctions.Functions.add_aged_data" title="Permalink to this definition">#</a></dt>
+<dd><p>This method will iterate through age cats and add the data together
+using the add_datasets Method.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">cat</dt>
+<dd class="field-odd"><p>String Value, this will be either deaths or cases.</p>
+</dd>
+<dt class="field-even">L_Limit</dt>
+<dd class="field-even"><p>Integer Value, this is the lower age limit 0 - 18.</p>
+</dd>
+<dt class="field-odd">h_Limit</dt>
+<dd class="field-odd"><p>Integer Value, this is the upper age limit 0 - 18.</p>
+</dd>
+<dt class="field-even">govData</dt>
+<dd class="field-even"><p>toolset.LoadDataSets object, this is the LoadDataSets object thats passed to this class.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DataFunctions.Functions.add_datasets">
+<span class="sig-name descname"><span class="pre">add_datasets</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">set1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataFunctions.Functions.add_datasets" title="Permalink to this definition">#</a></dt>
+<dd><p>Adds 2 datasets, both datasets must be of the same length
+This can be used to add deaths from different age groups together for instance
+O/P will be newSet[1] = data1[1] + data2[1], newSet[2] = data1[2] + data2[2],
+newSet[n] = data1[n] + data2[n], etc.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">set1</dt>
+<dd class="field-odd"><p>List, the first list to add to the next list.</p>
+</dd>
+<dt class="field-even">set2</dt>
+<dd class="field-even"><p>List, the second list to add to the first list.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>A List that contains both lists set1 + set2.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DataFunctions.Functions.calc_ratio_as_int">
+<span class="sig-name descname"><span class="pre">calc_ratio_as_int</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataFunctions.Functions.calc_ratio_as_int" title="Permalink to this definition">#</a></dt>
+<dd><p>Used to divide one number by another and returning the result as an integer 
+Can be use to calculate CFR or other ratios, use this when wnating data to plot on a graph.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">data1</dt>
+<dd class="field-odd"><p>Integer Value, this value will be divided by the next.</p>
+</dd>
+<dt class="field-even">data2</dt>
+<dd class="field-even"><p>Integer Value, this value will divide the above value; data1/data2.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>An Integer value representing the percentage.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DataFunctions.Functions.calc_ratio_as_int_noList">
+<span class="sig-name descname"><span class="pre">calc_ratio_as_int_noList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataFunctions.Functions.calc_ratio_as_int_noList" title="Permalink to this definition">#</a></dt>
+<dd><p>Used to divide one number by another and returning the result as an integer 
+Can be use to calculate CFR or other ratios, use this when wanting data to plot on a graph
+Use this when data1 is a list but data2 is a single value.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">data1</dt>
+<dd class="field-odd"><p>List, the values to be used to calculate the ratio.</p>
+</dd>
+<dt class="field-even">data2</dt>
+<dd class="field-even"><p>Integer Value, a single value to be use as the denominator for the calculation.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>A list of calulated values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DataFunctions.Functions.calc_ratio_as_percentage">
+<span class="sig-name descname"><span class="pre">calc_ratio_as_percentage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataFunctions.Functions.calc_ratio_as_percentage" title="Permalink to this definition">#</a></dt>
+<dd><p>Used to divide one number by another and returning the result as a string percentage
+Can be use to calculate CFR or other ratios, use this when wanting percentages for a table that are formatted.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>&gt;data1: Integer Value, this value will be divided by the next.
+&gt;data2: Integer Value, this value will divide the above value; data1/data2.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A string value with the percentage follows by % sign.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DataFunctions.Functions.calc_time_series_per_million">
+<span class="sig-name descname"><span class="pre">calc_time_series_per_million</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">age_group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataFunctions.Functions.calc_time_series_per_million" title="Permalink to this definition">#</a></dt>
+<dd><p>Pass in an list of data and this will calculate the per million for that time series list
+the data list should just be a list of time series numbers. You also need toLoad pass in
+the age group 0 toLoad 18.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>&gt;data: List, timseries data that contain the numbers such as case or death figures.
+&gt;age_group: Integer Value, age group from 0 to 18, the method will get population data from toolset.LoadDatasets.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A time series list with per million amounts for the selected age group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DataFunctions.Functions.calc_total_per_million">
+<span class="sig-name descname"><span class="pre">calc_total_per_million</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">age_group</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataFunctions.Functions.calc_total_per_million" title="Permalink to this definition">#</a></dt>
+<dd><p>Pass in a list of data and this will calculate the total per million for that list
+the data list should just be a list of time series numbers. You also need to pass in
+the age group 0 to 18.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">data</dt>
+<dd class="field-odd"><p>List, timseries data that contain the numbers such as case or death figures.</p>
+</dd>
+<dt class="field-even">age_group</dt>
+<dd class="field-even"><p>Integer Value, age group from 0 to 18, the method will get population data from toolset.LoadDatasets.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>A single integer value that will be the amount per million for the selected age group.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DataFunctions.Functions.get_first_records">
+<span class="sig-name descname"><span class="pre">get_first_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">days_to_sub</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataFunctions.Functions.get_first_records" title="Permalink to this definition">#</a></dt>
+<dd><p>Returns the first n amount of records</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">days_to_sub</dt>
+<dd class="field-odd"><p>Integer Value, amount of days to return from the start of the dataset.</p>
+</dd>
+<dt class="field-even">data</dt>
+<dd class="field-even"><p>List, this is the full dataset as a list.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>A List of the first n values from the original dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DataFunctions.Functions.get_last_records">
+<span class="sig-name descname"><span class="pre">get_last_records</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">days_to_sub</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataFunctions.Functions.get_last_records" title="Permalink to this definition">#</a></dt>
+<dd><p>Will return n amount of last records, so for instance if you want the last 90 days of cases
+you would pass the arguments 90 and govData.get_new_cases().</p>
+<dl class="simple">
+<dt>Args:</dt><dd><dl class="field-list simple">
+<dt class="field-odd">days_to_sub</dt>
+<dd class="field-odd"><p>Integer Value, amount of days to return from the end of the dataset.</p>
+</dd>
+<dt class="field-even">data</dt>
+<dd class="field-even"><p>List, this is the full dataset as a list.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>A List of the last n values from the original dataset.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="DataFunctions.Functions.scale_data">
+<span class="sig-name descname"><span class="pre">scale_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scale_factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#DataFunctions.Functions.scale_data" title="Permalink to this definition">#</a></dt>
+<dd><p>Uae this when you want to scale data in a list.</p>
+<dl class="simple">
+<dt>Args: </dt><dd><dl class="field-list simple">
+<dt class="field-odd">data</dt>
+<dd class="field-odd"><p>List, the data to be scaled.</p>
+</dd>
+<dt class="field-even">scale_factor</dt>
+<dd class="field-even"><p>Float Value, by how much to scale the data for a 25% increase use 1.25, etc.</p>
+</dd>
+</dl>
+</dd>
+<dt>Returns:</dt><dd><p>A List with the scaled values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 </section>
 
 
-           </div>
-          </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="CovidDashboard.html" class="btn btn-neutral float-left" title="CovidDashboard Class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="GetCovidData.html" class="btn btn-neutral float-right" title="GetCovidData Class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
-    </div>
-
-  <hr/>
-
-  <div role="contentinfo">
-    <p>&#169; Copyright 2022, David Bradshaw.</p>
-  </div>
-
-  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
-    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
-    provided by <a href="https://readthedocs.org">Read the Docs</a>.
-   
-
-</footer>
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="CovidDashboard.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">CovidDashboard Class</p>
         </div>
-      </div>
-    </section>
-  </div>
-  <script>
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script> 
+    </a>
+    <a class='right-next' id="next-link" href="BenchMark.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">BenchMark Class</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
 
-</body>
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2022, David Bradshaw.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
 </html>

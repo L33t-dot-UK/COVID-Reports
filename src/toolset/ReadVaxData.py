@@ -3,9 +3,12 @@ class readVaxData:
     This class is used to read vaccination data from vax_data.csv
     for this we will use dataframes similar to how we dealt with hospital data
     '''
+
+    
     import ast
     import numpy as np
     import pandas as pd
+    
 
     def __init__(self, nation):
 
@@ -17,20 +20,20 @@ class readVaxData:
 
     def get_vax_data(self):
         '''
-        Loads the data into a dataframe
+        Loads the data into a dataframe.
 
         Returns:
-            Vaccination dataframe in the nested list format
+            Vaccination dataframe in the nested list format.
         '''
         vax_df = self.pd.read_csv("data/autoimport/vax_data" + self.nation + ".csv")
         return vax_df
     
     def unpack_data(self):
         '''
-        unpacks the vaccination data as each day is in a nested list
+        unpacks the vaccination data as each day is in a nested list.
 
         Returns:
-            The full unpacked dataframe 
+            The full unpacked dataframe .
         '''
         df = self.get_vax_data()
 
@@ -64,13 +67,13 @@ class readVaxData:
 
     def get_vax_aged_data(self, age_group):
         '''
-        returns vaccination data for a given age group as a dataframe. This makes it easier to navigate the dataframe
+        returns vaccination data for a given age group as a dataframe. This makes it easier to navigate the dataframe.
 
         Args:
-            age_group: Integer Value, these age groups can be seen at the start of this class under self.vax_age_groups
+            :age_group: Integer Value, these age groups can be seen at the start of this class under self.vax_age_groups.
 
         Returns:
-            A dataframe with vaccinaiton data for the selected age group
+            A dataframe with vaccinaiton data for the selected age group.
         '''
         df = self.unpacked[self.unpacked['age'] == age_group]
         return df
@@ -78,20 +81,20 @@ class readVaxData:
     
     def get_packed_data(self):
         '''
-        Returns all vaccinaiton data in the nested list format
+        Returns all vaccinaiton data in the nested list format.
         '''
         return self.unpacked
 
 
     def get_vax_age_groups(self):
         '''
-        Returns the age groups as they are in the dataframe
+        Returns the age groups as they are in the dataframe.
         '''
         return self.vax_age_groups.copy()
 
 
     def get_vax_age_groups_string(self):
         '''
-        Returns the age groups for use in a graph or report
+        Returns the age groups for use in a graph or report.
         '''
         return self.vax_age_groups_string.copy()

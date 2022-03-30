@@ -1,28 +1,70 @@
 class GetCOVIDData:
     '''
-    Create the object and 2 CSV files will be created data.csv and ageData.csv.
-    These files contain the fields indicated below and downloads, data from the
-    UK Governments COVID Dashboard using their own API version 1.
-
-    This class has not methods everything is done in the constructor.
-
-    If you want different datasets goto https://coronavirus.data.gov.uk/details/download to
-    choose which datasets to download and amend the below code. If new datasets are downloaded 
-    then the Class LoadDataSets.py will need to be amended if your using it.
-
-    .. Note:: Age profiled data for Scotland, Wales and NI is not available. If you select one of these nations the age profiled data will not be downloaded. You will only download non-age specific data saved in data.csv
+    This class will download 3 CSV files from the UK Governments COVID API. These files will be saved in /data/autoimport and loaded in memory by the LoadDatasets class
     '''
+    #Create the object and 2 CSV files will be created data.csv and ageData.csv.
+    #These files contain the fields indicated below and downloads, data from the
+    #UK Governments COVID Dashboard using their own API version 1.
+
+    #This class has not methods everything is done in the constructor.
+
+    #If you want different datasets goto https://coronavirus.data.gov.uk/details/download to
+    #choose which datasets to download and amend the below code. If new datasets are downloaded 
+    #then the Class LoadDataSets.py will need to be amended if your using it.
+
+    
+    import sys
+    sys.path.append('./src/toolset')
+
     from uk_covid19 import Cov19API #This is the UK Governments COVID API to install use "PIP install uk_covid19"
-    from .BenchMark import Benchmark as Benchmark
+    from BenchMark import Benchmark as Benchmark
     BENCH = Benchmark()
     BENCH.set_bench(False) #Bechmark output will be printed if this is set to true
     
+    
     def __init__(self, nation):
+        self.pull_data(nation)
+
+    def pull_data(self, nation):
         '''
-        Will download the data, create data.csv and ageData.csv
+        This method is called when the GetCovidData object is created.
+
+        Example::
+
+            from GetCovidData import GetCOVIDData as datapull
+            pulldata = dataPull("England")
+
+        It downloads covid data using the UK Governments COVID-19 API Version 1. You can add more fields to this class in order to get different datasets. The current datasets that are downloaded can be view below.
+
+            | date
+            | areaName
+            | areaCode
+            | hospitalCases
+            | newAdmissions
+            | newCasesBySpecimenDate
+            | newDeaths28DaysByDeathDate
+            | newPillarTwoTestsByPublishDate
+            | newDeaths28DaysByPublishDate
+            | newPillarOneTestsByPublishDate
+            | newCasesLFDConfirmedPCRBySpecimenDate
+            | newCasesPCROnlyBySpecimenDate
+            | newPCRTestsByPublishDate
+            | newLFDTests
+            | newCasesLFDOnlyBySpecimenDate
+            | cumPeopleVaccinatedSecondDoseByPublishDate
+            | newCasesByPublishDate  
+
+            | newCasesBySpecimenDateAgeDemographics
+            | newDeaths28DaysByDeathDateAgeDemographics
+
+            | vaccinationsAgeDemographics
+
+        To view datasets that can be added go to https://coronavirus.data.gov.uk/details/download 
+
+        .. Note:: Age profiled data for Scotland, Wales and NI is not available. If you select one of these nations the age profiled data will not be downloaded. You will only download non-age specific data saved in data.csv
 
         Args:
-            nations: String Value, can be "England", "Scotland" or "Wales"
+            :nation: String Value, can be "England", "Scotland" or "Wales"
         '''
 
         #This is where you put all the fields that you want to download

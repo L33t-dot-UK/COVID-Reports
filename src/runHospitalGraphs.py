@@ -279,20 +279,18 @@ def bedCom():
     chart.draw_chart("Date", "Number of People", "COVID-19: TEST", "HOSDATA_TESTA", True, hos_data = True)
 
 
+def main():
+    drawBedsvsBeds()
+    drawAdsDiagsActual()
+    drawAdsDiagsPerCap()
+    drawAdsDiags()
+    drawC19Abs()
+    drawPopulaitonChart()
+    drawRecovery()
+    #drawFromNursing()
+    #drawMechBeds()
+    #bedCom()
+    
 
-
-drawBedsvsBeds()
-drawAdsDiagsActual()
-drawAdsDiagsPerCap()
-drawAdsDiags()
-drawC19Abs()
-drawPopulaitonChart()
-drawRecovery()
-#drawFromNursing()
-#drawMechBeds()
-#bedCom()
-
-
-
-
-
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,336 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Getting Started &#8212; COVID Reports ToolSet 1.0.0 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Example Code Snippets" href="docs_Example.html" />
+    <link rel="prev" title="COVID Reports Python Toolset" href="modules.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+    <nav class="navbar navbar-light navbar-expand-lg bg-light fixed-top bd-navbar" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="index.html">
+<p class="title">COVID Reports ToolSet</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 current active nav-item">
+ <a class="reference internal nav-link" href="modules.html">
+  COVID Reports Python Toolset
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+    </nav>
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items"><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search the docs ..." aria-label="Search the docs ..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Getting Started
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="docs_Example.html">
+   Example Code Snippets
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="GetCovidData.html">
+   GetCovidData Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="LoadDatasets.html">
+   LoadDatasets Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ReadHospitalData.html">
+   ReadHospitalData Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="ReadVaxData.html">
+   ReadVaxData Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="CovidChart.html">
+   CovidChart Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="CovidDashboard.html">
+   CovidDashboard Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="DataFunctions.html">
+   DataFunctions Class
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="BenchMark.html">
+   BenchMark Class
+  </a>
+ </li>
+</ul>
+
+  </div>
+</nav>
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+
+<nav id="bd-toc-nav">
+    
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                
+  <section id="module-docs_GettingStarted">
+<span id="getting-started"></span><h1>Getting Started<a class="headerlink" href="#module-docs_GettingStarted" title="Permalink to this headline">#</a></h1>
+<p>To use the COVID Reports Python Toolset go tou our Git hub Repo, download, fork or clone it.</p>
+<p>All toolset classes are stored in the /src/toolset folder. These are the classes that are used to create charts and import data using the Goverments API.</p>
+<p>Example code can be viewed in the Examples folder and in this documentation. All of your code should be put in the src folder.</p>
+<p>For imports to work always include the below line at the top of your code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;./src/toolset&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Once this is added you can import the modules in 2 ways the first way is shown below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">toolset.LoadDatasets</span> <span class="kn">import</span> <span class="n">LoadDataSets</span> <span class="k">as</span> <span class="n">govDataClass</span>
+<span class="kn">from</span> <span class="nn">toolset.CovidChart</span> <span class="kn">import</span> <span class="n">CovidChart</span> <span class="k">as</span> <span class="n">CovidChart</span>
+<span class="kn">from</span> <span class="nn">toolset.GetCovidData</span> <span class="kn">import</span> <span class="n">GetCOVIDData</span> <span class="k">as</span> <span class="n">getData</span>
+<span class="kn">from</span> <span class="nn">toolset.DataFunctions</span> <span class="kn">import</span> <span class="n">Functions</span> <span class="k">as</span> <span class="n">functions</span>
+<span class="kn">from</span> <span class="nn">toolset.CovidDashboard</span> <span class="kn">import</span> <span class="n">Dashboard</span> <span class="k">as</span> <span class="n">DASH</span>
+<span class="kn">from</span> <span class="nn">toolset.ReadVaxData</span> <span class="kn">import</span> <span class="n">readVaxData</span> <span class="k">as</span> <span class="n">vax_data</span>
+<span class="kn">from</span> <span class="nn">toolset.ReadHospitalData</span> <span class="kn">import</span> <span class="n">readHospitalData</span> <span class="k">as</span> <span class="n">HOSPITALDATA</span>
+<span class="kn">from</span> <span class="nn">toolset.BenchMark</span> <span class="kn">import</span> <span class="n">Benchmark</span> <span class="k">as</span> <span class="n">Benchmark</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The above way is to be used when putting you code in the src folder.</p>
+</div>
+<p>Another way to import the functions is shown here:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">LoadDatasets</span> <span class="kn">import</span> <span class="n">LoadDataSets</span> <span class="k">as</span> <span class="n">govDataClass</span>
+<span class="kn">from</span> <span class="nn">CovidChart</span> <span class="kn">import</span> <span class="n">CovidChart</span> <span class="k">as</span> <span class="n">CovidChart</span>
+<span class="kn">from</span> <span class="nn">GetCovidData</span> <span class="kn">import</span> <span class="n">GetCOVIDData</span> <span class="k">as</span> <span class="n">getData</span>
+<span class="kn">from</span> <span class="nn">DataFunctions</span> <span class="kn">import</span> <span class="n">Functions</span> <span class="k">as</span> <span class="n">functions</span>
+<span class="kn">from</span> <span class="nn">CovidDashboard</span> <span class="kn">import</span> <span class="n">Dashboard</span> <span class="k">as</span> <span class="n">DASH</span>
+<span class="kn">from</span> <span class="nn">ReadVaxData</span> <span class="kn">import</span> <span class="n">readVaxData</span> <span class="k">as</span> <span class="n">vax_data</span>
+<span class="kn">from</span> <span class="nn">ReadHospitalData</span> <span class="kn">import</span> <span class="n">readHospitalData</span> <span class="k">as</span> <span class="n">HOSPITALDATA</span>
+<span class="kn">from</span> <span class="nn">BenchMark</span> <span class="kn">import</span> <span class="n">Benchmark</span> <span class="k">as</span> <span class="n">Benchmark</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If you use the above import with the toolset folder ommitted you might get syntax error highlighting however the code should still run. Use this method if your code is going in a different folder under root such as the examples folder.</p>
+</div>
+<p>Once the libaries are imported you will be able to access all methods within the classes. I recomend using Visual Studio Code with this project as it will automatically detect the virtual
+environment that is stored in the venv folder. All dependecies have been added to this virtual environment. The dependcies are listed below incase you have any issues:</p>
+<blockquote>
+<div><div class="line-block">
+<div class="line">uk_coivd19</div>
+<div class="line">pandas</div>
+<div class="line">Matplotlib</div>
+<div class="line">Squarify</div>
+<div class="line">PIL</div>
+<div class="line">openpyxl</div>
+</div>
+</div></blockquote>
+<p>A summary of what each class does is shown below;</p>
+<dl class="field-list simple">
+<dt class="field-odd">GetCovidData</dt>
+<dd class="field-odd"><p>Used to download datasets from the UK Governments COVID API.</p>
+</dd>
+<dt class="field-even">LoadDatasets</dt>
+<dd class="field-even"><p>Used to load the datasets into memory and offers easy to use methods to access the data in lists and as dataframes.</p>
+</dd>
+<dt class="field-odd">ReadHospitalData</dt>
+<dd class="field-odd"><p>Reads hospital data from xlsx files downloaded manually from the NHS statistical service with detailed hsopital stats for England. Retruns data as a dataframe.</p>
+</dd>
+<dt class="field-even">ReadVaxData</dt>
+<dd class="field-even"><p>Reads vaccination data that was downloaded with GetCovidData. Returns data as a dataframe.</p>
+</dd>
+<dt class="field-odd">CovidChart</dt>
+<dd class="field-odd"><p>Used to create charts with a consistent look and feel. Allows the creation of bar charts, plot, scatter plots and tree maps.</p>
+</dd>
+<dt class="field-even">CovidDashboard</dt>
+<dd class="field-even"><p>Used to create tables and dashboards from data and charts created by the CovidChart method.</p>
+</dd>
+<dt class="field-odd">DataFunctions</dt>
+<dd class="field-odd"><p>Contains functions used to manipulate lists making it easier to create charts.</p>
+</dd>
+<dt class="field-even">Benchmark</dt>
+<dd class="field-even"><p>Used to benchmark various methods.</p>
+</dd>
+</dl>
+<p>If you want to change the time stamp i.e. change the URL to your own, you need to edit:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CovidChart</span><span class="o">.</span><span class="n">create_time_stamp</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>If you want to change how the charts looks you need to edit:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">CovidChart</span><span class="o">.</span><span class="n">draw_chart</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Documentation for this toolset can be viewed at <a class="reference external" href="https://covidreports.l33t.uk/API">https://covidreports.l33t.uk/API</a></p>
+<p>Github Repo <a class="reference external" href="https://github.com/L33t-dot-UK/COVID-Reports">https://github.com/L33t-dot-UK/COVID-Reports</a></p>
+<p>For support or bugs you can find me at Dave at L33T dot uk</p>
+</section>
+
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="modules.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">COVID Reports Python Toolset</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="docs_Example.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Example Code Snippets</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2022, David Bradshaw.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
