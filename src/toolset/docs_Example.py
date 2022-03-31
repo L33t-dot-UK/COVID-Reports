@@ -1,4 +1,4 @@
-#DO NOT USE THIS IS PART OF THE DOCUMENTATION SYSTEM
+#DO NOT USE -------- PART OF THE DOCUMENTATION SYSTEM
 
 '''
 This document will contain some code snippets showing you how to use the COVID toolset. Before these sniipets will work you will need to ensure that
@@ -14,6 +14,21 @@ Charts can be constructed using either lists or dataframes, for more on this see
 
 .. _header1:
 
+Downloading COVID Data
+----------------------
+
+This toolset links into the UK Governments COVID API allowing you to download COVID-19 data automatically. To do this you need to create a GetCovidData object. The creatation of this object will pull required data and save it to csv files in /data/autoimport.
+The below code shows how to do this:
+
+.. code-block:: python
+
+    from toolset.GetCovidData import GetCOVIDData as getData # Import the class
+    nation = "England" # Select the nation you want data for
+    pullData = getData(nation) # get the latest data
+
+.. Note:: Data will be saved in 2 csv files one named data + nation.csv and the other named dataAge.csv. If you select a different country i.e. Scotland dataAge will still be 
+    downloaded however it will contian data for England and not Scotland. Data.csv will contain data for the selected nation. Aged profiled data is only available for England at this time.
+
 Creating a Bar Chart
 --------------------
 
@@ -27,6 +42,10 @@ Bar charts are bar graphs without a line of best fit and they can have the amoun
     from toolset.CovidChart import CovidChart as CovidChart
     import numpy as np
 
+    nation = "England"
+    govData = govDataClass(True, nation) # create the LoadDatasets object and load the data
+    chart = CovidChart() # create the CovidChart object
+
     chart.set_chart_params(False,False,False,True) #Change params we dont want the VLINE legend
     chart.clear_chart()
 
@@ -37,8 +56,9 @@ Bar charts are bar graphs without a line of best fit and they can have the amoun
         totData[ii] = np.sum(data) #sum up cases in each age group
 
     chart.add_bar_chart(govData.get_age_cat_string_list(), totData, "teal")
-    chart.draw_chart("Age Categories", "Number of People", "COVID 19 Data - 
-            Age Profile of Cases (" + nation + ")", "BarCases", False) #create the chart 
+
+    chart.draw_chart("Age Categories", "Number of People", 
+        "COVID 19 Data - Age Profile of Cases (" + nation + ")", "BarCases", False) #create the chart 
 
 Creating a Bar Plot
 -------------------
@@ -52,6 +72,10 @@ A bar plot is the same as a bar chart without the amount shown and a linr of bes
     from toolset.LoadDatasets import LoadDataSets as govDataClass
     from toolset.CovidChart import CovidChart as CovidChart
 
+    nation = "England"
+    govData = govDataClass(True, nation) # create the LoadDatasets object and load the data
+    chart = CovidChart() # create the CovidChart object
+
     # These params will ensure that the chart is not shown, VLINES are added,
     # a legend is added and time stamp is added.
     chart.set_chart_params(False,True,True,True)
@@ -63,8 +87,8 @@ A bar plot is the same as a bar chart without the amount shown and a linr of bes
     data = govData.get_deaths_by_report_date() #Gets new deaths
     chart.add_bar_plot(govData.get_gov_date_Series(), data, "blue", "Death by Reported Date")
 
-    chart.draw_chart("Date", "Number of People", "COVID 19 Data - Death Reported Date vs Death Date 
-                                (" + nation + ")" , "deathsAndDeaths", True) #create the chart
+    chart.draw_chart("Date", "Number of People", "COVID 19 Data - Death Reported Date vs Death Date (" + nation + ")" 
+                , "deathsAndDeaths", True) #create the chart
 
 
 Creating a Scatter Plot
@@ -78,6 +102,9 @@ A scatter plot is a plot with points added and a line of best fit between the po
 
     from toolset.ReadHospitalData import readHospitalData as HOSPITALDATA
     from toolset.CovidChart import CovidChart as CovidChart
+
+    hospitalData = HOSPITALDATA()
+    chart = CovidChart() # create the CovidChart object
 
     #First load the datasets and join them as these are in different excel files
     hospitalData = HOSPITALDATA()
@@ -110,6 +137,9 @@ Example using lists:
     from toolset.CovidChart import CovidChart as CovidChart
     from DataFunctions import Functions as functions
 
+    nation = "England"
+    govData = govDataClass(True, nation) # create the LoadDatasets object and load the data
+    chart = CovidChart() # create the CovidChart object
 
     chart.set_chart_params(False,False,True,True)
     chart.clear_chart()
@@ -125,8 +155,8 @@ Example using lists:
                 False, True)
 
     file_name = "ageDeathsPerCapita" + "0" + "_" + "19"
-    chart.draw_chart("Dates", "Deaths Per Million", "COVID 19 Data - Daily Deaths Per 
-                          Million by Age in " + nation, file_name, True)
+    chart.draw_chart("Dates", "Deaths Per Million", "COVID 19 Data - Daily Deaths Per Million by Age in " 
+                + nation, file_name, True)
 
 
 Creating a Treemap

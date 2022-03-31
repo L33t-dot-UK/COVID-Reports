@@ -56,7 +56,7 @@ class CovidChart:
         self.BENCH.bench_end("CREATE COVIDCHART CLASS")
   
 
-    def add_scatter_plot(self, x_data, y_data, colour, label, to_dash, data_complete):
+    def add_scatter_plot(self, x_data, y_data, colour, label, to_dash, data_complete, to_clip = False, tolerance = 1.2):
         '''
         Adds a scatter plot with line of best fit to a plot, this just adds the data
         once draw_chart is called the plot will be saved and/or displayed on screen
@@ -68,6 +68,8 @@ class CovidChart:
             :label: String Value, The label for the plot, this will be used in the legend
             :to_dash: Boolean Value, decides if the plot should have a solid or dashed line of best fit
             :data_complete: Boolean value, if set to true the LOBF will go to the end, if set to False the LOBF will go to (values - (time/2)), set to False if data is incomplete
+            :to_clip: Boolean Value, if this is true any plot that is greater than the (averaged value * tolerance) then the plot value will be changed to the average value, this allows us to clip data points that are alot higher than the averaged value.
+            :tolerance: Float Value, the tolerance for clipping, set to 1.2 by default which is 20%.
         '''
 
         self.BENCH.bench_start()
@@ -85,6 +87,11 @@ class CovidChart:
 
         self.BENCH.bench_start()
         LOBF_Data = self._averaged_values(y_data.copy(), self.averaged_time)
+
+        if to_clip:
+            for ii in range(0, len( y_data)):
+                if y_data[ii] > (LOBF_Data[ii] * tolerance):
+                    y_data[ii] = LOBF_Data[ii]
 
         if (data_complete == False):
             #If the data is not complete don't add a line of best fit for the last 7 days

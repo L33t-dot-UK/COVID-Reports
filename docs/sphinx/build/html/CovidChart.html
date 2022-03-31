@@ -257,7 +257,7 @@ once draw_chart is called the plot will be saved and/or displayed on screen</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="CovidChart.CovidChart.add_scatter_plot">
-<span class="sig-name descname"><span class="pre">add_scatter_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colour</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_dash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_complete</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CovidChart.CovidChart.add_scatter_plot" title="Permalink to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">add_scatter_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colour</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_dash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_complete</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">to_clip</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CovidChart.CovidChart.add_scatter_plot" title="Permalink to this definition">#</a></dt>
 <dd><p>Adds a scatter plot with line of best fit to a plot, this just adds the data
 once draw_chart is called the plot will be saved and/or displayed on screen</p>
 <dl class="simple">
@@ -279,6 +279,12 @@ once draw_chart is called the plot will be saved and/or displayed on screen</p>
 </dd>
 <dt class="field-even">data_complete</dt>
 <dd class="field-even"><p>Boolean value, if set to true the LOBF will go to the end, if set to False the LOBF will go to (values - (time/2)), set to False if data is incomplete</p>
+</dd>
+<dt class="field-odd">to_clip</dt>
+<dd class="field-odd"><p>Boolean Value, if this is true any plot that is greater than the (averaged value * tolerance) then the plot value will be changed to the average value, this allows us to clip data points that are alot higher than the averaged value.</p>
+</dd>
+<dt class="field-even">tolerance</dt>
+<dd class="field-even"><p>Float Value, the tolerance for clipping, set to 1.2 by default which is 20%.</p>
 </dd>
 </dl>
 </dd>

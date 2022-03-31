@@ -1,3 +1,8 @@
+
+
+import sys
+sys.path.append('./src/toolset')
+
 import numpy as np
 
 from toolset.CovidChart import CovidChart as COVIDCHART

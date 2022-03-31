@@ -1,7 +1,7 @@
-#DO NOT USE THIS IS PART OF THE DOCUMENTATION SYSTEM
+#DO NOT USE -------- PART OF THE DOCUMENTATION SYSTEM
 
 '''
-To use the COVID Reports Python Toolset go tou our Git hub Repo, download, fork or clone it.
+To use the COVID Reports Python Toolset go to our Git hub Repo, download, fork or clone it. https://github.com/L33t-dot-UK/COVID-Reports
 
 All toolset classes are stored in the /src/toolset folder. These are the classes that are used to create charts and import data using the Goverments API.
 
@@ -42,7 +42,7 @@ Another way to import the functions is shown here:
     from ReadHospitalData import readHospitalData as HOSPITALDATA
     from BenchMark import Benchmark as Benchmark
 
-.. Note:: If you use the above import with the toolset folder ommitted you might get syntax error highlighting however the code should still run. Use this method if your code is going in a different folder under root such as the examples folder.
+.. Note:: If you use the above import with the toolset folder ommitted you might get syntax errors and autocomplete will not work, however the code should still run. Use this method if your code is going in a different folder under root such as the examples folder.
 
 Once the libaries are imported you will be able to access all methods within the classes. I recomend using Visual Studio Code with this project as it will automatically detect the virtual
 environment that is stored in the venv folder. All dependecies have been added to this virtual environment. The dependcies are listed below incase you have any issues:
