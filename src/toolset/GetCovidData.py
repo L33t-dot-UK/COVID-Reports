@@ -89,7 +89,8 @@ class GetCOVIDData:
             "newLFDTests": "newLFDTestsBySpecimenDate",
             "newCasesLFDOnlyBySpecimenDate": "newCasesLFDOnlyBySpecimenDate",
             "cumPeopleVaccinatedSecondDoseByPublishDate": "cumPeopleVaccinatedSecondDoseByPublishDate",
-            "newCasesByPublishDate": "newCasesByPublishDate"
+            "newCasesByPublishDate": "newCasesByPublishDate",
+            "covidOccupiedMVBeds": "covidOccupiedMVBeds"
         }
 
         england_only = [

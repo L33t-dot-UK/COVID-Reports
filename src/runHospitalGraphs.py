@@ -1,4 +1,11 @@
 
+'''
+This code creates the graphs under Hospital Data using manually downloaded spreadsheets from the NHS
+
+The code is not PEP8 compliant and is unlikely to change
+
+'''
+
 
 import sys
 sys.path.append('./src/toolset')
@@ -85,20 +92,22 @@ def drawMechBeds():
     chart.set_chart_params(False, False, True, True)
 
     df1 = hospitalData.join_totals_datasets("data/hospitalData", "MV Beds Occupied")
-    df2= hospitalData.join_totals_datasets("data/hospitalData", "MV Beds Occupied Covid-19")
+    #df2= hospitalData.join_totals_datasets("data/hospitalData", "MV Beds Occupied Covid-19")
 
     df1 = df1.reset_index() #remove dates as the index
     chart.add_bar_plot(df1["Dates"].tolist(), df1["ENGLAND"].tolist(), "green", "Number of Total Occupied Mechanical Ventalation Beds")
 
-    df2 = df2.reset_index() #remove dates as the index
-    chart.add_bar_plot(df2["Dates"].tolist(), df2["ENGLAND"].tolist(), "red", "Number of Mechanical Ventalation Beds Used by COVID-19 Patients")
+    #df2 = df2.reset_index() #remove dates as the index
+    #chart.add_bar_plot(df2["Dates"].tolist(), df2["ENGLAND"].tolist(), "red", "Number of Mechanical Ventalation Beds Used by COVID-19 Patients")
+
+    chart.add_bar_plot(govData.get_gov_date_Series(), govData.get_mv_beds(), "red", "Number of Mechanical Ventalation Beds Used by COVID-19 Patients")
 
     bedCap = 4000
-    bedCapArr = [0] * len(df2["Dates"].tolist())
-    for ii in range(0, len(df2["Dates"].tolist())):
+    bedCapArr = [0] * len(df1["Dates"].tolist())
+    for ii in range(0, len(df1["Dates"].tolist())):
         bedCapArr[ii] = bedCap
 
-    chart.add_scatter_plot(df2["Dates"].tolist(), bedCapArr, 'grey', 'Estimated Critcal Care Bed Capacity', True, False) 
+    chart.add_scatter_plot(df1["Dates"].tolist(), bedCapArr, 'grey', 'Estimated Critcal Care Bed Capacity', True, False) 
 
     chart.draw_chart("Date", "Percentage of MV Beds Used / Total MV Beds Occupied (Scaled, in Hundreds)", "COVID-19: Number of Occupied Mechanical Ventalation Beds Used by COVID Patients (England)", "HOSDATA_MechBeds", True, hos_data = True)
 
@@ -293,7 +302,7 @@ def main():
     drawPopulaitonChart()
     drawRecovery()
     #drawFromNursing()
-    #drawMechBeds()
+    drawMechBeds()
     #bedCom()
     
 

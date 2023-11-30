@@ -1,9 +1,7 @@
 '''
 
-COPYRIGHT DAVID BRADSHAW, L33T.UK AND COVIDREPORTS.UK, CREDIT MUST BE GIVEN IF THIS CODE IS USED
-
 This script will use the covid toolset to create graphs for https://www.COVIDreports.uk all graphs
-apart from the hospital data are produced here
+apart from Four Nations and hospital data are produced here
 
 The below code shows how the covid toolset can be used to easily produce graphs with autoimported data.
 
@@ -12,7 +10,10 @@ toolset.LoadDatasets can return data as a list or a dataframe depending on your 
 
 toolset.readVaxData only returns data as a dataframe and not lists, for this you will need to convert them yourself.
 
+The code is not PEP8 compliant and is unlikely to change
+
 '''
+
 import sys
 sys.path.append('./src/toolset')
 
@@ -31,14 +32,14 @@ from toolset.ReadVaxData import readVaxData as vax_data
 from toolset.BenchMark import Benchmark as Benchmark
 
 import numpy as np
+from datetime import datetime
+from PIL import ImageFont, ImageDraw, Image, ImageOps
 
-import warnings
-warnings.simplefilter(action='ignore', category=UserWarning) #surpress various warnings for charts if you want to see the warnings comment these lines
-warnings.simplefilter(action='ignore', category=RuntimeWarning) #surpress various warnings for charts if you want to see the warnings comment these lines
-warnings.simplefilter(action='ignore', category=FutureWarning) #surpress various warnings to do with dataframes if you want to see the warnings comment these lines
+import toolset.BoilerPlateImports
 
 nation = "England" #If this is set to anything else Age profiled data will always be for England as it is not available for the other nations
 
+#NOT WORKING 30/11/23 AGE DATA GIVES ERRORS
 pullData = getData(nation) #get the latest data
 govData = govDataClass(True, nation) #this object stores all downloaded data and loads it into memory when the argument is set to true
 
@@ -161,8 +162,9 @@ def growthRateGraph(x_data, y_data, colour, label, SF):
             growthRate[ii] = 0
 
     
-    chart.add_scatter_plot(x_data, growthRate, colour, label, False, False)
+    chart.add_scatter_plot(x_data, growthRate, colour, label, False, False, to_clip = True, tolerance = 1.1)
     chart.add_scatter_plot(x_data, sfA, 'grey', 'Baseline', True, False) # This is the Baseline
+
 
 def page_02_Cases_Deaths(L_Limit, h_Limit):
     '''
@@ -397,7 +399,7 @@ def page_03_Dashboard():
     
     dashData = [govData.get_age_cat_string_list(), totalCases, totalDeaths, CFR] #This is the data for the first table
 
-    dash.create_table(215, 525, 20, 20, dashData,'whitesmoke', 'pink', rowLabel, True, 'reports/images/totals.png', 40 ,True, "Total Cases and Deaths (First 45 Days)")
+    dash.create_table(215, 525, 20.5, 20, dashData,'whitesmoke', 'pink', rowLabel, True, 'reports/images/totals.png', 40 ,True, "Total Cases and Deaths (First 45 Days)")
     
     totalCases = [0] * 19
     totalDeaths = [0] * 19
@@ -411,7 +413,7 @@ def page_03_Dashboard():
     
     dashData = [govData.get_age_cat_string_list(), totalCases, totalDeaths, CFR] #This is the data for the first table
 
-    dash.create_table(215, 1000, 20, 20, dashData,'whitesmoke', 'pink', rowLabel, True, 'reports/images/totals.png', 40 ,True, "Total Cases and Deaths (Last 45 Days)")
+    dash.create_table(215, 1000, 26, 20, dashData,'whitesmoke', 'pink', rowLabel, True, 'reports/images/totals.png', 40 ,True, "Total Cases and Deaths (Last 45 Days)")
     
     #-------------------------------------------------------------------------
     #-------------------- Create Graphs for the Dashboard --------------------
@@ -538,9 +540,9 @@ def page_04_Testing():
 
     chart.add_bar_plot(dates, govData.get_new_LFD_tests(), 'violet', 'Total LFTs Conducted')
 
-    chart.add_scatter_plot(dates,govData.get_new_LFD_tests(), 'violet', 'Pillar 1 & 2 Tests LFT Only', False, False)
-    chart.add_scatter_plot(dates, govData.get_new_PCR_tests(), 'darkslategray', 'Pillar 1 & 2 Tests PCR Only', False, False)
-    chart.add_scatter_plot(dates, govData.get_new_pillar_one_tests_by_publish_date(), 'chocolate', 'Pillar 1 Tests PCR', False, False)
+    #chart.add_scatter_plot(dates,govData.get_new_LFD_tests(), 'violet', 'Pillar 1 & 2 Tests LFT Only', False, False)
+    chart.add_scatter_plot(dates, govData.get_new_PCR_tests(), 'darkslategray', 'Pillar 1 & 2 PCR Tests', False, False)
+    chart.add_scatter_plot(dates, govData.get_new_pillar_one_tests_by_publish_date(), 'chocolate', 'Pillar 1 PCR Tests', False, False)
     chart.draw_chart("Date","Number of Tests","COVID 19 Data - Tests Conducted Pillar 1 and 2  " + nation, "testsConducted", True) 
  
 def page_05_Lockdown():
@@ -553,6 +555,12 @@ def page_05_Lockdown():
     chart.add_scatter_plot(dates, govData.get_new_cases(), 'orange', 'New Cases', False, False )
 
     chart.draw_chart("Date","Number of People","COVID 19 Data - Cases Daily Growth Rate " + nation, "gRateCases", True) 
+
+    chart.clear_chart()
+    growthRateGraph(dates, govData.get_new_deaths(), 'darkcyan', 'Growth Rate of Deaths', 1000)
+    chart.add_scatter_plot(dates, govData.get_new_deaths(), 'red', 'New Cases', False, False )
+
+    chart.draw_chart("Date","Number of People","COVID 19 Data - Deaths Daily Growth Rate " + nation, "gRateDeaths", True) 
 
 def draw_Scatter_Aged_Death_Grouped():
     chart.clear_chart()
@@ -607,26 +615,6 @@ def page_06_Vaccinations():
     img = ['reports/images/age_groupCases.png', 'reports/images/age_groupDeaths.png']
     dash.create_dashboard('', img, 'agedGroupedData')    #This will put the images side by side
     
-
-    #WIP
-    '''
-    for ii in range(0, 19): #Draw a year comp for each age group
-        label = "CFR " + govData.get_age_cat_string_list()[ii]  
-        data = funcs.Calc_CFR(18, govData.get_aged_death_data(ii), govData.get_aged_case_data(ii))
-        chart.draw_Scatter_Year_Comp(data, False, label, True, govData.get_year_dates(), False)
-    '''
-
-    #WIP
-    '''
-    for ii in range(0, 19): #Draw a year comp for each age group
-        label = "Cases " + govData.get_age_cat_string_list()[ii]  
-        chart.draw_Scatter_Year_Comp(govData.get_aged_case_data(ii), False, label, False, govData.get_year_dates(), False)
-        label = "Deaths " + govData.get_age_cat_string_list()[ii]  
-        chart.draw_Scatter_Year_Comp(govData.get_aged_death_data(ii), False, label, False, govData.get_year_dates(), False)
-
-        img = ['reports/images/yearlyCompCases ' + govData.get_age_cat_string_list()[ii]  + '.png', 'reports/images/yearlyCompDeaths ' + govData.get_age_cat_string_list()[ii]  + '.png']
-        dash.create_dashboard('', img, 'XXXyearCompVax' + str(ii))    #This will put the images side by side
-    '''
     #
     #
     #   THE BELOW CODE IS FOR THE VACCInation DASHBOARD
@@ -639,15 +627,15 @@ def page_06_Vaccinations():
     numberofRecords = numberofRecords - 1
 
     #Plot vaccine by age group
-    chart.set_chart_params(False, False, False, False, )
+    chart.set_chart_params(False, False, False, False)
     chart.clear_chart()
     for ii in range(0, len(vData.get_vax_age_groups())):
         df = vData.get_vax_aged_data(vData.get_vax_age_groups()[ii])
         ratio_df = funcs.calc_ratio_as_int(df["cumPeopleVaccinatedFirstDoseByVaccinationDate"].tolist(), df["VaccineRegisterPopulationByVaccinationDate"].tolist())
         chart.add_scatter_plot(df["date"].tolist(), ratio_df, govData.get_line_colour_list()[ii], vData.get_vax_age_groups()[ii] + " (" + str(int(ratio_df[numberofRecords])) + "%)", False, True)
 
-    
     chart.draw_chart("Date", "Percentage of People Vaccinated in Each Age Group", "COVID-19: 1st Dose Administered by Age (Cumulative)", "VAX_1Dose", False)
+
     chart.clear_chart()
     for ii in range(0, len(vData.get_vax_age_groups())):
         df = vData.get_vax_aged_data(vData.get_vax_age_groups()[ii])
@@ -664,7 +652,30 @@ def page_06_Vaccinations():
 
     chart.draw_chart("Date", "Percentage of People Vaccinated in Each Age Group", "COVID-19: 3rd Dose Administered by Age (Cumulative)", "VAX_3dose", False)
 
+    #4th Does using NHS data as the UKHSA are not publishing this data at the moment
+    forth_DoseP = [0] * len(vData.get_vax_age_groups()) #percentages for the table later on
 
+    chart.clear_chart()
+    dose_4_df = vData.get_vax_dataframe_4th_dose("data/nhsvaxdata")
+    for ii in range(0, len(vData.vax_age_groups_4th)):
+        mask = dose_4_df["age"] == vData.vax_age_groups_4th[ii] #get each age group in turn
+        sub_df = dose_4_df[mask] #This is the data for the selected age group
+
+        df = vData.get_vax_aged_data(vData.get_vax_age_groups()[ii]) #this is needed for the vaccine population
+
+        if (vData.vax_age_groups_4th[ii] == "80+"): #This is the last age group in the NHS data so we need to change the population figures
+            ratio_df = funcs.calc_ratio_as_int(sub_df["4th Dose"].tolist(), vData.get_80_plus_pop_list())
+        else:
+            ratio_df = funcs.calc_ratio_as_int(sub_df["4th Dose"].tolist(), df["VaccineRegisterPopulationByVaccinationDate"].tolist())
+        
+        forth_DoseP[ii] = str(int(ratio_df[len(ratio_df) - 1])) + "%" #Used for the table later on
+        chart.add_scatter_plot(sub_df["Dates"].tolist(), ratio_df, govData.get_line_colour_list()[ii], vData.vax_age_groups_4th[ii] + " (" + str(int(ratio_df[len(ratio_df) - 1])) + "%)", False, True)
+
+    forth_DoseP[16] = "--" #These age groups dont exist in this dataset
+    forth_DoseP[17] = "--" #These age groups dont exist in this dataset
+    chart.set_legend_bottom(False) #Use a floating legend
+    chart.draw_chart("Date", "Percentage of People Vaccinated in Each Age Group", "COVID-19: 4th Dose Administered by Age (Cumulative)", "VAX_4dose", False)
+    
     chart.clear_chart()
     for ii in range(0, len(vData.get_vax_age_groups())):
         df = vData.get_vax_aged_data(vData.get_vax_age_groups()[ii])
@@ -675,6 +686,20 @@ def page_06_Vaccinations():
         ratio_df = funcs.calc_ratio_as_int(df["cumPeopleVaccinatedThirdInjectionByVaccinationDate"].tolist(), df["VaccineRegisterPopulationByVaccinationDate"].tolist())
         chart.add_scatter_plot(df["date"].tolist(), ratio_df, govData.get_line_colour_list()[ii], "", False, True)
 
+    #Add 4th doses
+    for ii in range(0, len(vData.vax_age_groups_4th)):
+        mask = vData.get_vax_dataframe_4th_dose("data/nhsvaxdata")['age'] == vData.vax_age_groups_4th[ii] #filter by age group
+
+        df = vData.get_vax_aged_data(vData.get_vax_age_groups()[ii]) # to get population figures
+        new_df = vData.get_vax_dataframe_4th_dose("data/nhsvaxdata")[mask] # to get doses
+
+        if (vData.vax_age_groups_4th[ii] == "80+"):
+            ratio_df = funcs.calc_ratio_as_int(new_df["4th Dose"].tolist(), vData.get_80_plus_pop_list())
+        else:
+            ratio_df = funcs.calc_ratio_as_int(new_df["4th Dose"].tolist(), df["VaccineRegisterPopulationByVaccinationDate"].tolist())
+
+        chart.add_scatter_plot(new_df["Dates"].tolist(), ratio_df, govData.get_line_colour_list()[ii], "", True, True)
+
     chart.draw_chart("Date", "Percentage of People Vaccinated in Each Age Group", "COVID-19: All Doses Administered by Age", "VAX_ALLdose", True)
 
     #Daily total uptake
@@ -683,26 +708,62 @@ def page_06_Vaccinations():
     total_df = vData.get_packed_data()
     date_df = vData.get_vax_aged_data("90+") #Any age_group will do
 
+    #complete_total_df = pd.DataFrame({"totalFirstJab": [], "totalSecondJab": [], "totalThirdJab": [], "totalForthJab": []})
     complete_total_df = pd.DataFrame({"totalFirstJab": [], "totalSecondJab": [], "totalThirdJab": []})
-    date = date_df["date"]
+    #date = date_df["date"]
 
     date_list = date_df["date"].tolist() #This will be a list of dates to be used later
 
-
+    #df_4th_dose = vData.get_vax_dataframe_4th_dose()
     for ii in range(0, len(date_df)):
+
         subset = total_df[total_df["date"] == date_list[ii]]
         totalValue1 = subset["newPeopleVaccinatedFirstDoseByVaccinationDate"].sum()
         totalValue2 = subset["newPeopleVaccinatedSecondDoseByVaccinationDate"].sum()
         totalValue3 = subset["newPeopleVaccinatedThirdInjectionByVaccinationDate"].sum()
+
+        #subset = df_4th_dose[df_4th_dose["Dates"] == date_list[ii]]
+        #totalValue4 = vData.get_vax_dataframe_4th_dose["daily_doses"].sum()
+
         complete_total_df.loc[ii, "totalFirstJab"] = totalValue1
         complete_total_df.loc[ii, "totalSecondJab"] = totalValue2
         complete_total_df.loc[ii, "totalThirdJab"] = totalValue3
+        #complete_total_df.loc[ii, "totalForthJab"] = totalValue4
 
     chart.set_chart_params(False, False, True, False)
     chart.add_scatter_plot(date_list, complete_total_df["totalFirstJab"], "firebrick", "Daily 1st Doses", False, True)
     chart.add_scatter_plot(date_list, complete_total_df["totalSecondJab"], "darkgoldenrod", "Daily 2nd Doses", False, True)
     chart.add_scatter_plot(date_list, complete_total_df["totalThirdJab"], "darkgreen", "Daily 3rd Doses", False, True, to_clip=True, tolerance= 1.0)
     chart.add_scatter_plot(govData.get_gov_date_Series(), funcs.scale_data(govData.get_new_cases(), 5), "orange", "Daily Cases (Scaled Up by 5)", True, False, to_clip=True, tolerance= 1.0)
+    
+    chart.add_scatter_plot(date_list, complete_total_df["totalThirdJab"], "darkgreen", "Daily 3rd Doses", False, True, to_clip=True, tolerance= 1.0)
+
+    #Now add 4th dose data, this data is processed differently because it's from the NHS and not UKHSA
+    dose_4_df = vData.get_vax_dataframe_4th_dose("data/nhsvaxdata") #Reload the data
+    
+    #filter data by date
+    #First get a list of dates
+    dates = dose_4_df["Dates"]
+    dates = dates.drop_duplicates()
+    dates = dates.tolist() #convert this to a list to make it easier to iterate
+    
+    total = [0] * len(dates) #create an empty list that will represent the summed data
+    for ii in range(0, len(dates)): #iterate through each day summing up the data
+        mask = dose_4_df["Dates"] == dates[ii]
+        sub_df = dose_4_df[mask]
+        total[ii] = sub_df["daily_doses"].sum() 
+        '''
+        if (total[ii] < 0):
+            total[ii] = total[ii - 1]
+
+        if (total[ii] > (total[ii] * 1.2)):
+            total[ii] = total[ii - 1]
+         '''  
+
+    percent4th = round((total[len(total) - 1] / np.sum(govData.get_population_number_list()) * 100), 0)
+    percent4th = "(" + str(percent4th) + "% " + "of Eligible Total Population)"
+    chart.add_scatter_plot(dates, total, "blue", "Daily 4th Doses", False, True)
+
     chart.draw_chart("Date", "Number of People (Clipped)", "COVID-19: Daily Vaccinations Administered and Cases (Scaled)", "VAX_DailyDosesCases", True)
 
     #CUMULATIVE total uptake
@@ -726,13 +787,13 @@ def page_06_Vaccinations():
 
     for ii in range(0, len(vData.get_vax_age_groups())):
         df = vData.get_vax_aged_data(vData.get_vax_age_groups()[ii])
-        first_Dose[ii] = df.iloc[numberofRecords, 4]
-        second_Dose[ii] = df.iloc[numberofRecords, 6]
-        third_Dose[ii] = df.iloc[numberofRecords, 8]
+        first_Dose[ii] = df.iloc[numberofRecords, 6] #
+        second_Dose[ii] = df.iloc[numberofRecords, 8] #
+        third_Dose[ii] = df.iloc[numberofRecords, 10] #
 
-        first_DoseP[ii] = int((df.iloc[numberofRecords, 4] / df.iloc[numberofRecords, 1]) * 100)
-        second_DoseP[ii] = int((df.iloc[numberofRecords, 6] / df.iloc[numberofRecords, 1]) * 100)
-        third_DoseP[ii] = int((df.iloc[numberofRecords, 8] / df.iloc[numberofRecords, 1]) * 100)
+        first_DoseP[ii] = int((df.iloc[numberofRecords, 6] / df.iloc[numberofRecords, 1]) * 100) #
+        second_DoseP[ii] = int((df.iloc[numberofRecords, 8] / df.iloc[numberofRecords, 1]) * 100) #
+        third_DoseP[ii] = int((df.iloc[numberofRecords, 10] / df.iloc[numberofRecords, 1]) * 100) #
 
     percent1st = "(" + str(int(np.sum(first_DoseP) / len(vData.get_vax_age_groups()))) + "% " + "of Eligible Total Population)"
     percent2nd = "(" + str(int(np.sum(second_DoseP) / len(vData.get_vax_age_groups()))) + "% " + "of Eligible Total Population)"
@@ -742,41 +803,78 @@ def page_06_Vaccinations():
     chart.add_scatter_plot(date_list, complete_total_df["totalFirstJab"], "firebrick", "Cumulative 1st Doses" + " (" + f'{int(complete_total_df["totalFirstJab"][numberofRecords]):,}' + ")" + percent1st, False, True)
     chart.add_scatter_plot(date_list, complete_total_df["totalSecondJab"], "darkgoldenrod", "Cumulative 2nd Doses" + " (" + f'{int(complete_total_df["totalSecondJab"][numberofRecords]):,}' + ")"+ percent2nd, False, True)
     chart.add_scatter_plot(date_list, complete_total_df["totalThirdJab"], "darkgreen", "Cumulative 3rd Doses" + " (" + f'{int(complete_total_df["totalThirdJab"][numberofRecords]):,}' + ")"+ percent3rd, False, True)
-    chart.draw_chart("Date", "Number of People", "COVID-19: Cumulative Administered Vaccinations, All Ages", "VAX_CUMDoses", False)
+    
+    #Now add 4th dose data, this data is processed differently because it's from the NHS and not UKHSA
+    #The below code is reused from above with a little added for cumulative doses
+    dose_4_df = vData.get_vax_dataframe_4th_dose("data/nhsvaxdata") #Reload the data
+    
+    #filter data by date
+    #First get a list of dates
+    dates = dose_4_df["Dates"]
+    dates = dates.drop_duplicates()
+    dates = dates.tolist() #convert this to a list to make it easier to iterate
+    
+    total = [0] * len(dates) #create an empty list that will represent the summed data
+    for ii in range(0, len(dates)): #iterate through each day summing up the data
+        mask = dose_4_df["Dates"] == dates[ii]
+        sub_df = dose_4_df[mask]
 
+        if (ii == 0):
+            total[ii] = sub_df["daily_doses"].sum() 
+        else:  
+            total[ii] = sub_df["daily_doses"].sum() + total[ii - 1] #cumalative total
+
+    percent4th = round((total[len(total) - 1] / np.sum(govData.get_population_number_list()) * 100), 0)
+    percent4th = "(" + str(percent4th) + "% " + "of Eligible Total Population)"
+    chart.add_scatter_plot(dates, total, "blue", "Cumulative 4th Doses" + " (" + str(f'{total[len(total) - 1]:,}') + ")" + percent4th + " *total jabs may be an underestimate due to NHS counting errors", False, True)
+
+    chart.draw_chart("Date", "Number of People", "COVID-19: Cumulative Administered Vaccinations, All Ages", "VAX_CUMDoses", True)
+
+    #Creating the dashboard below
 
     dash = DASH()
 
-    dash.create_PNG(5600, 800, 'VAX_totals', 40)
+    dash.create_PNG(6000, 960, 'VAX_totals', 40)
 
-    rowLabel = ['EMPTY', '1st Jab',  '1st Jab %', '2nd Jab', '2nd Jab %', '3rd Jab', '3rd Jab %']
+    rowLabel = ['EMPTY', '1st Jab',  '1st Jab %', '2nd Jab', '2nd Jab %', '3rd Jab', '3rd Jab %', '4th Jab', '4th Jab %']
 
     first_Dose = [0] * len(vData.get_vax_age_groups())
     second_Dose = [0] * len(vData.get_vax_age_groups())
     third_Dose =  [0] * len(vData.get_vax_age_groups())
+    forth_Dose = [0] * len(vData.get_vax_age_groups())
 
     first_DoseP = [0] * len(vData.get_vax_age_groups())
     second_DoseP = [0] * len(vData.get_vax_age_groups())
     third_DoseP =  [0] * len(vData.get_vax_age_groups())
-
+    
     for ii in range(0, len(vData.get_vax_age_groups())):
         df = vData.get_vax_aged_data(vData.get_vax_age_groups()[ii])
-        first_Dose[ii] = df.iloc[numberofRecords, 4]
-        second_Dose[ii] = df.iloc[numberofRecords, 6]
-        third_Dose[ii] = df.iloc[numberofRecords, 8]
+        first_Dose[ii] = df.iloc[numberofRecords, 6] #
+        second_Dose[ii] = df.iloc[numberofRecords, 8] #
+        third_Dose[ii] = df.iloc[numberofRecords, 10] #
 
-        first_DoseP[ii] = str(int((df.iloc[numberofRecords, 4] / df.iloc[numberofRecords, 1]) * 100)) + "%"
-        second_DoseP[ii] = str(int((df.iloc[numberofRecords, 6] / df.iloc[numberofRecords, 1]) * 100)) + "%"
-        third_DoseP[ii] = str(int((df.iloc[numberofRecords, 8] / df.iloc[numberofRecords, 1]) * 100)) + "%"
+        first_DoseP[ii] = str(int((df.iloc[numberofRecords, 6] / df.iloc[numberofRecords, 1]) * 100)) + "%" #
+        second_DoseP[ii] = str(int((df.iloc[numberofRecords, 8] / df.iloc[numberofRecords, 1]) * 100)) + "%" #
+        third_DoseP[ii] = str(int((df.iloc[numberofRecords, 10] / df.iloc[numberofRecords, 1]) * 100)) + "%" #
 
+    #4th dose stuff
+    df_ = vData.get_vax_dataframe_4th_dose("data/nhsvaxdata")
+
+    len_records = len(df_)
+    len_records = len_records - 1
+
+    cntr = 0
+    for ii in range(len(vData.vax_age_groups_4th) - 1, 0, -1):
+        forth_Dose[ii] = df_.iloc[len_records - cntr, 2] #these need to be correct to align age groups!
+        cntr = cntr + 1
 
     age_groups = vData.get_vax_age_groups_string()
-    dashData = [age_groups, first_Dose, first_DoseP, second_Dose, second_DoseP, third_Dose, third_DoseP] #This is the data for the first table
+    dashData = [age_groups, first_Dose, first_DoseP, second_Dose, second_DoseP, third_Dose, third_DoseP, forth_Dose, forth_DoseP] #This is the data for the first table
 
-    dash.create_table(315, 20, 20, 20, dashData,'whitesmoke', 'pink', rowLabel, True, 'reports/images/VAX_totals.png', 40 ,True, "Number and Percentage of Vaccinaiton Doses Given to Each Age Group")
+    dash.create_table(315, 20, 20, 20, dashData,'whitesmoke', 'pink', rowLabel, True, 'reports/images/VAX_totals.png', 40 ,True, "Number and Percentage of Vaccinaiton Doses Given to Each Age Group", footnote="* 4th Dose data highest age group is 80+ hence zero values for 85-89 and 90+, this is because that data comes from the NHS and not UKHSA.")
 
     dashPics = ["reports/images/VAX_totals.png", "reports/images/VAX_CUMDoses.png", "reports/images/VAX_1Dose.png", "reports/images/VAX_2Dose.png", "reports/images/VAX_3Dose.png", 
-                    "reports/images/VAX_ALLdose.png","reports/images/VAX_DailyDosesCases.png"]
+                    "reports/images/VAX_4Dose.png", "reports/images/VAX_ALLdose.png","reports/images/VAX_DailyDosesCases.png"]
 
     dash.create_dashboard("Vaccination Dashboard", dashPics, "VAX_DASH")
 
@@ -889,12 +987,115 @@ def Dashboard_2():
     dash = DASH()
     dash.create_dashboard("Cases, Deaths and Hospitalisation (14 to 45 Day Review)", img, 'dashboard_2')
 
+#----------------------------------------- 4th dose stuff this will be moved into the readvaxdataclass
+#-------------------------------------------------------------------------------------------------------
+import os
+import urllib.request
+
+def build_url(year, month, day, month_no):
+    url = "https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/COVID-19-daily-announced-vaccinations-"
+
+
+    url = "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2022/03/COVID-19-daily-announced-vaccinations-27-March-2022.xlsx"
+    url = "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2"
+
+    final_url = url + "/" + year + "/" + month_no + "/COVID-19-daily-announced-vaccinations-" + day + "-" + month + "-" + year + ".xlsx"
+    return final_url
+
+def re_build_url(year, month, day, month_no): # This adds a 0 to the day
+    url = "https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/COVID-19-daily-announced-vaccinations-"
+
+
+    url = "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2/2022/03/COVID-19-daily-announced-vaccinations-27-March-2022.xlsx"
+    url = "https://www.england.nhs.uk/statistics/wp-content/uploads/sites/2"
+
+    final_url = url + "/" + year + "/" + month_no + "/COVID-19-daily-announced-vaccinations-0" +  day + "-" + month + "-" + year + ".xlsx"
+    return final_url
+
+def get_url_list(): #returns a list of URLs to download for 4th dose vaccinations
+
+    #COVID-19-daily-announced-vaccinations-01-April-2022
+
+    import datetime as datetime
+    import numpy as np
+
+    url_list = []
+
+    start_day = datetime.date(2022, 3, 10) #This is when the 4th doses started
+
+    url_list.append(build_url(start_day.strftime("%Y"), start_day.strftime("%B"), start_day.strftime("%d"), start_day.strftime("%m"))) #add the first date top the url
+
+    current_day = datetime.date.today() #get the current day
+
+    total_days = current_day - start_day
+
+    for ii in range (0, total_days.days + 1): #Now build the list of URLs
+        day = start_day + datetime.timedelta(days=ii)
+        url_list.append(build_url(day.strftime("%Y"), day.strftime("%B"), day.strftime("%d"), day.strftime("%m"))) #add the first date top the url
+
+    return url_list
+
+def download_data_from_NHS():
+
+    DOWNLOADS_DIR = 'data/nhsvaxdata'
+  
+    # For every line in the file
+    for url in get_url_list():
+        # Split on the rightmost / and take everything on the right side of that
+        name = url.rsplit('/', 1)[-1]
+
+        # Combine the name and the downloads directory to get the local filename
+        filename = os.path.join(DOWNLOADS_DIR, name)
+
+        try:
+            # Download the file if it does not exist
+            if not os.path.isfile(filename):
+                urllib.request.urlretrieve(url, filename)
+        except:
+            print ("failed to download " + url + ", retrying file download with the day zero taken off")
+            try:
+                # Remove the zero from the day and try again
+                url1 = url[0:111]
+                url2 = url[112:]
+                url = url1 + url2
+                urllib.request.urlretrieve(url, filename)
+                print ("file downloaded " + url)
+            except:
+                print ("failed to download " + url)
+
+    print ("4th dose data downloaded")
+
+def create_last_update_note():
+    # This will create a PNG image with the time and date when the last graphs were produced
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y @ %H:%M:%S")
+
+    dt_string = "Last Update: " + dt_string
+
+    img = Image.new('RGB', (450, 75), color = 'white')
+    img = ImageOps.expand(img, border=0,fill='red')
+    d = ImageDraw.Draw(img)
+
+    font = ImageFont.truetype("arial.ttf", 25)
+
+    d.text((10,10), dt_string, fill=("red"), font=font, alpha = 0.7)
+
+    font = ImageFont.truetype("arial.ttf", 16)
+    d.text((10,40), "View website in incognito mode to see the latest graphs", fill=("grey"), font=font, alpha = 0.7)
+
+    img.save('reports/images/' + "lastUpdate" + '.png')
+    img.close()
+
+
 
 def main():
     BENCH = Benchmark() #Used for benchmarking
-    BENCH.set_bench(True) #Bechmark output will be printed if this is set to true
+    BENCH.set_bench(True) #Benchmark output will be printed if this is set to true
 
     BENCH.bench_start()
+
+    create_last_update_note()
+    download_data_from_NHS() # download 4th dose vaccination data
 
     page_01_Overview()
     page_02_Cases_Deaths(0, 19)
@@ -903,14 +1104,15 @@ def main():
     page_05_Lockdown()
     page_06_Vaccinations()
 
-
     CFRChart.clear_chart()
 
     calcAgedCFR(18, 40)
     Dashboard_2()
 
+    import runWebsiteFourNations #run the 4 nation graphs
 
-    #WIP FOR WAVE COMP
+    #WIP FOR WAVE COM
+    '''
     chart.set_chart_params(False,False,True,True) #Change params we dont want the VLINE legend
     chart.clear_chart()
 
@@ -925,7 +1127,7 @@ def main():
     file_name = "ageDeaths_" + str(0) + "_" + str(5)
     chart.draw_chart("Date", "Number of People", "COVID 19 Data - Daily Deaths by Age in " + nation, file_name, True) #create the chart
 
-
+    '''
     BENCH.bench_end("TOTAL EXECUTION")
     
 

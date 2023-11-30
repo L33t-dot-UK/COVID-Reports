@@ -54,6 +54,8 @@ class LoadDataSets:
                             2796740,2779326,1940686,1439913,
                             879778,517273] # 2019 Population Data for England
 
+        self.population_nation = [56286961, 5454000, 3136000, 1885000] #Population figures for the nations england, scotland, wales and NI
+
         #Line colour and age cats are used when creating the graphs to keep things the same. If you change these here it will affect all graphs
         #self.line_colour = ['black', 'gray', 'rosybrown', 'maroon', 'salmon', 'sienna', 'sandybrown', 'goldenrod', 'olive', 'lawngreen', 'darkseagreen', 'green', 'lightseagreen', 'darkcyan', 'steelblue', 'navy', 'indigo', 'purple', 'crimson']
         self.line_colour = ['#800000', '#9A6324', '#808000', '#469990', '#000075', '#000000', '#e6194B', '#f58231', '#ffe119', '#bfef45', '#3cb44b', '#42d4f4', '#4363d8', '#911eb4', '#f032e6', '#fabed4', '#ffd8b1', '#aaffc3', '#dcbeff']
@@ -204,7 +206,11 @@ class LoadDataSets:
             self.yearDates = self.yearDatesDataSet.iloc[0:,0].values
 
             self.GOVdataset =  self.pd.read_csv('data/autoimport/data' + self.nation + '.csv') #load the dataset from the CSV file
-            self.GOVdataset.drop(self.GOVdataset.tail(32).index,inplace=True) #Remove the first 32 rows so the data starts on the 02/03/20
+
+            if (self.nation == "England"):
+                self.GOVdataset.drop(self.GOVdataset.tail(32).index,inplace=True) #Remove the first 32 rows so the data starts on the 02/03/20
+            else:
+                self.GOVdataset.drop(self.GOVdataset.tail(4).index,inplace=True) #Remove the first 32 rows so the data starts on the 02/03/20
 
             self.fullDataFrame = self.GOVdataset.copy()
             self.fullDataFrame = self.fullDataFrame.fillna(0)
@@ -248,6 +254,7 @@ class LoadDataSets:
             self.cumSecondDose = self.GOVdataset.iloc[0:,15].values
 
             self.newCasesByReportDate = self.GOVdataset.iloc[0:,16].values
+            self.hospMVbeds = self.GOVdataset.iloc[0:,17].values
 
             self.GOVdateSeries = self.GOVdataset.iloc[0:,0].values
             
@@ -266,6 +273,7 @@ class LoadDataSets:
             self.newLFDCases = self.newLFDCases[::-1]
             self.cumSecondDose = self.cumSecondDose[::-1]
             self.newCasesByReportDate = self.newCasesByReportDate[::-1]
+            self.hospMVbeds = self.hospMVbeds[::-1]
             
             self.GOVdateSeries = self.GOVdateSeries[::-1]
 
@@ -280,7 +288,10 @@ class LoadDataSets:
 
         try:
             self.agedGOVdataset.drop(self.agedGOVdataset.tail(32).index,inplace=True) #Remove the first days_to_sub rows, for time series chart drop the first 32 rows 32 the data starts on the 02/03/20
-            self.agedGOVdataset.fillna(0, inplace=True) #replace all null values with 0
+            #go through the deaths array and check for null values, if you find them replace with zero values
+            replacementString = "[{'age': '00_04', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '00_59', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0}, {'age': '05_09', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '10_14', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '15_19', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '20_24', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '25_29', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '30_34', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '35_39', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '40_44', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '45_49', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '50_54', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0}, {'age': '55_59', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '60+', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '60_64', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '65_69', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '70_74', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '75_79', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '80_84', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0.0}, {'age': '85_89', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0}, {'age': '90+', 'deaths': 0, 'rollingSum': 0, 'rollingRate': 0}]"
+        
+            self.agedGOVdataset = self.agedGOVdataset.replace("[]", replacementString) #Replace null values
             
             self.caseDataByAge = self.agedGOVdataset.iloc[0:,3].values
             self.deathDataByAge = self.agedGOVdataset.iloc[0:,4].values
@@ -389,6 +400,10 @@ class LoadDataSets:
             List of population figures from the ONS for each age group, i.e. populaiton[0] will be for 0_4 year olds, population[4] will be for 15_19 year olds, etc.
         '''
         return self.population.copy()
+
+    def get_population_nation_list(self):
+
+        return self.population_nation.copy()
     
 
     def get_line_colour_list(self):
@@ -573,6 +588,16 @@ class LoadDataSets:
         
         return self.yearDates.copy()
         #return self.np.array(self.yearDates.copy(), dtype='datetime64')
+
+    def get_mv_beds(self):
+        '''
+        Returns number of people in mechanical ventalation beds
+
+        Returns:
+            list of number of people in mechanical ventalation beds
+        '''
+
+        return self.hospMVbeds
 
     '''
     ----------------------------------------------------

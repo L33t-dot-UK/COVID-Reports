@@ -49,8 +49,8 @@ class Functions:
         the age group 0 toLoad 18.
 
         Args:
-            >data: List, timseries data that contain the numbers such as case or death figures.
-            >age_group: Integer Value, age group from 0 to 18, the method will get population data from toolset.LoadDatasets.
+            :data: List, timseries data that contain the numbers such as case or death figures.
+            :age_group: Integer Value, age group from 0 to 18, the method will get population data from toolset.LoadDatasets.
 
         Returns:
             A time series list with per million amounts for the selected age group.
@@ -64,6 +64,64 @@ class Functions:
 
         return perMillionData
 
+    def calc_time_series_per_million_nation(self, data, nation):
+        '''
+        NOT DOCUMENTED
+
+        Args:
+            NIL
+
+        Returns:
+            NIL
+        '''
+        population = self.dataSetLoader.get_population_nation_list() #Load populaiton data
+
+        nationID = 0
+        if nation == "England":
+            nationID = 0
+        elif nation == "Scotland":
+            nationID = 1
+        elif nation == "Wales":
+            nationID = 2
+        elif nation == "Northern Ireland":
+            nationID = 3
+
+        perMillionData = [0] * len(data)
+        for ii in range(len(data)):
+            perMillionData[ii] = float(data[ii] / population[nationID])
+            perMillionData[ii] = perMillionData[ii] * 1000000
+
+        return perMillionData
+
+    def calc_per_million_nation(self, data, nation):
+        '''
+        NOT DOCUMENTED
+
+        Args:
+            NIL
+
+        Returns:
+            NIL
+        '''
+        population = self.dataSetLoader.get_population_nation_list() #Load populaiton data
+
+        nationID = 0
+
+        if nation == "England":
+            nationID = 0
+        elif nation == "Scotland":
+            nationID = 1
+        elif nation == "Wales":
+            nationID = 2
+        elif nation == "Northern Ireland":
+            nationID = 3
+
+        perMillionData = self.np.sum(data) / float(population[nationID])
+        perMillionData = perMillionData * 1000000
+
+        perMillionData = "{:.0f}".format(perMillionData)
+        perMillionData = str(perMillionData) #cast to an int to remove the decimal place
+        return perMillionData
 
     def get_last_records(self, days_to_sub, data):
         '''
@@ -141,7 +199,11 @@ class Functions:
         '''
         calcRatio = [0] * len(data1)
         for ii in range(len(data1)):
-            calcRatio[ii] = data1[ii] / data2[ii]
+            try:
+                calcRatio[ii] = data1[ii] / data2[ii]
+            except:
+                calcRatio[ii] = 0
+
 
             calcRatio[ii]  = calcRatio[ii] * 100
         return calcRatio

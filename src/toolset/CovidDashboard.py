@@ -21,7 +21,7 @@ class Dashboard:
         pass
     
 
-    def create_dashboard(self, title, images, file_name):
+    def create_dashboard(self, title, images, file_name, toStamp = True):
         '''
         Takes a list of PNG images and creates a dashboard. Images will be displayed in order.
 
@@ -157,11 +157,12 @@ class Dashboard:
         yPos = imageHeight - 25
 
         chart = self.chartBENCH()
-        chart.create_time_stamp("reports/images/" + file_name + ".png",  xPos, yPos, 20, False)
+        if (toStamp):
+            chart.create_time_stamp("reports/images/" + file_name + ".png",  xPos, yPos, 20, False)
         print("--DASHBOARD CLASS -- Dashboard Saved as reports/images/" + file_name + ".png")
    
 
-    def create_table(self, x_start, y_start, x_padding, y_padding, data, fill_colour, line_colour, label, to_total, image_path, fontsize, title_row, table_title):
+    def create_table(self, x_start, y_start, x_padding, y_padding, data, fill_colour, line_colour, label, to_total, image_path, fontsize, title_row, table_title, footnote = ""):
         '''
         Create a table and saves to PNG image, this method uses the create_row method in a loop to create tables.
 
@@ -257,6 +258,13 @@ class Dashboard:
                 y_start = y_start + (self.globalHeight + (y_padding * 2)) #Increment Y-Coords
             cntr = cntr + 1
 
+        img.close()
+
+        img = self.Image.open(image_path) #reopen image
+        font = self.ImageFont.truetype("arial.ttf", (fontsize))
+        d = self.ImageDraw.Draw(img)
+        d.text((x_start ,y_start + 20), footnote, fill=("#6D6D6D"), font=font, alpha = 0.7)
+        img.save(image_path)
 
     def create_row(self, x_start, y_start, x_padding, y_padding, data, fill_colour, line_colour, label, to_total, image_path, fontsize):
         '''

@@ -94,16 +94,14 @@ class CovidChart:
                     y_data[ii] = LOBF_Data[ii]
 
         if (data_complete == False):
-            #If the data is not complete don't add a line of best fit for the last 7 days
+            #If the data is not complete don't add a line of best fit for the last n days
 
-            #Now we will chop the last 4 days worth of data as this data is probably incomplete and 
-            #will make our LOBF look a little funny if we include it.
-            values = [0]*(len(x_data) - 7)
+            values = [0]*(len(x_data) - self.averaged_time)
             for ii in range (0 , len(values)):
                 values[ii] = x_data[ii]
 
 
-            nData = [0]* (len(LOBF_Data) - 7)
+            nData = [0]* (len(LOBF_Data) - self.averaged_time)
             for ii in range (0 , len(nData)):
                 nData[ii] = LOBF_Data[ii]
         else:
@@ -161,7 +159,7 @@ class CovidChart:
         self.BENCH.bench_end("COVIDCHART add_bar_plot")
 
 
-    def add_bar_chart(self, x_data, y_data, colour, label="", display_vals = True, to_bar_over = True):
+    def add_bar_chart(self, x_data, y_data, colour, label = "", display_vals = True, to_bar_over = True):
         '''
         Use when creating just bar charts without a line of best fit and totals at the top of each bar
 
@@ -243,8 +241,7 @@ class CovidChart:
         self.treeMap.plot(sizes=data, label=ageCategoriesLabel, color=colours, alpha=.8, bar_kwargs=dict(linewidth=0.5, edgecolor="black"),text_kwargs={'fontsize':14})
         self.BENCH.bench_end("COVIDCHART add_treemap")
 
-
-    def draw_chart(self, x_axis_title, y_axis_title, title, file_name, to_be_wide, hos_data=False):
+    def draw_chart(self, x_axis_title, y_axis_title, title, file_name, to_be_wide, hos_data=False, forth_dose = False):
         '''
         Draws the chart either on screen if to_show == true (set_chart_params) or as a png image saved with the file_name variable
         These graphs use ONS guidelines for formatting
@@ -343,9 +340,9 @@ class CovidChart:
         #Add time stamp to the png file
         if (self.to_stamp == True):
             if (to_be_wide == True):
-                self.create_time_stamp("reports/images/" + file_name + '.png', 4300, 200, 24, to_be_wide, hos_data)
+                self.create_time_stamp("reports/images/" + file_name + '.png', 4300, 200, 24, to_be_wide, hos_data, forth_dose)
             else:
-                self.create_time_stamp("reports/images/" + file_name + '.png', 1795, 1930, 24, to_be_wide, hos_data)
+                self.create_time_stamp("reports/images/" + file_name + '.png', 1795, 1930, 24, to_be_wide, hos_data, forth_dose)
 
         print ("--CHART CLASS--: Graph saved as " + "reports/images/" + file_name + ".png")
 
@@ -384,6 +381,17 @@ class CovidChart:
 
         self.columns = 14 #Reset this value
     
+    def add_vline(self, year, month, day, label_desc, colour):
+        vline = self.np.array(self.date(year, month, day), dtype='datetime64')
+        self.plt.axvline(x=(vline), alpha = 0.2, label = label_desc, color = colour)
+
+    def add_vline_day_no(self, no_of_days, label_desc, colour):
+        #vline = self.np.array(self.date(year, month, day), dtype='datetime64')
+
+        start_date = self.np.array(self.date(2020, 3, 2), dtype='datetime64')
+        vline = start_date + no_of_days
+        self.plt.axvline(x=(vline), alpha = 0.2, label = label_desc, color = colour)
+
 
     def draw_v_lines(self):
         '''
@@ -406,10 +414,12 @@ class CovidChart:
         P2T = self.np.array(self.date(2020,7,13), dtype='datetime64')
         SLFT = self.np.array(self.date(2021,3,8), dtype='datetime64')
 
-        TODAY = self.np.array(self.date(2021,11,16), dtype='datetime64')
-
         VAC1716 = self.np.array(self.date(2021,8,23), dtype='datetime64')
         BVACBOOST = self.np.array(self.date(2021,9,20), dtype='datetime64')
+
+        VAC0512_ENDFREETESTS = self.np.array(self.date(2022,4,1), dtype='datetime64')
+
+        TODAY = self.np.array(self.date(2021,11,16), dtype='datetime64')
         try:
             if (self.show_leg == True):
                 
@@ -417,20 +427,12 @@ class CovidChart:
                 self.plt.axvline(x=(LD1_SchoolsBack), alpha = 0.2, color = 'red', label = '(VLINE 2) LD1 Schools Back')
                 self.plt.axvline(x=(LD1_S), alpha = 0.2, color = 'steelblue')
 
-                #Shade in lockdown 1 region
-                #for i in range((LD1), (LD1_S)):
-                #    self.plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
-
                 self.plt.axvline(x=(P2T), alpha = 0.2, label = '(VLINE 3) Large Scale P2 Tests Introduced', color = 'red')
                 
                 self.plt.axvline(x=(FM), alpha = 0.2, label = '(VLINE 4) Mandatory Face Masks', color = 'deepskyblue')
 
                 self.plt.axvline(x=(LD2), alpha = 0.2, label = '(VLINE 5) Lockdown 2.0', color = 'cadetblue')
                 self.plt.axvline(x=(LD2_S), alpha = 0.2, color = 'cadetblue')
-
-                #Shade in lockdown 2 region
-                #for i in range((LD2), (LD2_S)):
-                #    self.plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
 
                 self.plt.axvline(x=(VAC), alpha = 0.4, color = 'red', label = '(VLINE 6) Vaccine Rollout Starts')
 
@@ -441,14 +443,12 @@ class CovidChart:
                 
                 self.plt.axvline(x=(VAC1716), alpha = 0.4, label = '(VLINE 9) Vaccinate 16 & 17 Year Olds', color = 'red')
                 self.plt.axvline(x=(BVACBOOST), alpha = 0.4, label = '(VLINE 10) Vaccinate 12 - 15 & Booster Rollout', color = 'red')
+
+                self.plt.axvline(x=(VAC0512_ENDFREETESTS), alpha = 0.4, label = '(VLINE 11) Vaccinate 5 - 11 & No Free Tests', color = 'red')
             else:
                 self.plt.axvline(x=(LD1), alpha = 0.2,  color = 'steelblue')
                 self.plt.axvline(x=(LD1_SchoolsBack), alpha = 0.2, color = 'red')
                 self.plt.axvline(x=(LD1_S), alpha = 0.2, color = 'steelblue')
-
-                #Shade in lockdown 1 region
-                #for i in range((LD1), (LD1_S)):
-                #    self.plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
 
                 self.plt.axvline(x=(P2T), alpha = 0.2, color = 'red')
                 
@@ -456,10 +456,6 @@ class CovidChart:
 
                 self.plt.axvline(x=(LD2), alpha = 0.2, color = 'cadetblue')
                 self.plt.axvline(x=(LD2_S), alpha = 0.2, color = 'cadetblue')
-
-                #Shade in lockdown 2 region
-                #for i in range((LD2 - self.start_dataset_date).days, (LD2_S - self.start_dataset_date).days):
-                #    self.plt.axvspan(i, i+1, facecolor='grey', alpha=0.1)
 
                 self.plt.axvline(x=(VAC), alpha = 0.4, color = 'red')
 
@@ -471,7 +467,7 @@ class CovidChart:
                 self.plt.axvline(x=(VAC1716), alpha = 0.4, color = 'red')
                 self.plt.axvline(x=(BVACBOOST), alpha = 0.4, color = 'red')
 
-                #self.plt.axvline(x=(TODAY - self.start_dataset_date).days, alpha = 0.4, color = 'red')
+                self.plt.axvline(x=(VAC0512_ENDFREETESTS), alpha = 0.4, color = 'red')
 
             #Shade in lockdown regions
             LD1 = self.date(2020,3,23)
@@ -501,7 +497,7 @@ class CovidChart:
             print("--CHART CLASS--: Error drawing VLINES, use LoadDatasets.get_gov_date_Series() or govAgedDateSeries() instead of DataFrame['date'], Y axis canot be a dataframe it must be a list of dates.")
 
 
-    def create_time_stamp(self, img_path, x_pos, y_pos, fontsize, to_be_wide, hos_data = False):
+    def create_time_stamp(self, img_path, x_pos, y_pos, fontsize, to_be_wide, hos_data = False, forth_dose = False):
         '''
         Adds a timestamp to the chart with the website URL
 
@@ -524,17 +520,23 @@ class CovidChart:
         if (to_be_wide == True): #put time stamps at the top
             d.text((x_pos,y_pos - 30), "https://www.COVIDreports.uk   Last Updated " + dt_string, fill=("#6D6D6D"), font=font, alpha = 0.7)
             d.text((x_pos,y_pos),"GitHub Repo: https://github.com/L33t-dot-UK/COVID-Reports", fill=("#6D6D6D"), font=font, alpha = 0.7)
+            if forth_dose == True:
+                d.text((x_pos,y_pos + 60),"4th Dose Source: https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/", fill=("#6D6D6D"), font=font, alpha = 0.7)
+
             if(hos_data):
                 d.text((x_pos,y_pos + 30),"Data Source: https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-hospital-activity/", fill=("#6D6D6D"), font=font, alpha = 0.7)
             else:
                 d.text((x_pos,y_pos + 30),"Data Source: https://coronavirus.data.gov.uk/details/download", fill=("#6D6D6D"), font=font, alpha = 0.7)
         else: #put the time stamps at the bottom
-            d.text((x_pos,y_pos - 30), "https://www.COVIDreports.uk   Last Updated " + dt_string, fill=("#6D6D6D"), font=font, alpha = 0.7)
+            d.text((x_pos,y_pos + 30), "https://www.COVIDreports.uk   Last Updated " + dt_string, fill=("#6D6D6D"), font=font, alpha = 0.7)
             d.text((x_pos,y_pos),"GitHub Repo: https://github.com/L33t-dot-UK/COVID-Reports", fill=("#6D6D6D"), font=font, alpha = 0.7)
             if (hos_data):
                 d.text((x_pos - 1400,y_pos),"Data Source:  https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-hospital-activity/", fill=("#6D6D6D"), font=font, alpha = 0.7)
             else:
                 d.text((x_pos - 1400,y_pos),"Data Source: https://coronavirus.data.gov.uk/details/download", fill=("#6D6D6D"), font=font, alpha = 0.7)
+                
+            if forth_dose == True:
+                d.text((x_pos - 1400,y_pos + 30),"4th Dose Source: https://www.england.nhs.uk/statistics/statistical-work-areas/covid-19-vaccinations/", fill=("#6D6D6D"), font=font, alpha = 0.7)
             
         img.save(img_path)
    
