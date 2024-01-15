@@ -1,0 +1,19 @@
+Create a virtual environment using the command;
+
+	python -m venv directory 
+
+Note for the above the directory will be the full path to the virtual environment eg. c:\users\generic\covidreports\venv
+
+Once the virtual environment is created you need to download all of the packages using the requirements.txt. Before doing this naviagte
+to the scripts folder in the virtual environment folder eg. c:\users\generic\covidreports\venv\scripts. Once here type activate.bat 
+which will activate the virtual environment. Now you need to copy the requirements.txt file and paste it into the scripts folder then 
+type the following to install the correct packages;
+
+	pip install -r requirements.txt
+
+You will now have an environment that was used when this toolset was created. If your using Microsoft Visual Studio it will automatically 
+select this as your venv.
+
+Make sure the the line "include-system-site-packages" in pyvenv is set to false and NOT true.
+
+The version of python that this toolset was tested with is version = 3.8.2

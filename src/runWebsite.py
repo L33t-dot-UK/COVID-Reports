@@ -39,7 +39,6 @@ import toolset.BoilerPlateImports
 
 nation = "England" #If this is set to anything else Age profiled data will always be for England as it is not available for the other nations
 
-#NOT WORKING 30/11/23 AGE DATA GIVES ERRORS
 pullData = getData(nation) #get the latest data
 govData = govDataClass(True, nation) #this object stores all downloaded data and loads it into memory when the argument is set to true
 
@@ -1102,7 +1101,7 @@ def main():
     page_03_Dashboard()
     page_04_Testing()
     page_05_Lockdown()
-    page_06_Vaccinations()
+    #page_06_Vaccinations()
 
     CFRChart.clear_chart()
 
