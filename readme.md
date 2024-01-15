@@ -16,7 +16,7 @@
 
 <h2>Virtual Environment</h2>
 
-<p>If you open this repo in Visual Studio Code and press F5 for any of the code files in the src folder you can use the venv to run the scripts. If you do this do not run the scripts through the console otherwise the venv won't find the reports folder. Instead press F5 again to run the selected script.</p>
+<p>Instructions are in the venv folder on how to create a virtual environment using the requirements.txt file. Please do this the code will not work with upto date versions of pillow, matplotlib and pandas. Create a venv in accordance with the instrucitons and run the code in there. The code was tested with Python 3.8.2 using Microsoft Visual Studio.</p>
 
 
 <h2>Graphical User Interface</h2>
